@@ -144,6 +144,7 @@ class _ListParentState extends State<ListParent> {
                         icon: const Icon(Icons.arrow_back, color: Colors.white))
                     : null),
             floatingActionButton: FloatingActionButton(
+                heroTag: "btn7",
                 backgroundColor: Colors.amber,
                 onPressed: btnInsert,
                 child: const Icon(Icons.add)),
@@ -219,7 +220,7 @@ class _ListParentState extends State<ListParent> {
                                   searching = !searching;
                                 });
                               },
-                              child: const Icon(Icons.clear)),
+                              child: Ink(child: const Icon(Icons.clear))),
                           prefixIcon: const Icon(Icons.search)))),
               Expanded(
                   child: AlphabetScrollPage(

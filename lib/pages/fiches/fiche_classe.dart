@@ -1037,9 +1037,11 @@ class _SearchEnfantState extends State<SearchEnfant> {
                                                                   'Voulez vraiment supprimer cette relation ?')
                                                           .show();
                                                     },
-                                                    child: const Icon(
-                                                        Icons.delete,
-                                                        color: Colors.red)),
+                                                    child: Ink(
+                                                      child: const Icon(
+                                                          Icons.delete,
+                                                          color: Colors.red)
+                                                    )),
                                                 Container(
                                                     child: Padding(
                                                         padding:
@@ -1072,7 +1074,7 @@ class _SearchEnfantState extends State<SearchEnfant> {
                                           query = "";
                                         });
                                       },
-                                      child: const Icon(Icons.search)))),
+                                      child: Ink(child: const Icon(Icons.search))))),
                           Expanded(
                               child: ListView.builder(
                                   shrinkWrap: true,
@@ -1330,9 +1332,11 @@ class _SearchGroupState extends State<SearchGroup> {
                                                                   'Voulez vraiment supprimer cette relation ?')
                                                           .show();
                                                     },
-                                                    child: const Icon(
-                                                        Icons.delete,
-                                                        color: Colors.red)),
+                                                    child: Ink(
+                                                      child: const Icon(
+                                                          Icons.delete,
+                                                          color: Colors.red)
+                                                    )),
                                                 Container(
                                                     child: Padding(
                                                         padding:
@@ -1365,7 +1369,7 @@ class _SearchGroupState extends State<SearchGroup> {
                                           query = "";
                                         });
                                       },
-                                      child: const Icon(Icons.search)))),
+                                      child: Ink(child: const Icon(Icons.search))))),
                           Expanded(
                               child: ListView.builder(
                                   shrinkWrap: true,

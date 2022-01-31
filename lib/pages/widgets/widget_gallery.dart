@@ -109,82 +109,77 @@ class _GalleryWidgetState extends State<GalleryWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-          child: Scaffold(
-              body: Hero(
-        tag: 'myHero',
-        child: Stack(alignment: Alignment.bottomCenter, children: [
-          PhotoViewGallery.builder(
-              loadingBuilder: (context, event) => Center(
-                    child: CircularProgressIndicator(
-                        color: Data.darkColor[
-                            Random().nextInt(Data.darkColor.length - 1) + 1]),
-                  ),
-              onPageChanged: (index) => setState(() => this.index = index),
-              pageController: widget.pageController,
-              itemCount: myImages.length,
-              builder: (context, i) {
-                final image = myImages[i];
-                return PhotoViewGalleryPageOptions(
-                    minScale: PhotoViewComputedScale.contained,
-                    maxScale: PhotoViewComputedScale.contained * 4,
-                    imageProvider:
-                        NetworkImage(Data.getImage(image.chemin, folder)));
-              }),
-          Positioned(
-              top: 0,
-              left: 0,
-              child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                      color: Colors.black,
-                      child:
-                          const Icon(Icons.arrow_back, color: Colors.white)))),
-          Padding(
-              padding: const EdgeInsets.only(bottom: 15),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text("Photo ${index + 1} / ${myImages.length}",
-                        style: const TextStyle(color: Colors.white)),
-                    /*   InkWell(
-                        onTap: () {
-                          saveFile();
-                        },
-                        child: Row(children: const [
-                          Text("Enregistrer ",
-                              style: TextStyle(color: Colors.white)),
-                          Icon(Icons.download, color: Colors.white)
-                        ])),*/
-                    !Data.currentUser!.isParent && delete
-                        ? InkWell(
-                            onTap: () {
-                              AwesomeDialog(
-                                      context: context,
-                                      dialogType: DialogType.QUESTION,
-                                      showCloseIcon: true,
-                                      title: 'Confirmation',
-                                      btnOkText: "Oui",
-                                      btnCancelText: "Non",
-                                      btnOkOnPress: () {
-                                        setState(() {
-                                          deleteEnseignant();
-                                        });
-                                      },
-                                      btnCancelOnPress: () {},
-                                      desc:
-                                          'Voulez vraiment supprimer cette photo ?')
-                                  .show();
-                            },
-                            child: Row(children: const [
-                              Text("Supprimer ",
-                                  style: TextStyle(color: Colors.white)),
-                              Icon(Icons.delete, color: Colors.white)
-                            ]))
-                        : const SizedBox(height: 0, width: 0)
-                  ]))
-        ]),
-      )));
+  Widget build(BuildContext context) {
+    return SafeArea(
+        child: Scaffold(
+            body: Hero(
+                tag: 'myHero$index',
+                child: Stack(alignment: Alignment.bottomCenter, children: [
+                  PhotoViewGallery.builder(
+                      loadingBuilder: (context, event) => Center(
+                          child: CircularProgressIndicator(
+                              color: Data.darkColor[
+                                  Random().nextInt(Data.darkColor.length - 1) +
+                                      1])),
+                      onPageChanged: (index) =>
+                          setState(() => this.index = index),
+                      pageController: widget.pageController,
+                      itemCount: myImages.length,
+                      builder: (context, i) {
+                        final image = myImages[i];
+                        return PhotoViewGalleryPageOptions(
+                            minScale: PhotoViewComputedScale.contained,
+                            maxScale: PhotoViewComputedScale.contained * 4,
+                            imageProvider: NetworkImage(
+                                Data.getImage(image.chemin, folder)));
+                      }),
+                  Positioned(
+                      top: 0,
+                      left: 0,
+                      child: InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Ink(
+                              color: Colors.black,
+                              child: const Icon(Icons.arrow_back,
+                                  color: Colors.white)))),
+                  Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text("Photo ${index + 1} / ${myImages.length}",
+                                style: const TextStyle(color: Colors.white)),
+                            !Data.currentUser!.isParent && delete
+                                ? InkWell(
+                                    onTap: () {
+                                      AwesomeDialog(
+                                              context: context,
+                                              dialogType: DialogType.QUESTION,
+                                              showCloseIcon: true,
+                                              title: 'Confirmation',
+                                              btnOkText: "Oui",
+                                              btnCancelText: "Non",
+                                              btnOkOnPress: () {
+                                                setState(() {
+                                                  deleteEnseignant();
+                                                });
+                                              },
+                                              btnCancelOnPress: () {},
+                                              desc:
+                                                  'Voulez vraiment supprimer cette photo ?')
+                                          .show();
+                                    },
+                                    child: Ink(
+                                        child: Row(children: const [
+                                      Text("Supprimer ",
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                      Icon(Icons.delete, color: Colors.white)
+                                    ])))
+                                : const SizedBox(height: 0, width: 0)
+                          ]))
+                ]))));
+  }
 }

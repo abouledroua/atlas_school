@@ -354,9 +354,10 @@ class _FicheMessageState extends State<FicheMessage> {
                                                 onTap: () {
                                                   _showModal(i);
                                                 },
-                                                child: const Icon(Icons.warning,
-                                                    color: Colors.red),
-                                              )))),
+                                                child: Ink(
+                                                    child: const Icon(
+                                                        Icons.warning,
+                                                        color: Colors.red)))))),
                             Visibility(
                                 visible: (messages[i].idSend ==
                                         Data.currentUser!.idUser &&
@@ -451,9 +452,11 @@ class _FicheMessageState extends State<FicheMessage> {
                                               'Voulez vraiment supprimer ce message ?')
                                       .show();
                                 },
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
+                                child: Ink(
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
                                       Icon(Icons.delete,
                                           color: Colors.red, size: textSize),
                                       SizedBox(width: 10),
@@ -461,7 +464,7 @@ class _FicheMessageState extends State<FicheMessage> {
                                           style: TextStyle(
                                               color: Colors.red,
                                               fontSize: textSize))
-                                    ]))),
+                                    ])))),
                         Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: InkWell(
@@ -471,9 +474,11 @@ class _FicheMessageState extends State<FicheMessage> {
                                   Data.showSnack("Text copier", Colors.black);
                                   Navigator.of(context).pop();
                                 },
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
+                                child: Ink(
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
                                       Icon(Icons.copy,
                                           color: Colors.black, size: textSize),
                                       SizedBox(width: 10),
@@ -481,7 +486,7 @@ class _FicheMessageState extends State<FicheMessage> {
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: textSize))
-                                    ]))),
+                                    ])))),
                         Visibility(
                             visible: messages[i].sent != 1,
                             child: const Divider()),
@@ -509,10 +514,11 @@ class _FicheMessageState extends State<FicheMessage> {
                                                   'Voulez vraiment renvoyer ce message ?')
                                           .show();
                                     },
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: const [
+                                    child: Ink(
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: const [
                                           Icon(Icons.send,
                                               color: Colors.green,
                                               size: textSize),
@@ -521,7 +527,7 @@ class _FicheMessageState extends State<FicheMessage> {
                                               style: TextStyle(
                                                   color: Colors.green,
                                                   fontSize: textSize))
-                                        ]))))
+                                        ])))))
                       ]))));
         });
   }

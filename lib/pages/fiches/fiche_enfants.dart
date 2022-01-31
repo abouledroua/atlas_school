@@ -202,7 +202,7 @@ class _FicheEnfantState extends State<FicheEnfant> {
                       width: 4,
                       color: Theme.of(context).scaffoldBackgroundColor),
                   color: Colors.green),
-              child: GestureDetector(
+              child: InkWell(
                   onTap: valider
                       ? null
                       : () {
@@ -220,51 +220,68 @@ class _FicheEnfantState extends State<FicheEnfant> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceEvenly,
                                               children: [
-                                                GestureDetector(
+                                                InkWell(
                                                     onTap: () {
                                                       getPhoto(
                                                           ImageSource.gallery);
                                                       Navigator.of(context)
                                                           .pop();
                                                     },
-                                                    child:
-                                                        Column(children: const [
-                                                      Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Icon(
-                                                              Icons.photo_album,
-                                                              size: 30)),
-                                                      Text("Gallery",
-                                                          style: TextStyle(
-                                                              fontSize: 20))
-                                                    ])),
-                                                GestureDetector(
+                                                    child: Ink(
+                                                        width:
+                                                            Data.widthScreen /
+                                                                3,
+                                                        child: Column(
+                                                            children: const [
+                                                              Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              8.0),
+                                                                  child: Icon(
+                                                                      Icons
+                                                                          .photo_album,
+                                                                      size:
+                                                                          30)),
+                                                              Text("Gallery",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          20))
+                                                            ]))),
+                                                InkWell(
                                                     onTap: () {
                                                       getPhoto(
                                                           ImageSource.camera);
                                                       Navigator.of(context)
                                                           .pop();
                                                     },
-                                                    child:
-                                                        Column(children: const [
-                                                      Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Icon(
-                                                              Icons.camera,
-                                                              size: 30)),
-                                                      Text("Camera",
-                                                          style: TextStyle(
-                                                              fontSize: 20))
-                                                    ]))
+                                                    child: Ink(
+                                                        width:
+                                                            Data.widthScreen /
+                                                                3,
+                                                        child: Column(
+                                                            children: const [
+                                                              Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              8.0),
+                                                                  child: Icon(
+                                                                      Icons
+                                                                          .camera,
+                                                                      size:
+                                                                          30)),
+                                                              Text("Camera",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          20))
+                                                            ])))
                                               ]))
                                     ]);
                               });
                         },
-                  child: const Icon(Icons.edit, color: Colors.white))))
+                  child:
+                      Ink(child: const Icon(Icons.edit, color: Colors.white)))))
     ]));
   }
 
@@ -609,7 +626,7 @@ class _FicheEnfantState extends State<FicheEnfant> {
                                 });
                               }
                             }),
-                        GestureDetector(
+                        InkWell(
                             child: const Text("Homme"),
                             onTap: () {
                               if (!valider) {
@@ -628,7 +645,7 @@ class _FicheEnfantState extends State<FicheEnfant> {
                                 });
                               }
                             }),
-                        GestureDetector(
+                        InkWell(
                             child: const Text("Femme"),
                             onTap: () {
                               if (!valider) {

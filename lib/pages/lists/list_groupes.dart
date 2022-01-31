@@ -119,6 +119,7 @@ class _ListGroupesState extends State<ListGroupes> {
                         icon: const Icon(Icons.arrow_back, color: Colors.white))
                     : null),
             floatingActionButton: FloatingActionButton(
+                heroTag: "btn5",
                 backgroundColor: Colors.cyan,
                 onPressed: btnInsert,
                 child: const Icon(Icons.add)),

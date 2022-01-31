@@ -332,7 +332,7 @@ class _LoginPageState extends State<LoginPage> {
                                   .push(route)
                                   .then((value) => Navigator.pop(context));
                             },
-                            child: Container(
+                            child: Ink(
                                 padding: const EdgeInsets.all(8),
                                 color: Colors.amber,
                                 child: Row(children: const [
@@ -354,7 +354,7 @@ class _LoginPageState extends State<LoginPage> {
                                   .push(route)
                                   .then((value) => Navigator.pop(context));
                             },
-                            child: Container(
+                            child: Ink(
                                 padding: const EdgeInsets.all(8),
                                 color: Colors.brown,
                                 child: Row(children: const [

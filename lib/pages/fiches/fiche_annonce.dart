@@ -485,13 +485,13 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                 Positioned(
                     top: 0,
                     right: 0,
-                    child: GestureDetector(
+                    child: InkWell(
                         onTap: valider
                             ? null
                             : () {
                                 showModal();
                               },
-                        child: Container(
+                        child: Ink(
                             padding: const EdgeInsets.all(8),
                             decoration: const BoxDecoration(
                                 borderRadius:
@@ -516,7 +516,7 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                 Positioned(
                     top: 0,
                     right: 0,
-                    child: GestureDetector(
+                    child: InkWell(
                         onTap: valider
                             ? null
                             : () async {
@@ -527,7 +527,7 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                                   setState(() {});
                                 });
                               },
-                        child: Container(
+                        child: Ink(
                             padding: const EdgeInsets.all(8),
                             decoration: const BoxDecoration(
                                 borderRadius:
@@ -600,7 +600,7 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                                         horizontal: 30),
                                     decoration: BoxDecoration(
                                         border: Border.all(
-                                            color: Colors.black, width: 1),
+                                            color: Colors.red, width: 1),
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(20))),
                                     child: TextButton(
@@ -623,14 +623,14 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                                         child: const Text("Annuler",
                                             style: TextStyle(
                                                 fontSize: 16,
-                                                color: Colors.black)))),
+                                                color: Colors.red)))),
                                 Container(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 30),
                                     decoration: BoxDecoration(
                                         color: Colors.green,
                                         border: Border.all(
-                                            color: Colors.black, width: 1),
+                                            color: Colors.green, width: 1),
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(20))),
                                     child: TextButton(
@@ -730,7 +730,8 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                                 groupes.removeAt(i);
                               });
                             },
-                      child: const Icon(Icons.delete, color: Colors.red))
+                      child: Ink(
+                          child: const Icon(Icons.delete, color: Colors.red)))
                 ]))),
         itemCount: groupes.length,
         primary: false,
@@ -758,7 +759,8 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                                 parents.removeAt(i);
                               });
                             },
-                      child: const Icon(Icons.delete, color: Colors.red))
+                      child: Ink(
+                          child: const Icon(Icons.delete, color: Colors.red)))
                 ]))));
   }
 
@@ -803,7 +805,8 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                                 enfants.removeAt(i);
                               });
                             },
-                      child: const Icon(Icons.delete, color: Colors.red))
+                      child: Ink(
+                          child: const Icon(Icons.delete, color: Colors.red)))
                 ]))));
   }
 
@@ -1114,28 +1117,32 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      GestureDetector(
+                      InkWell(
                           onTap: () {
                             pickImages();
                             Navigator.of(context).pop();
                           },
-                          child: Column(children: const [
-                            Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Icon(Icons.photo_album, size: 30)),
-                            Text("Gallery", style: TextStyle(fontSize: 20))
-                          ])),
-                      GestureDetector(
+                          child: Ink(
+                              width: Data.widthScreen / 3,
+                              child: Column(children: const [
+                                Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Icon(Icons.photo_album, size: 30)),
+                                Text("Gallery", style: TextStyle(fontSize: 20))
+                              ]))),
+                      InkWell(
                           onTap: () {
                             captureImage();
                             Navigator.of(context).pop();
                           },
-                          child: Column(children: const [
-                            Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Icon(Icons.camera, size: 30)),
-                            Text("Camera", style: TextStyle(fontSize: 20))
-                          ]))
+                          child: Ink(
+                              width: Data.widthScreen / 3,
+                              child: Column(children: const [
+                                Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Icon(Icons.camera, size: 30)),
+                                Text("Camera", style: TextStyle(fontSize: 20))
+                              ])))
                     ]))
           ]);
         });
@@ -1419,7 +1426,8 @@ class _PermissionPageState extends State<PermissionPage> {
             onTap: () {
               onRadioChange(val);
             },
-            child: Row(children: [
+            child: Ink(
+                child: Row(children: [
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Icon(icon)),
@@ -1432,7 +1440,7 @@ class _PermissionPageState extends State<PermissionPage> {
                         style: TextStyle(
                             color: Colors.grey.shade700, fontSize: 11)))
               ])
-            ])),
+            ]))),
         groupValue: radio,
         onChanged: (value) {
           onRadioChange(value);
@@ -1625,7 +1633,7 @@ class _SearchGroupState extends State<SearchGroup> {
                                                     child: const Icon(
                                                         Icons.delete,
                                                         color: Colors.red)),
-                                                Container(
+                                                Ink(
                                                     color: Colors.blue,
                                                     child: Padding(
                                                         padding:
@@ -1657,7 +1665,8 @@ class _SearchGroupState extends State<SearchGroup> {
                                           query = "";
                                         });
                                       },
-                                      child: const Icon(Icons.search)))),
+                                      child: Ink(
+                                          child: const Icon(Icons.search))))),
                           Expanded(
                               child: ListView.builder(
                                   shrinkWrap: true,
@@ -1895,7 +1904,8 @@ class _SearchParentState extends State<SearchParent> {
                                                     child: const Icon(
                                                         Icons.delete,
                                                         color: Colors.red)),
-                                                Container(
+                                                Ink(
+                                                    color: Colors.blue,
                                                     child: Padding(
                                                         padding:
                                                             const EdgeInsets
@@ -1904,8 +1914,7 @@ class _SearchParentState extends State<SearchParent> {
                                                             item.fullName,
                                                             style: const TextStyle(
                                                                 color: Colors
-                                                                    .white))),
-                                                    color: Colors.blue)
+                                                                    .white))))
                                               ])))
                                       .toList()
                                       .cast<Widget>())),
@@ -1926,7 +1935,8 @@ class _SearchParentState extends State<SearchParent> {
                                           query = "";
                                         });
                                       },
-                                      child: const Icon(Icons.clear)),
+                                      child:
+                                          Ink(child: const Icon(Icons.clear))),
                                   prefixIcon: const Icon(Icons.search))),
                           Expanded(
                               child: ListView.builder(
@@ -2158,9 +2168,11 @@ class _SearchEnfantState extends State<SearchEnfant> {
                                                             .indexOf(item));
                                                       });
                                                     },
-                                                    child: const Icon(
-                                                        Icons.delete,
-                                                        color: Colors.red)),
+                                                    child: Ink(
+                                                        child: const Icon(
+                                                            Icons.delete,
+                                                            color:
+                                                                Colors.red))),
                                                 Container(
                                                     child: Padding(
                                                         padding:
@@ -2192,7 +2204,8 @@ class _SearchEnfantState extends State<SearchEnfant> {
                                           query = "";
                                         });
                                       },
-                                      child: const Icon(Icons.clear)),
+                                      child:
+                                          Ink(child: const Icon(Icons.clear))),
                                   prefixIcon: const Icon(Icons.search))),
                           Expanded(
                               child: ListView.builder(

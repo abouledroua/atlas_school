@@ -95,6 +95,7 @@ class _ListEnfantState extends State<ListEnfant> {
 
   @override
   void initState() {
+    print("initialise list_enfant");
     WidgetsFlutterBinding.ensureInitialized(); //all widgets are rendered here
     loading = true;
     getEnfants();
@@ -103,6 +104,7 @@ class _ListEnfantState extends State<ListEnfant> {
 
   @override
   Widget build(BuildContext context) {
+    print("build list_enfant");
     Data.setSizeScreen(context);
     return SafeArea(
         child: Scaffold(
@@ -141,6 +143,7 @@ class _ListEnfantState extends State<ListEnfant> {
                         icon: const Icon(Icons.arrow_back, color: Colors.white))
                     : null),
             floatingActionButton: FloatingActionButton(
+                heroTag: "btn3",
                 backgroundColor: Colors.blueGrey,
                 onPressed: btnInsert,
                 child: const Icon(Icons.add)),
@@ -241,7 +244,7 @@ class _ListEnfantState extends State<ListEnfant> {
                                   searching = !searching;
                                 });
                               },
-                              child: const Icon(Icons.clear)),
+                              child: Ink(child: const Icon(Icons.clear))),
                           prefixIcon: const Icon(Icons.search)))),
               Expanded(
                   child: AlphabetScrollPage(

@@ -141,6 +141,7 @@ class _ListMessagesState extends State<ListMessages> {
                           color: Colors.white))
                 ]),
             floatingActionButton: FloatingActionButton(
+                heroTag: "btn6",
                 backgroundColor: Colors.green.shade600,
                 onPressed: Data.currentUser!.isAdmin ? newMessage : null,
                 child: const Icon(Icons.add)),
@@ -243,11 +244,13 @@ class _ListMessagesState extends State<ListMessages> {
                                 });
                               });
                             },
-                            child: Row(children: const [
-                              Icon(Icons.group_outlined),
-                              SizedBox(width: 10),
-                              Text("Parent", style: TextStyle(fontSize: 20))
-                            ])),
+                            child: Ink(
+                              child: Row(children: const [
+                                Icon(Icons.group_outlined),
+                                SizedBox(width: 10),
+                                Text("Parent", style: TextStyle(fontSize: 20))
+                              ]),
+                            )),
                         InkWell(
                             onTap: () async {
                               await showDialog(
@@ -260,11 +263,12 @@ class _ListMessagesState extends State<ListMessages> {
                                 });
                               });
                             },
-                            child: Row(children: const [
+                            child: Ink(
+                                child: Row(children: const [
                               Icon(Icons.person_pin_outlined),
                               SizedBox(width: 10),
                               Text("Enseignant", style: TextStyle(fontSize: 20))
-                            ]))
+                            ])))
                       ])
                 ]))));
   }
@@ -505,7 +509,8 @@ class _SearchParentState extends State<SearchParent> {
                                           query = "";
                                         });
                                       },
-                                      child: const Icon(Icons.search)))),
+                                      child: Ink(
+                                          child: const Icon(Icons.search))))),
                           Expanded(
                               child: ListView.builder(
                                   shrinkWrap: true,
@@ -723,7 +728,8 @@ class _SearchEnseignantState extends State<SearchEnseignant> {
                                           query = "";
                                         });
                                       },
-                                      child: const Icon(Icons.search)))),
+                                      child: Ink(
+                                          child: const Icon(Icons.search))))),
                           Expanded(
                               child: ListView.builder(
                                   shrinkWrap: true,

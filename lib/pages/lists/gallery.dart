@@ -136,6 +136,7 @@ class _GalleriePageState extends State<GalleriePage> {
                     : null),
             floatingActionButton: !Data.currentUser!.isParent
                 ? FloatingActionButton(
+                    heroTag: "btn1",
                     backgroundColor: Colors.black,
                     onPressed: btnInsert,
                     child: const Icon(Icons.add))
@@ -199,7 +200,7 @@ class _GalleriePageState extends State<GalleriePage> {
                                     onTap: () {
                                       openGallery(gallery.indexOf(item));
                                     },
-                                    child: Padding(
+                                    child: Ink(
                                         padding: const EdgeInsets.all(2),
                                         child: Image.network(
                                             Data.getImage(
@@ -218,8 +219,6 @@ class _GalleriePageState extends State<GalleriePage> {
                                                               1) +
                                                       1]));
                                         }, fit: BoxFit.contain)))));
-                        //     date = item.date;
-                        //     heure = item.heure;
                       })
                       .toList()
                       .cast<Widget>())
@@ -263,23 +262,25 @@ class _GalleriePageState extends State<GalleriePage> {
                             pickImages();
                             Navigator.of(context).pop();
                           },
-                          child: Column(children: const [
+                          child: Ink(
+                              child: Column(children: const [
                             Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Icon(Icons.photo_album, size: 30)),
                             Text("Gallery", style: TextStyle(fontSize: 20))
-                          ])),
+                          ]))),
                       InkWell(
                           onTap: () {
                             captureImage();
                             Navigator.of(context).pop();
                           },
-                          child: Column(children: const [
+                          child: Ink(
+                              child: Column(children: const [
                             Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Icon(Icons.camera, size: 30)),
                             Text("Camera", style: TextStyle(fontSize: 20))
-                          ]))
+                          ])))
                     ]))
           ]);
         });

@@ -510,7 +510,7 @@ class _FicheEnseignantState extends State<FicheEnseignant> {
                                       sexe = value as int?;
                                     });
                                   }),
-                        GestureDetector(
+                        InkWell(
                             child: const Text("Homme"),
                             onTap: valider
                                 ? null
@@ -529,7 +529,7 @@ class _FicheEnseignantState extends State<FicheEnseignant> {
                                       sexe = value as int?;
                                     });
                                   }),
-                        GestureDetector(
+                        InkWell(
                             child: const Text("Femme"),
                             onTap: valider
                                 ? null

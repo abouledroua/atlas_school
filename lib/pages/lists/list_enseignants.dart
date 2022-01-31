@@ -145,6 +145,7 @@ class _ListEnseignantState extends State<ListEnseignant> {
                         icon: const Icon(Icons.arrow_back, color: Colors.white))
                     : null),
             floatingActionButton: FloatingActionButton(
+              heroTag: "btn4",
               backgroundColor: Colors.brown,
               onPressed: btnInsert,
               child: const Icon(Icons.add),
@@ -221,7 +222,7 @@ class _ListEnseignantState extends State<ListEnseignant> {
                                   searching = !searching;
                                 });
                               },
-                              child: const Icon(Icons.clear)),
+                              child: Ink(child: const Icon(Icons.clear))),
                           prefixIcon: const Icon(Icons.search)))),
               Expanded(
                   child: AlphabetScrollPage(

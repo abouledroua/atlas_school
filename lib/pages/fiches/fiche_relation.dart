@@ -719,7 +719,6 @@ class _FicheRelationState extends State<FicheRelation> {
                                 overflow: TextOverflow.clip)
                           ])
                     : Container(),
-           
             const Divider(),
             Row(children: [
               Padding(
@@ -1128,9 +1127,11 @@ class _SearchParentState extends State<SearchParent> {
                                                                   'Voulez vraiment supprimer cette relation ?')
                                                           .show();
                                                     },
-                                                    child: const Icon(
-                                                        Icons.delete,
-                                                        color: Colors.red)),
+                                                    child: Ink(
+                                                        child: const Icon(
+                                                            Icons.delete,
+                                                            color:
+                                                                Colors.red))),
                                                 Container(
                                                     child: Padding(
                                                         padding:
@@ -1163,7 +1164,8 @@ class _SearchParentState extends State<SearchParent> {
                                           query = "";
                                         });
                                       },
-                                      child: const Icon(Icons.search)))),
+                                      child: Ink(
+                                          child: const Icon(Icons.search))))),
                           Expanded(
                               child: ListView.builder(
                                   shrinkWrap: true,
@@ -1433,9 +1435,11 @@ class _SearchEnfantState extends State<SearchEnfant> {
                                                                   'Voulez vraiment supprimer cette relation ?')
                                                           .show();
                                                     },
-                                                    child: const Icon(
-                                                        Icons.delete,
-                                                        color: Colors.red)),
+                                                    child: Ink(
+                                                        child: const Icon(
+                                                            Icons.delete,
+                                                            color:
+                                                                Colors.red))),
                                                 Container(
                                                     child: Padding(
                                                         padding:
@@ -1468,7 +1472,8 @@ class _SearchEnfantState extends State<SearchEnfant> {
                                           query = "";
                                         });
                                       },
-                                      child: const Icon(Icons.search)))),
+                                      child: Ink(
+                                          child: const Icon(Icons.search))))),
                           Expanded(
                               child: ListView.builder(
                                   shrinkWrap: true,

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:atlas_school/classes/enfant.dart';
 import 'package:atlas_school/classes/gest_gallery_images.dart';
 import 'package:atlas_school/classes/user.dart';
+import 'package:atlas_school/pages/lists/list_enfants.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -204,7 +205,9 @@ class Data {
             decoration: BoxDecoration(
                 color: color,
                 borderRadius: const BorderRadius.all(Radius.circular(20))),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            child: Ink(
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Icon(icon, color: Colors.black, size: 26),
               const SizedBox(width: 10),
               Text(text,
@@ -212,7 +215,7 @@ class Data {
                       color: Colors.black,
                       fontSize: 17,
                       fontWeight: FontWeight.bold))
-            ])));
+            ]))));
   }
 
   static Drawer myDrawer(context, {Color? color}) {
@@ -259,7 +262,9 @@ class Data {
                             onTap: () {
                               canPop = true;
                               Navigator.of(context).pop();
-                              Navigator.of(context).pushNamed("ListEnfants");
+                              var route = MaterialPageRoute(
+                                  builder: (context) => const ListEnfant());
+                              Navigator.of(context).push(route);
                             },
                             text: "Liste des Enfants")),
                     Visibility(

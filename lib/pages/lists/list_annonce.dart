@@ -257,6 +257,7 @@ class _ListAnnonceState extends State<ListAnnonce> {
                     : null),
             floatingActionButton: Data.currentUser!.isAdmin
                 ? FloatingActionButton(
+                    heroTag: "btn2",
                     backgroundColor: Colors.indigo,
                     onPressed: btnInsert,
                     child: const Icon(Icons.add))
@@ -634,7 +635,7 @@ Shimmer.fromColors(
 
   showImage(Annonce annonce, int i) {
     return Hero(
-      tag: 'myHero',
+      tag: 'myHero$i',
       child: GestureDetector(
           onTap: () async {
             List<Photo> gallery = [];

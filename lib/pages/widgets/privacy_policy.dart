@@ -79,10 +79,11 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                           Navigator.pop(context, true);
                         }
                       : null,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
+                  child: Ink(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
                         Container(
                             padding: const EdgeInsets.all(10),
                             color: accept ? Colors.green : Colors.grey.shade400,
@@ -95,7 +96,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                                   SizedBox(width: 10),
                                   Icon(Icons.arrow_forward, color: Colors.white)
                                 ]))
-                      ])),
+                      ]))),
               const SizedBox(height: 20)
             ]))));
   }

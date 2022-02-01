@@ -2,8 +2,8 @@
 
 import 'package:atlas_school/classes/data.dart';
 import 'package:atlas_school/classes/user.dart';
-import 'package:atlas_school/pages/fiches/fiche_enseignant.dart';
-import 'package:atlas_school/pages/fiches/fiche_parent.dart';
+import 'package:atlas_school/pages/fiches/fiche_new_enseignant.dart';
+import 'package:atlas_school/pages/fiches/fiche_new_parent.dart';
 import 'package:atlas_school/pages/widgets/privacy_policy.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
@@ -303,7 +303,8 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     existUser();
                   },
-                  child: const Text("Connecter"))))
+                  child: const Text("Connecter")))),
+      const SizedBox(height: 10)
     ]);
   }
 
@@ -326,8 +327,7 @@ class _LoginPageState extends State<LoginPage> {
                         InkWell(
                             onTap: () async {
                               var route = MaterialPageRoute(
-                                  builder: (context) =>
-                                      const FicheParent(id: 0));
+                                  builder: (context) => const FicheNewParent());
                               Navigator.of(context)
                                   .push(route)
                                   .then((value) => Navigator.pop(context));
@@ -349,7 +349,7 @@ class _LoginPageState extends State<LoginPage> {
                             onTap: () async {
                               var route = MaterialPageRoute(
                                   builder: (context) =>
-                                      const FicheEnseignant(id: 0));
+                                      const FicheNewEnseignant());
                               Navigator.of(context)
                                   .push(route)
                                   .then((value) => Navigator.pop(context));

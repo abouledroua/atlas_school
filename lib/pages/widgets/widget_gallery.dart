@@ -110,6 +110,8 @@ class _GalleryWidgetState extends State<GalleryWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print("gallery widget");
+    final image = myImages[index];
     return SafeArea(
         child: Scaffold(
             body: Hero(
@@ -126,7 +128,6 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                       pageController: widget.pageController,
                       itemCount: myImages.length,
                       builder: (context, i) {
-                        final image = myImages[i];
                         return PhotoViewGalleryPageOptions(
                             minScale: PhotoViewComputedScale.contained,
                             maxScale: PhotoViewComputedScale.contained * 4,
@@ -144,6 +145,36 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                               color: Colors.black,
                               child: const Icon(Icons.arrow_back,
                                   color: Colors.white)))),
+                  if (index > 0)
+                    Positioned(
+                        top: Data.heightScreen / 2,
+                        left: 0,
+                        child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                index--;
+                              });
+                            },
+                            child: Ink(
+                                color: Colors.black,
+                                child: Icon(Icons.arrow_back_ios_new_rounded,
+                                    size: Data.heightScreen / 15,
+                                    color: Colors.white)))),
+                  if (index < myImages.length - 1)
+                    Positioned(
+                        top: Data.heightScreen / 2,
+                        right: 0,
+                        child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                index++;
+                              });
+                            },
+                            child: Ink(
+                                color: Colors.black,
+                                child: Icon(Icons.arrow_forward_ios_rounded,
+                                    size: Data.heightScreen / 15,
+                                    color: Colors.white)))),
                   Padding(
                       padding: const EdgeInsets.only(bottom: 15),
                       child: Row(

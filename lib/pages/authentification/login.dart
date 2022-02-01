@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,14 +23,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  //String userName = "", password = "";
   String userName = "admin", password = "admin";
-  //String userName = "PAR.1", password = "g";
-  //String userName = "PARENT.3", password = "amor";
-  //String userName = "ENS.1", password = "g";
   String? serverIP = "", userPref = "", passPref = "";
   bool showPassword = false, isSwitched = true, reconnect = false, err = true;
   late SharedPreferences prefs;
+  TextEditingController txtUserName = TextEditingController(text: "");
+  TextEditingController txtPassword = TextEditingController(text: "");
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -58,42 +57,46 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+    print("init login");
     WidgetsFlutterBinding.ensureInitialized(); //all widgets are rendered here
     if (Data.production) {
       userName = "";
+      txtUserName.text = "";
+      txtPassword.text = "";
       password = "";
     }
     getSharedPrefs();
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) => {
-          if (!isAllowed)
-            {
-              showDialog(
-                  context: Data.myContext,
-                  builder: (context) => AlertDialog(
-                          actions: [
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text("Ne pas Autoriser",
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 18))),
-                            TextButton(
-                                onPressed: () => AwesomeNotifications()
-                                    .requestPermissionToSendNotifications()
-                                    .then((_) => Navigator.of(context).pop()),
-                                child: const Text("Autoriser",
-                                    style: TextStyle(
-                                        color: Colors.teal,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold)))
-                          ],
-                          title: const Text("Autoriser les notifications"),
-                          content: const Text(
-                              "Notre application souhaite vous envoyer des notifications")))
-            }
-        });
-    //initPlatformState();
+    if (!kIsWeb) {
+      AwesomeNotifications().isNotificationAllowed().then((isAllowed) => {
+            if (!isAllowed)
+              {
+                showDialog(
+                    context: Data.myContext,
+                    builder: (context) => AlertDialog(
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("Ne pas Autoriser",
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 18))),
+                              TextButton(
+                                  onPressed: () => AwesomeNotifications()
+                                      .requestPermissionToSendNotifications()
+                                      .then((_) => Navigator.of(context).pop()),
+                                  child: const Text("Autoriser",
+                                      style: TextStyle(
+                                          color: Colors.teal,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold)))
+                            ],
+                            title: const Text("Autoriser les notifications"),
+                            content: const Text(
+                                "Notre application souhaite vous envoyer des notifications")))
+              }
+          });
+    } //initPlatformState();
     super.initState();
   }
 
@@ -123,13 +126,18 @@ class _LoginPageState extends State<LoginPage> {
     }
     userPref = prefs.getString('LastUser');
     passPref = prefs.getString('LastPass');
+    bool connect = prefs.getBool('LastConnected') ?? false;
     if (userPref != null && userPref!.isNotEmpty) {
       setState(() {
-        reconnect = true;
         userName = userPref!;
         password = passPref!;
+        reconnect = connect;
+        txtUserName.text = userName;
+        txtPassword.text = password;
       });
-      existUser();
+      if (connect) {
+        existUser();
+      }
     }
   }
 
@@ -197,40 +205,48 @@ class _LoginPageState extends State<LoginPage> {
                   child: Padding(
                       padding: const EdgeInsets.all(20),
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
-                        TextFormField(
-                            readOnly: reconnect,
-                            initialValue: userName,
-                            onChanged: (value) {
-                              userName = value;
-                            },
+                        TextField(
+                            onChanged: (value) => userName = value,
+                            enabled: !reconnect,
+                            controller: txtUserName,
+                            textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.text,
                             style: const TextStyle(
                                 fontSize: 16, color: Colors.white),
                             decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.blueAccent.shade100,
-                                hintText: "Nom d'Utilisateur",
-                                hintStyle: const TextStyle(color: Colors.white),
-                                prefixIcon:
-                                    const Icon(Icons.code, color: Colors.white),
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(40)))),
-                        const SizedBox(height: 10),
-                        TextFormField(
-                            readOnly: reconnect,
-                            initialValue: password,
-                            onChanged: (value) {
-                              password = value;
-                            },
-                            obscureText: !showPassword,
-                            style: const TextStyle(
-                                fontSize: 16, color: Colors.white),
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
+                                    borderRadius: BorderRadius.circular(40),
+                                    borderSide: const BorderSide(
+                                        width: 5, color: Colors.black)),
                                 filled: true,
                                 fillColor: Colors.blueAccent.shade100,
-                                hintText: "Mot de Passe",
-                                hintStyle: const TextStyle(color: Colors.white),
+                                prefixIcon: const Padding(
+                                    padding: EdgeInsets.only(right: 4),
+                                    child:
+                                        Icon(Icons.code, color: Colors.white)),
+                                contentPadding:
+                                    const EdgeInsets.only(bottom: 3),
+                                hintText: "Nom d'Utilisateur",
+                                hintStyle: const TextStyle(
+                                    fontSize: 14, color: Colors.white),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always)),
+                        const SizedBox(height: 10),
+                        TextField(
+                            onChanged: (value) => password = value,
+                            enabled: !reconnect,
+                            controller: txtPassword,
+                            obscureText: !showPassword,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.visiblePassword,
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.white),
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(40),
+                                    borderSide: const BorderSide(
+                                        width: 5, color: Colors.black)),
+                                filled: true,
                                 suffixIcon: IconButton(
                                     onPressed: () {
                                       setState(() {
@@ -239,12 +255,18 @@ class _LoginPageState extends State<LoginPage> {
                                     },
                                     icon: const Icon(Icons.remove_red_eye,
                                         color: Colors.white)),
-                                prefixIcon: const Icon(Icons.password,
-                                    color: Colors.white),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(40),
-                                    borderSide: const BorderSide(
-                                        width: 5, color: Colors.black)))),
+                                fillColor: Colors.blueAccent.shade100,
+                                prefixIcon: const Padding(
+                                    padding: EdgeInsets.only(right: 4),
+                                    child: Icon(Icons.password,
+                                        color: Colors.white)),
+                                contentPadding:
+                                    const EdgeInsets.only(bottom: 3),
+                                hintText: "Mot de Passe",
+                                hintStyle: const TextStyle(
+                                    fontSize: 14, color: Colors.white),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always)),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -483,17 +505,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void openHomePage() {
-    switch (Data.currentUser!.type) {
-      case 1:
-        Navigator.of(context).pushReplacementNamed("homeUser");
-        break;
-      case 2:
-        Navigator.of(context).pushReplacementNamed("homeAdmin");
-        break;
-      case 3:
-        Navigator.of(context).pushReplacementNamed("homeEns");
-        break;
-      default:
+    if (Data.currentUser!.isEns) {
+      Navigator.of(context).pushReplacementNamed("homeEns");
+    } else {
+      Navigator.of(context).pushReplacementNamed("homeAdmin");
     }
   }
 
@@ -504,6 +519,7 @@ class _LoginPageState extends State<LoginPage> {
       passPref = password;
       prefs.setString('LastUser', userPref!);
       prefs.setString('LastPass', passPref!);
+      prefs.setBool('LastConnected', true);
     }
     User u = User(
         idEns: idEns,

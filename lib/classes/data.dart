@@ -622,8 +622,9 @@ class Data {
             btnCancelOnPress: () {},
             btnOkOnPress: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.setString('LastUser', "");
-              prefs.setString('LastPass', "");
+              prefs.setBool('LastConnected', false);
+              // prefs.setString('LastUser', "");
+              // prefs.setString('LastPass', "");
               currentUser = null;
               while (Navigator.of(myContext).canPop()) {
                 Navigator.of(myContext).pop();

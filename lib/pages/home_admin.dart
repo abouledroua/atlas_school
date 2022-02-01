@@ -6,7 +6,6 @@ import 'package:atlas_school/pages/lists/gallery.dart';
 import 'package:atlas_school/pages/lists/list_annonce.dart';
 import 'package:atlas_school/pages/lists/list_messages.dart';
 import 'package:atlas_school/classes/data.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -103,7 +102,6 @@ class _HomeAdminState extends State<HomeAdmin> {
                     child: Scaffold(
                         resizeToAvoidBottomInset: true,
                         bottomNavigationBar: bottomNavigationBar(),
-                        //  bottomNavigationBar: curvedNavigationBar(),
                         body: screens[Data.index])))));
   }
 
@@ -128,11 +126,12 @@ class _HomeAdminState extends State<HomeAdmin> {
               const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           unselectedLabelStyle: const TextStyle(fontSize: 18),
           items: [
-            myBottomBarItem(
-                index: 0,
-                color: Colors.indigo,
-                icon: Icons.announcement,
-                title: "Annonces"),
+            if (!Data.currentUser!.isEns)
+              myBottomBarItem(
+                  index: 0,
+                  color: Colors.indigo,
+                  icon: Icons.announcement,
+                  title: "Annonces"),
             myBottomBarItem(
                 index: 1,
                 color: Colors.green,
@@ -155,21 +154,4 @@ class _HomeAdminState extends State<HomeAdmin> {
               color: Data.index == index ? color : Colors.grey.shade400),
           label: title,
           backgroundColor: Colors.white);
-
-  CurvedNavigationBar curvedNavigationBar() {
-    return CurvedNavigationBar(
-        buttonBackgroundColor: getItemColor(),
-        color: getItemColor(),
-        index: Data.index,
-        backgroundColor: Colors.white,
-        height: 60,
-        items: items,
-        onTap: (value) {
-          setState(() {
-            Data.index = value;
-            majScreens();
-            majItems();
-          });
-        });
-  }
 }

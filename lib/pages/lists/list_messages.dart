@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ListMessages extends StatefulWidget {
   const ListMessages({Key? key}) : super(key: key);
@@ -37,12 +38,14 @@ class _ListMessagesState extends State<ListMessages> {
   }
 
   listenNewMessages() async {
-    while (true) {
-      if (!Fetch.newMessage) {
-        await Future.delayed(const Duration(seconds: 2));
-      } else {
-        Fetch.newMessage = false;
-        getListMessages();
+    if (!kIsWeb) {
+      while (true) {
+        if (!Fetch.newMessage) {
+          await Future.delayed(const Duration(seconds: 2));
+        } else {
+          Fetch.newMessage = false;
+          getListMessages();
+        }
       }
     }
   }
@@ -140,11 +143,13 @@ class _ListMessagesState extends State<ListMessages> {
                       icon: const FaIcon(FontAwesomeIcons.sync,
                           color: Colors.white))
                 ]),
-            floatingActionButton: FloatingActionButton(
-                heroTag: "btn6",
-                backgroundColor: Colors.green.shade600,
-                onPressed: Data.currentUser!.isAdmin ? newMessage : null,
-                child: const Icon(Icons.add)),
+            floatingActionButton: Data.currentUser!.isAdmin
+                ? FloatingActionButton(
+                    heroTag: "btn6",
+                    backgroundColor: Colors.green.shade600,
+                    onPressed: Data.currentUser!.isAdmin ? newMessage : null,
+                    child: const Icon(Icons.add))
+                : null,
             body: bodyContent()));
   }
 

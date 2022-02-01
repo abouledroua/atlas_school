@@ -11,6 +11,7 @@ import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class FicheMessage extends StatefulWidget {
   final int idUser;
@@ -32,12 +33,14 @@ class _FicheMessageState extends State<FicheMessage> {
   final _controller = ScrollController();
 
   listenNewMessages() async {
-    while (true) {
-      if (!Fetch.newMessage) {
-        await Future.delayed(const Duration(seconds: 2));
-      } else {
-        Fetch.newMessage = false;
-        getMessages();
+    if (!kIsWeb) {
+      while (true) {
+        if (!Fetch.newMessage) {
+          await Future.delayed(const Duration(seconds: 2));
+        } else {
+          Fetch.newMessage = false;
+          getMessages();
+        }
       }
     }
   }

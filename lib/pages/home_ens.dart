@@ -5,8 +5,8 @@ import 'package:atlas_school/classes/gest_gallery_images.dart';
 import 'package:atlas_school/pages/fiches/fiche_message.dart';
 import 'package:atlas_school/pages/lists/gallery.dart';
 import 'package:atlas_school/classes/data.dart';
+import 'package:atlas_school/pages/lists/list_messages.dart';
 import 'package:atlas_school/pages/settings.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -84,21 +84,19 @@ class _HomeEnsState extends State<HomeEns> {
     }
     screens = [
       const GalleriePage(),
-      Visibility(
-          visible: Data.loadingAdmin,
-          child: Center(
+      Data.loadingAdmin
+          ? Center(
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                CircularProgressIndicator(
-                    color: Data.darkColor[
-                        Random().nextInt(Data.darkColor.length - 1) + 1]),
-                const SizedBox(width: 20),
-                const Text("Charegement en cours ...")
-              ])),
-          replacement: FicheMessage(
-              idUser: Data.adminId!, parentName: "Administration")),
+                  CircularProgressIndicator(
+                      color: Data.darkColor[
+                          Random().nextInt(Data.darkColor.length - 1) + 1]),
+                  const SizedBox(width: 20),
+                  const Text("Charegement en cours ...")
+                ]))
+          : FicheMessage(idUser: Data.adminId!, parentName: "Administration"),
       const SettingPage()
     ];
   }
@@ -115,20 +113,50 @@ class _HomeEnsState extends State<HomeEns> {
                 child: ClipRect(
                     child: Scaffold(
                         resizeToAvoidBottomInset: true,
-                        bottomNavigationBar: CurvedNavigationBar(
-                            buttonBackgroundColor: getItemColor(),
-                            color: getItemColor(),
-                            index: Data.index,
-                            backgroundColor: Colors.white,
-                            height: 60,
-                            items: items,
-                            onTap: (value) {
-                              setState(() {
-                                Data.index = value;
-                                majScreen();
-                                majItems();
-                              });
-                            }),
+                        bottomNavigationBar: bottomNavigationBar(),
                         body: screens[Data.index])))));
   }
+
+  majScreens() {
+    screens = [const GalleriePage(), const ListMessages()];
+  }
+
+  Widget bottomNavigationBar() => BottomNavigationBar(
+          currentIndex: Data.index,
+          onTap: (value) {
+            setState(() {
+              Data.index = value;
+              majScreens();
+            });
+          },
+          elevation: 0,
+          backgroundColor: Colors.white,
+          fixedColor: Data.index == 0 ? Colors.black : Colors.green,
+          iconSize: 32,
+          selectedLabelStyle:
+              const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          unselectedLabelStyle: const TextStyle(fontSize: 18),
+          items: [
+            myBottomBarItem(
+                index: 0,
+                color: Colors.black,
+                icon: Icons.photo,
+                title: "Gallerie"),
+            myBottomBarItem(
+                index: 1,
+                color: Colors.green,
+                icon: Icons.message,
+                title: 'Messages')
+          ]);
+
+  BottomNavigationBarItem myBottomBarItem(
+          {required IconData icon,
+          required Color color,
+          required String title,
+          required int index}) =>
+      BottomNavigationBarItem(
+          icon: Icon(icon,
+              color: Data.index == index ? color : Colors.grey.shade400),
+          label: title,
+          backgroundColor: Colors.white);
 }

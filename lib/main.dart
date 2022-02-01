@@ -6,7 +6,6 @@ import 'package:atlas_school/pages/fiches/fiche_message.dart';
 import 'package:atlas_school/pages/home_admin.dart';
 import 'package:atlas_school/pages/authentification/login.dart';
 import 'package:atlas_school/pages/home_ens.dart';
-import 'package:atlas_school/pages/home_user.dart';
 import 'package:atlas_school/pages/lists/gallery.dart';
 import 'package:atlas_school/pages/lists/list_annonce.dart';
 import 'package:atlas_school/pages/lists/list_enfants.dart';
@@ -17,90 +16,98 @@ import 'package:atlas_school/pages/lists/list_parents.dart';
 import 'package:atlas_school/pages/settings.dart';
 import 'package:atlas_school/pages/welcome.dart';
 import 'package:flutter/material.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:awesome_notifications/awesome_notifications.dart'
+    if (kIsWeb) '';
 import 'package:flutter/services.dart';
 import 'dart:io';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  AwesomeNotifications().initialize(
-      'resource://drawable/icone',
-      [
-        NotificationChannel(
-            channelKey: 'msg_channel',
-            channelName: 'Message notifications',
-            channelDescription:
-                'Notification channel for receiving new message',
-            defaultColor: Colors.green.shade600,
-            importance: NotificationImportance.High,
-            channelShowBadge: true,
-            playSound: true,
-            icon: 'resource://drawable/icone',
-            soundSource: 'resource://raw/res_sms',
-            ledColor: Colors.white,
-            onlyAlertOnce: true,
-            defaultPrivacy: NotificationPrivacy.Private,
-            vibrationPattern: lowVibrationPattern),
-        NotificationChannel(
-            channelKey: 'upload_Image_channel',
-            channelName: 'Upload Image notifications',
-            channelDescription: 'Notification channel for uploading images',
-            defaultColor: Colors.amber,
-            importance: NotificationImportance.High,
-            icon: 'resource://drawable/icone',
-            channelShowBadge: true,
-            playSound: true,
-            soundSource: 'resource://raw/res_upload',
-            onlyAlertOnce: true,
-            ledColor: Colors.yellow),
-        NotificationChannel(
-            channelKey: 'annonce_channel',
-            channelName: 'Annonce notifications',
-            channelDescription:
-                'Notification channel for alerts about new announce',
-            defaultColor: Colors.indigo,
-            importance: NotificationImportance.High,
-            channelShowBadge: true,
-            playSound: true,
-            icon: 'resource://drawable/icone',
-            soundSource: 'resource://raw/res_announce',
-            defaultPrivacy: NotificationPrivacy.Private,
-            ledColor: Colors.blue)
-      ],
-      debug: true);
-  Fetch.fetchNewMessages();
-  Fetch.fetchNewAnnounce();
+  print("i'm in main");
+  if (kIsWeb) {
+    print("i'm on the web");
+  } else {
+    print("i'm not on the web");
+    AwesomeNotifications().initialize(
+        'resource://drawable/icone',
+        [
+          NotificationChannel(
+              channelKey: 'msg_channel',
+              channelName: 'Message notifications',
+              channelDescription:
+                  'Notification channel for receiving new message',
+              defaultColor: Colors.green.shade600,
+              importance: NotificationImportance.High,
+              channelShowBadge: true,
+              playSound: true,
+              icon: 'resource://drawable/icone',
+              soundSource: 'resource://raw/res_sms',
+              ledColor: Colors.white,
+              onlyAlertOnce: true,
+              defaultPrivacy: NotificationPrivacy.Private,
+              vibrationPattern: lowVibrationPattern),
+          NotificationChannel(
+              channelKey: 'upload_Image_channel',
+              channelName: 'Upload Image notifications',
+              channelDescription: 'Notification channel for uploading images',
+              defaultColor: Colors.amber,
+              importance: NotificationImportance.High,
+              icon: 'resource://drawable/icone',
+              channelShowBadge: true,
+              playSound: true,
+              soundSource: 'resource://raw/res_upload',
+              onlyAlertOnce: true,
+              ledColor: Colors.yellow),
+          NotificationChannel(
+              channelKey: 'annonce_channel',
+              channelName: 'Annonce notifications',
+              channelDescription:
+                  'Notification channel for alerts about new announce',
+              defaultColor: Colors.indigo,
+              importance: NotificationImportance.High,
+              channelShowBadge: true,
+              playSound: true,
+              icon: 'resource://drawable/icone',
+              soundSource: 'resource://raw/res_announce',
+              defaultPrivacy: NotificationPrivacy.Private,
+              ledColor: Colors.blue)
+        ],
+        debug: true);
+    AwesomeNotifications().actionStream.listen((event) {
+      print("actionStream=${event.channelKey}");
+      switch (event.channelKey) {
+        case "msg_channel":
+          if (Data.currentUser != null && Data.currentUser!.isAdmin) {
+            Navigator.pushAndRemoveUntil(
+                Data.myContext,
+                MaterialPageRoute(builder: (_) => const ListMessages()),
+                (route) => route.isFirst);
+          } else {
+            Navigator.pushAndRemoveUntil(
+                Data.myContext,
+                MaterialPageRoute(
+                    builder: (_) => FicheMessage(
+                        idUser: 1, parentName: Data.currentUser!.parentName)),
+                (route) => route.isFirst);
+          }
+          break;
+        case "annonce_channel":
+          Navigator.pushAndRemoveUntil(
+              Data.myContext,
+              MaterialPageRoute(builder: (_) => const ListAnnonce()),
+              (route) => route.isFirst);
+          break;
+        default:
+      }
+    });
+    Fetch.fetchNewMessages();
+    Fetch.fetchNewAnnounce();
+  }
   if (Platform.isAndroid) {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   }
-  AwesomeNotifications().actionStream.listen((event) {
-    print("actionStream=${event.channelKey}");
-    switch (event.channelKey) {
-      case "msg_channel":
-        if (Data.currentUser != null && Data.currentUser!.isAdmin) {
-          Navigator.pushAndRemoveUntil(
-              Data.myContext,
-              MaterialPageRoute(builder: (_) => const ListMessages()),
-              (route) => route.isFirst);
-        } else {
-          Navigator.pushAndRemoveUntil(
-              Data.myContext,
-              MaterialPageRoute(
-                  builder: (_) => FicheMessage(
-                      idUser: 1, parentName: Data.currentUser!.parentName)),
-              (route) => route.isFirst);
-        }
-        break;
-      case "annonce_channel":
-        Navigator.pushAndRemoveUntil(
-            Data.myContext,
-            MaterialPageRoute(builder: (_) => const ListAnnonce()),
-            (route) => route.isFirst);
-        break;
-      default:
-    }
-  });
   runApp(const MyApp());
 }
 
@@ -140,7 +147,6 @@ class MyApp extends StatelessWidget {
           "ListEnseignants": (context) => const ListEnseignant(),
           "ListGroupes": (context) => const ListGroupes(),
           "homeAdmin": (context) => const HomeAdmin(),
-          "homeUser": (context) => const HomeUser(),
           "homeEns": (context) => const HomeEns(),
           "login": (context) => const LoginPage(),
           "setting": (context) => const SettingPage()

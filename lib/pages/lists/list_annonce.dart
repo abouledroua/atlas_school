@@ -17,7 +17,6 @@ import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shimmer/shimmer.dart';
 
 List<Groupe> groupes = [];
 List<Parent> parents = [];
@@ -343,34 +342,6 @@ class _ListAnnonceState extends State<ListAnnonce> {
                           child: Card(child: tile(annonces[i], i))));
                 })));
   }
-
-  shimmerWidget() {
-    return ListView.builder(
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return buildShimmer();
-      },
-    );
-  }
-  /*
-Shimmer.fromColors(
-          baseColor: Colors.red,
-          highlightColor: Colors.yellow,
-          child: Text(
-            'Shimmer',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 40.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ))
-  */
-
-  buildShimmer() => const ListTile(
-        leading: ShimmerWidget.circular(height: 60, width: 60),
-        title: ShimmerWidget.rectangular(height: 16),
-        subtitle: ShimmerWidget.rectangular(height: 14),
-      );
 
   Center loadingWidget() {
     return Center(
@@ -1081,28 +1052,4 @@ Shimmer.fromColors(
               .show();
         });
   }
-}
-
-class ShimmerWidget extends StatelessWidget {
-  final double height;
-  final double width;
-  final ShapeBorder shapBorder;
-
-  const ShimmerWidget.rectangular(
-      {this.width = double.infinity, required this.height})
-      : shapBorder = const RoundedRectangleBorder();
-
-  const ShimmerWidget.circular(
-      {required this.width,
-      required this.height,
-      this.shapBorder = const CircleBorder()});
-
-  @override
-  Widget build(BuildContext context) => Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[200]!,
-      child: Container(
-          width: width,
-          height: height,
-          decoration: ShapeDecoration(color: Colors.grey, shape: shapBorder)));
 }

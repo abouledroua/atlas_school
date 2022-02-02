@@ -733,7 +733,7 @@ deleteClasse(int idGroupe, int idEnfant, BuildContext context) async {
         if (response.statusCode == 200) {
           var result = response.body;
           if (result != "0") {
-            Data.showSnack('Classe supprimée ...', Colors.green);
+            Data.showSnack(msg: 'Classe supprimée ...',color:  Colors.green);
           } else {
             AwesomeDialog(
                     context: context,

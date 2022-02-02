@@ -141,7 +141,8 @@ class _FicheGroupeState extends State<FicheGroupe> {
           if (response.statusCode == 200) {
             var result = response.body;
             if (result != "0") {
-              Data.showSnack('Information mis à jours ...', Colors.green);
+              Data.showSnack(
+                  msg: 'Information mis à jours ...', color: Colors.green);
               Navigator.of(context).pop();
             } else {
               setState(() {
@@ -259,7 +260,7 @@ class _FicheGroupeState extends State<FicheGroupe> {
           if (response.statusCode == 200) {
             var result = response.body;
             if (result != "0") {
-              Data.showSnack('Groupe ajouté ...', Colors.green);
+              Data.showSnack(msg: 'Groupe ajouté ...',color:  Colors.green);
               Navigator.of(context).pop();
             } else {
               setState(() {

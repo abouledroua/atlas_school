@@ -306,7 +306,8 @@ class _FicheEnfantState extends State<FicheEnfant> {
         var responsebody = response.body;
         print("EnfantResponse=$responsebody");
         if (responsebody != "0") {
-          Data.showSnack('Information mis à jours ...', Colors.green);
+          Data.showSnack(
+              msg: 'Information mis à jours ...', color: Colors.green);
           Navigator.of(context).pop();
         } else {
           setState(() {
@@ -432,7 +433,7 @@ class _FicheEnfantState extends State<FicheEnfant> {
         var responsebody = response.body;
         print("EnfantResponse=$responsebody");
         if (responsebody != "0") {
-          Data.showSnack('Enfant inscris ...', Colors.green);
+          Data.showSnack(msg: 'Enfant inscris ...', color: Colors.green);
           Navigator.of(context).pop();
         } else {
           setState(() {

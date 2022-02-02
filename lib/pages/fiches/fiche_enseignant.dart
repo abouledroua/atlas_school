@@ -168,7 +168,8 @@ class _FicheEnseignantState extends State<FicheEnseignant> {
           if (response.statusCode == 200) {
             var result = response.body;
             if (result != "0") {
-              Data.showSnack('Information mis à jours ...', Colors.green);
+              Data.showSnack(
+                  msg: 'Information mis à jours ...', color: Colors.green);
               Navigator.of(context).pop();
             } else {
               setState(() {
@@ -308,11 +309,13 @@ class _FicheEnseignantState extends State<FicheEnseignant> {
             var result = response.body;
             if (result != "0") {
               if (Data.currentUser != null) {
-                Data.showSnack('Enseignant inscris ...', Colors.green);
+                Data.showSnack(
+                    msg: 'Enseignant inscris ...', color: Colors.green);
               } else {
                 Data.showSnack(
-                    "Vous êtes inscris ...\nVeuillez Contacter l'administration",
-                    Colors.green);
+                    msg:
+                        "Vous êtes inscris ...\nVeuillez Contacter l'administration",
+                    color: Colors.green);
               }
               Navigator.of(context).pop();
             } else {

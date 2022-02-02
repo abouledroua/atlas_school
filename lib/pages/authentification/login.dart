@@ -23,9 +23,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String userName = "admin", password = "admin";
+  String userName = "", password = "", oldPass = "";
   String? serverIP = "", userPref = "", passPref = "";
-  bool showPassword = false, isSwitched = true, reconnect = false, err = true;
+  bool showPassword = false,
+      isSwitched = true,
+      reconnect = false,
+      err = true,
+      oldInfoLoaded = false,
+      infoLoaded = false;
   late SharedPreferences prefs;
   TextEditingController txtUserName = TextEditingController(text: "");
   TextEditingController txtPassword = TextEditingController(text: "");
@@ -100,6 +105,10 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
   // Platform messages are asynchronous, so we initialize in an async method.
   // initPlatformState() async {
   //   Data.myKey = await Data.cryptor.generateRandomKey();
@@ -134,6 +143,7 @@ class _LoginPageState extends State<LoginPage> {
         reconnect = connect;
         txtUserName.text = userName;
         txtPassword.text = password;
+        infoLoaded = password.isNotEmpty;
       });
       if (connect) {
         existUser();
@@ -232,41 +242,66 @@ class _LoginPageState extends State<LoginPage> {
                                 floatingLabelBehavior:
                                     FloatingLabelBehavior.always)),
                         const SizedBox(height: 10),
-                        TextField(
-                            onChanged: (value) => password = value,
-                            enabled: !reconnect,
-                            controller: txtPassword,
-                            obscureText: !showPassword,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.visiblePassword,
-                            style: const TextStyle(
-                                fontSize: 16, color: Colors.white),
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(40),
-                                    borderSide: const BorderSide(
-                                        width: 5, color: Colors.black)),
-                                filled: true,
-                                suffixIcon: IconButton(
-                                    onPressed: () {
+                        Focus(
+                          onFocusChange: (value) {
+                            if (!value) {
+                              if (password.isEmpty) {
+                                password = oldPass;
+                                txtPassword.text = password;
+                                infoLoaded = true;
+                              }
+                              oldInfoLoaded = false;
+                            }
+                          },
+                          child: TextField(
+                              onTap: infoLoaded
+                                  ? () {
                                       setState(() {
-                                        showPassword = !showPassword;
+                                        oldPass = password;
+                                        password = "";
+                                        txtPassword.text = "";
+                                        oldInfoLoaded = true;
+                                        infoLoaded = false;
                                       });
-                                    },
-                                    icon: const Icon(Icons.remove_red_eye,
-                                        color: Colors.white)),
-                                fillColor: Colors.blueAccent.shade100,
-                                prefixIcon: const Padding(
-                                    padding: EdgeInsets.only(right: 4),
-                                    child: Icon(Icons.password,
-                                        color: Colors.white)),
-                                contentPadding:
-                                    const EdgeInsets.only(bottom: 3),
-                                hintText: "Mot de Passe",
-                                hintStyle: const TextStyle(
-                                    fontSize: 14, color: Colors.white),
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.always)),
+                                    }
+                                  : null,
+                              onChanged: (value) => password = value,
+                              enabled: !reconnect,
+                              controller: txtPassword,
+                              obscureText: !showPassword,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.visiblePassword,
+                              style: const TextStyle(
+                                  fontSize: 16, color: Colors.white),
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(40),
+                                      borderSide: const BorderSide(
+                                          width: 5, color: Colors.black)),
+                                  filled: true,
+                                  suffixIcon: infoLoaded
+                                      ? null
+                                      : IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              showPassword = !showPassword;
+                                            });
+                                          },
+                                          icon: const Icon(Icons.remove_red_eye,
+                                              color: Colors.white)),
+                                  fillColor: Colors.blueAccent.shade100,
+                                  prefixIcon: const Padding(
+                                      padding: EdgeInsets.only(right: 4),
+                                      child: Icon(Icons.password,
+                                          color: Colors.white)),
+                                  contentPadding:
+                                      const EdgeInsets.only(bottom: 3),
+                                  hintText: "Mot de Passe",
+                                  hintStyle: const TextStyle(
+                                      fontSize: 14, color: Colors.white),
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always)),
+                        ),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

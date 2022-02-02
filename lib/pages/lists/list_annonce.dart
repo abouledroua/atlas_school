@@ -925,7 +925,7 @@ class _ListAnnonceState extends State<ListAnnonce> {
           if (response.statusCode == 200) {
             var result = response.body;
             if (result != "0") {
-              Data.showSnack('Annonce supprimé ...', Colors.green);
+              Data.showSnack(msg: 'Annonce supprimé ...', color: Colors.green);
               getAnnonces();
               Navigator.of(context).pop();
             } else {

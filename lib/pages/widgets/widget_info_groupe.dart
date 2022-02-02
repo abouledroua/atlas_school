@@ -104,7 +104,7 @@ class _InfoGroupeState extends State<InfoGroupe> {
           if (response.statusCode == 200) {
             var result = response.body;
             if (result != "0") {
-              Data.showSnack('Groupe supprimé ...', Colors.green);
+              Data.showSnack(msg: 'Groupe supprimé ...',color:  Colors.green);
               Navigator.of(context).pop();
             } else {
               AwesomeDialog(

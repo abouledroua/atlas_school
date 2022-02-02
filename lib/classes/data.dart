@@ -178,7 +178,7 @@ class Data {
     prefs.setInt('TIMEOUT', timeOut);
   }
 
-  static showSnack(String msg, Color color) {
+  static showSnack({required String msg, required Color color}) {
     ScaffoldMessenger.of(myContext)
         .showSnackBar(SnackBar(content: Text(msg), backgroundColor: color));
   }
@@ -333,6 +333,16 @@ class Data {
                         },
                         text: "Gallerie des Photos"),
                     Visibility(visible: !production, child: const Divider()),
+                    Visibility(
+                        visible: currentUser!.isAdmin,
+                        child: _drawerButton(
+                            color: Colors.blue.shade50,
+                            icon: Icons.settings,
+                            onTap: () {
+                              Navigator.pop(context);
+                              reparerBDD();
+                            },
+                            text: "Réparer La BDD")),
                     Visibility(
                         visible: !production,
                         child: _drawerButton(
@@ -605,6 +615,53 @@ class Data {
       }
     }
     return str;
+  }
+
+  static void reparerBDD() {
+    String serverDir = getServerDirectory();
+    var url = "$serverDir/REPARER_BDD.php";
+    print(url);
+    Uri myUri = Uri.parse(url);
+    http
+        .post(myUri, body: {})
+        .timeout(Duration(seconds: timeOut))
+        .then((response) async {
+          if (response.statusCode == 200) {
+            var result = response.body;
+            if (result != "0") {
+              showSnack(
+                  msg: 'La base de données à été réparer ...',
+                  color: Colors.green);
+            } else {
+              AwesomeDialog(
+                      context: myContext,
+                      dialogType: DialogType.ERROR,
+                      showCloseIcon: true,
+                      title: 'Erreur',
+                      desc:
+                          "Probleme lors de la réparation de la base de données !!!")
+                  .show();
+            }
+          } else {
+            AwesomeDialog(
+                    context: myContext,
+                    dialogType: DialogType.ERROR,
+                    showCloseIcon: true,
+                    title: 'Erreur',
+                    desc: 'Probleme de Connexion avec le serveur 5!!!')
+                .show();
+          }
+        })
+        .catchError((error) {
+          print("erreur : $error");
+          AwesomeDialog(
+                  context: myContext,
+                  dialogType: DialogType.ERROR,
+                  showCloseIcon: true,
+                  title: 'Erreur',
+                  desc: 'Probleme de Connexion avec le serveur 6!!!')
+              .show();
+        });
   }
 
   static _logout() {

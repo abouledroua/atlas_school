@@ -957,7 +957,7 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
         print("responsebody=${response.body}");
         if (responsebody != "0") {
           loadImages();
-          Data.showSnack('Annonce mis à jours ...', Colors.green);
+          Data.showSnack(msg: 'Annonce mis à jours ...',color:  Colors.green);
           Navigator.of(context).pop();
         } else {
           setState(() {
@@ -1019,7 +1019,7 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
       exist = true;
     }
     if (exist) {
-      Data.showSnack("En cours de chargement des images ...", Colors.amber);
+      Data.showSnack(msg: "En cours de chargement des images ...",color:  Colors.amber);
     }
   }
 
@@ -1065,7 +1065,7 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
         if (responsebody != "0") {
           idAnnonce = int.parse(responsebody);
           loadImages();
-          Data.showSnack('Annonce ajoutée ...', Colors.green);
+          Data.showSnack(msg: 'Annonce ajoutée ...',color:  Colors.green);
           Navigator.of(context).pop();
         } else {
           setState(() {

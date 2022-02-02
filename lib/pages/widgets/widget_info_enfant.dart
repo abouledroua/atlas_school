@@ -167,7 +167,7 @@ class _InfoEnfantState extends State<InfoEnfant> {
           if (response.statusCode == 200) {
             var result = response.body;
             if (result != "0") {
-              Data.showSnack('Enfant supprimé ...', Colors.green);
+              Data.showSnack(msg: 'Enfant supprimé ...', color: Colors.green);
               Navigator.of(context).pop();
             } else {
               AwesomeDialog(

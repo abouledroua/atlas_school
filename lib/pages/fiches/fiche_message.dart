@@ -474,7 +474,7 @@ class _FicheMessageState extends State<FicheMessage> {
                                 onTap: () {
                                   Clipboard.setData(
                                       ClipboardData(text: messages[i].body));
-                                  Data.showSnack("Text copier", Colors.black);
+                                  Data.showSnack(msg: "Text copier", color: Colors.black);
                                   Navigator.of(context).pop();
                                 },
                                 child: Ink(
@@ -547,7 +547,7 @@ class _FicheMessageState extends State<FicheMessage> {
           if (response.statusCode == 200) {
             var result = response.body;
             if (result != "0") {
-              Data.showSnack('Message supprimé ...', Colors.green);
+              Data.showSnack(msg: 'Message supprimé ...',color:  Colors.green);
               Navigator.of(context).pop();
               setState(() {
                 messages.removeAt(i);

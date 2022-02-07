@@ -116,7 +116,7 @@ class _ListEnseignantState extends State<ListEnseignant> {
                 backgroundColor: Colors.brown,
                 centerTitle: true,
                 titleSpacing: 5,
-                title: const FittedBox(child: Text("Liste des Enseigants")),
+                title: const FittedBox(child: Text("Liste des Enseignants")),
                 actions: [
                   IconButton(
                       onPressed: () {

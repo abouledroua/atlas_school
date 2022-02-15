@@ -6,6 +6,7 @@ import 'package:atlas_school/classes/data.dart';
 import 'package:atlas_school/classes/enfant.dart';
 import 'package:atlas_school/classes/parent.dart';
 import 'package:atlas_school/pages/fiches/fiche_parent.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -183,17 +184,15 @@ class _InfoEnfantState extends State<InfoParent> {
                         width: 60,
                         child: (enfants[i].photo == "")
                             ? Image.asset("images/noPhoto.png")
-                            : Image.network(
-                                Data.getImage(enfants[i].photo, "PHOTO/ENFANT"),
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
+                            : CachedNetworkImage(
+                                //   fit: BoxFit.contain,
+                                placeholder: (context, url) => Center(
                                     child: CircularProgressIndicator(
                                         color: Data.darkColor[Random().nextInt(
                                                 Data.darkColor.length - 1) +
-                                            1]));
-                              })))))
+                                            1])),
+                                imageUrl: Data.getImage(
+                                    enfants[i].photo, "PHOTO/ENFANT"))))))
       ]);
     }
   }

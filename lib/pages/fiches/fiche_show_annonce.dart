@@ -9,6 +9,7 @@ import 'package:atlas_school/classes/groupe.dart';
 import 'package:atlas_school/classes/parent.dart';
 import 'package:atlas_school/classes/photo.dart';
 import 'package:atlas_school/pages/widgets/widget_gallery.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -110,35 +111,33 @@ class _ShowAnnonceState extends State<ShowAnnonce> {
                 child: SizedBox(
                     height: Data.heightScreen / 3,
                     child: Hero(
-                      tag: 'myHero${annonce.images.indexOf(item)}',
-                      child: GestureDetector(
-                          onTap: () async {
-                            List<Photo> gallery = [];
-                            for (var item in annonce.images) {
-                              gallery.add(Photo(
-                                  chemin: item, date: '', heure: '', id: 0));
-                            }
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => GalleryWidget(
-                                    index: annonce.images.indexOf(item),
-                                    myImages: gallery,
-                                    delete: false,
-                                    folder: "ANNONCE")));
-                          },
-                          child: Padding(
-                              padding: const EdgeInsets.all(2),
-                              child: Image.network(
-                                  Data.getImage(item, "ANNONCE"),
-                                  fit: BoxFit.contain, loadingBuilder:
-                                      (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
-                                    child: CircularProgressIndicator(
-                                        color: Data.darkColor[Random().nextInt(
-                                                Data.darkColor.length - 1) +
-                                            1]));
-                              }))),
-                    ))))
+                        tag: 'myHero${annonce.images.indexOf(item)}',
+                        child: GestureDetector(
+                            onTap: () async {
+                              List<Photo> gallery = [];
+                              for (var item in annonce.images) {
+                                gallery.add(Photo(
+                                    chemin: item, date: '', heure: '', id: 0));
+                              }
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => GalleryWidget(
+                                      index: annonce.images.indexOf(item),
+                                      myImages: gallery,
+                                      delete: false,
+                                      folder: "ANNONCE")));
+                            },
+                            child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: CachedNetworkImage(
+                                    fit: BoxFit.contain,
+                                    placeholder: (context, url) => Center(
+                                        child: CircularProgressIndicator(
+                                            color: Data
+                                                .darkColor[Random().nextInt(
+                                                    Data.darkColor.length - 1) +
+                                                1])),
+                                    imageUrl:
+                                        Data.getImage(item, "ANNONCE"))))))))
             .toList()
             .cast<Widget>());
   }
@@ -186,19 +185,15 @@ class _ShowAnnonceState extends State<ShowAnnonce> {
                       width: 40,
                       child: (enfants[i].photo == "")
                           ? Image.asset("images/noPhoto.png")
-                          : Image.network(
-                              Data.getImage(enfants[i].photo, "PHOTO/ENFANT"),
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              }
-                              return Center(
+                          : CachedNetworkImage(
+                              //  fit: BoxFit.contain,
+                              placeholder: (context, url) => Center(
                                   child: CircularProgressIndicator(
                                       color: Data.darkColor[Random().nextInt(
                                               Data.darkColor.length - 1) +
-                                          1]));
-                            })),
+                                          1])),
+                              imageUrl: Data.getImage(
+                                  enfants[i].photo, "PHOTO/ENFANT"))),
                   const SizedBox(width: 5),
                   Text(enfants[i].fullName,
                       style: GoogleFonts.laila(fontSize: 16))

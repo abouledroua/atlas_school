@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:atlas_school/classes/enfant.dart';
 import 'package:atlas_school/classes/groupe.dart';
 import 'package:atlas_school/classes/data.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -519,26 +520,21 @@ class _FicheClasseState extends State<FicheClasse> {
                               width: 60,
                               child: (enfants[i].photo == "")
                                   ? Image.asset("images/noPhoto.png")
-                                  : Image.network(
-                                      Data.getImage(enfants[i].photo, "PHOTO/ENFANT"),
-                                      loadingBuilder:
-                                          (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                          child: CircularProgressIndicator(
-                                              color: Data.darkColor[Random()
-                                                      .nextInt(Data.darkColor
-                                                              .length -
-                                                          1) +
-                                                  1]));
-                                    }))),
+                                  : CachedNetworkImage(
+                                      //  fit: BoxFit.contain,
+                                      placeholder: (context, url) =>
+                                          CircularProgressIndicator(
+                                              color: Data.darkColor[
+                                                  Random().nextInt(Data.darkColor.length - 1) +
+                                                      1]),
+                                      imageUrl: Data.getImage(
+                                          enfants[i].photo, "PHOTO/ENFANT")))),
                       title: Text(enfants[i].fullName,
                           style: GoogleFonts.laila(
                               fontSize: 12, fontWeight: FontWeight.bold),
                           overflow: TextOverflow.clip),
                       subtitle: Text(enfants[i].adresse,
-                          style: GoogleFonts.laila(
-                              fontSize: 12, color: Colors.grey.shade800),
+                          style: GoogleFonts.laila(fontSize: 12, color: Colors.grey.shade800),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 10),
                       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -733,7 +729,7 @@ deleteClasse(int idGroupe, int idEnfant, BuildContext context) async {
         if (response.statusCode == 200) {
           var result = response.body;
           if (result != "0") {
-            Data.showSnack(msg: 'Classe supprimée ...',color:  Colors.green);
+            Data.showSnack(msg: 'Classe supprimée ...', color: Colors.green);
           } else {
             AwesomeDialog(
                     context: context,
@@ -1038,10 +1034,10 @@ class _SearchEnfantState extends State<SearchEnfant> {
                                                           .show();
                                                     },
                                                     child: Ink(
-                                                      child: const Icon(
-                                                          Icons.delete,
-                                                          color: Colors.red)
-                                                    )),
+                                                        child: const Icon(
+                                                            Icons.delete,
+                                                            color:
+                                                                Colors.red))),
                                                 Container(
                                                     child: Padding(
                                                         padding:
@@ -1074,7 +1070,8 @@ class _SearchEnfantState extends State<SearchEnfant> {
                                           query = "";
                                         });
                                       },
-                                      child: Ink(child: const Icon(Icons.search))))),
+                                      child: Ink(
+                                          child: const Icon(Icons.search))))),
                           Expanded(
                               child: ListView.builder(
                                   shrinkWrap: true,
@@ -1333,10 +1330,10 @@ class _SearchGroupState extends State<SearchGroup> {
                                                           .show();
                                                     },
                                                     child: Ink(
-                                                      child: const Icon(
-                                                          Icons.delete,
-                                                          color: Colors.red)
-                                                    )),
+                                                        child: const Icon(
+                                                            Icons.delete,
+                                                            color:
+                                                                Colors.red))),
                                                 Container(
                                                     child: Padding(
                                                         padding:
@@ -1369,7 +1366,8 @@ class _SearchGroupState extends State<SearchGroup> {
                                           query = "";
                                         });
                                       },
-                                      child: Ink(child: const Icon(Icons.search))))),
+                                      child: Ink(
+                                          child: const Icon(Icons.search))))),
                           Expanded(
                               child: ListView.builder(
                                   shrinkWrap: true,

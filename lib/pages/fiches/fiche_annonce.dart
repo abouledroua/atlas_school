@@ -8,6 +8,7 @@ import 'package:atlas_school/classes/enfant.dart';
 import 'package:atlas_school/classes/gest_annonce_images.dart';
 import 'package:atlas_school/classes/groupe.dart';
 import 'package:atlas_school/classes/parent.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -38,6 +39,7 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
 
   bool _valTitre = false,
       loading = false,
+      loadingSub = false,
       uploadFinished = false,
       valider = false;
   DateTime? datetime;
@@ -47,6 +49,9 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
   List<MyAnnonceImage> myImages = [];
 
   getMyGroupes(List s) async {
+    setState(() {
+      loadingSub = true;
+    });
     String serverDir = Data.getServerDirectory();
     String pWhere = "";
     for (var item in s) {
@@ -74,8 +79,14 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                   id: int.parse(m['ID_GROUPE']));
               groupes.add(e);
             }
+            setState(() {
+              loadingSub = false;
+            });
           } else {
             groupes.clear();
+            setState(() {
+              loadingSub = false;
+            });
             AwesomeDialog(
                     context: context,
                     dialogType: DialogType.ERROR,
@@ -88,6 +99,9 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
         .catchError((error) {
           print("erreur : $error");
           groupes.clear();
+          setState(() {
+            loadingSub = false;
+          });
           AwesomeDialog(
                   context: context,
                   dialogType: DialogType.ERROR,
@@ -100,6 +114,9 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
   }
 
   getMyParents(List s) async {
+    setState(() {
+      loadingSub = true;
+    });
     String serverDir = Data.getServerDirectory();
     String pWhere = "";
     for (var item in s) {
@@ -141,8 +158,14 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                   tel1: m['TEL1']);
               parents.add(p);
             }
+            setState(() {
+              loadingSub = false;
+            });
           } else {
             parents.clear();
+            setState(() {
+              loadingSub = false;
+            });
             AwesomeDialog(
                     context: context,
                     dialogType: DialogType.ERROR,
@@ -155,6 +178,9 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
         .catchError((error) {
           print("erreur : $error");
           parents.clear();
+          setState(() {
+            loadingSub = false;
+          });
           AwesomeDialog(
                   context: context,
                   dialogType: DialogType.ERROR,
@@ -167,6 +193,9 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
   }
 
   getMyEnfants(List s) async {
+    setState(() {
+      loadingSub = true;
+    });
     String serverDir = Data.getServerDirectory();
     String pWhere = "";
     for (var item in s) {
@@ -204,8 +233,14 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                   photo: m['PHOTO']);
               enfants.add(e);
             }
+            setState(() {
+              loadingSub = false;
+            });
           } else {
             enfants.clear();
+            setState(() {
+              loadingSub = false;
+            });
             AwesomeDialog(
                     context: context,
                     dialogType: DialogType.ERROR,
@@ -218,6 +253,9 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
         .catchError((error) {
           print("erreur : $error");
           enfants.clear();
+          setState(() {
+            loadingSub = false;
+          });
           AwesomeDialog(
                   context: context,
                   dialogType: DialogType.ERROR,
@@ -549,15 +587,21 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                       textAlign: TextAlign.center,
                       style: GoogleFonts.laila(fontSize: 14),
                       overflow: TextOverflow.clip)),
-              Visibility(
-                  visible: (visibiliteMode != 1),
-                  child: Visibility(
-                      visible: (visibiliteMode == 2),
-                      child: showListGroupeSelected(),
-                      replacement: Visibility(
-                          visible: (visibiliteMode == 3),
-                          child: showListParentSelected(),
-                          replacement: showListEnfantSelected()))),
+              loadingSub
+                  ? Center(
+                      child: CircularProgressIndicator(
+                          color: Data.darkColor[
+                              Random().nextInt(Data.darkColor.length - 1) + 1]),
+                    )
+                  : Visibility(
+                      visible: (visibiliteMode != 1),
+                      child: Visibility(
+                          visible: (visibiliteMode == 2),
+                          child: showListGroupeSelected(),
+                          replacement: Visibility(
+                              visible: (visibiliteMode == 3),
+                              child: showListParentSelected(),
+                              replacement: showListEnfantSelected()))),
               Visibility(
                   visible: (visibiliteMode == 2 && groupes.isEmpty ||
                       visibiliteMode == 3 && parents.isEmpty ||
@@ -664,19 +708,15 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                     Padding(
                         padding: const EdgeInsets.all(8),
                         child: i < nbAnnImg
-                            ? Image.network(
-                                Data.getImage(myImages[i].chemin, "ANNONCE"),
-                                fit: BoxFit.contain, loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                if (loadingProgress == null) {
-                                  return child;
-                                }
-                                return Center(
-                                    child: CircularProgressIndicator(
+                            ? CachedNetworkImage(
+                                fit: BoxFit.contain,
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(
                                         color: Data.darkColor[Random().nextInt(
                                                 Data.darkColor.length - 1) +
-                                            1]));
-                              })
+                                            1]),
+                                imageUrl: Data.getImage(
+                                    myImages[i].chemin, "ANNONCE"))
                             : Image.file(File(myImages[i].chemin),
                                 fit: BoxFit.contain)),
                     Positioned(
@@ -780,19 +820,15 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
                       width: 40,
                       child: (enfants[i].photo == "")
                           ? Image.asset("images/noPhoto.png")
-                          : Image.network(
-                              Data.getImage(enfants[i].photo, "PHOTO/ENFANT"),
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              }
-                              return Center(
-                                  child: CircularProgressIndicator(
+                          : CachedNetworkImage(
+                              //  fit: BoxFit.contain,
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(
                                       color: Data.darkColor[Random().nextInt(
                                               Data.darkColor.length - 1) +
-                                          1]));
-                            })),
+                                          1]),
+                              imageUrl: Data.getImage(
+                                  enfants[i].photo, "PHOTO/ENFANT"))),
                   const SizedBox(width: 5),
                   Text(enfants[i].fullName,
                       style: GoogleFonts.laila(fontSize: 16)),
@@ -957,7 +993,7 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
         print("responsebody=${response.body}");
         if (responsebody != "0") {
           loadImages();
-          Data.showSnack(msg: 'Annonce mis à jours ...',color:  Colors.green);
+          Data.showSnack(msg: 'Annonce mis à jours ...', color: Colors.green);
           Navigator.of(context).pop();
         } else {
           setState(() {
@@ -1019,7 +1055,8 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
       exist = true;
     }
     if (exist) {
-      Data.showSnack(msg: "En cours de chargement des images ...",color:  Colors.amber);
+      Data.showSnack(
+          msg: "En cours de chargement des images ...", color: Colors.amber);
     }
   }
 
@@ -1065,7 +1102,7 @@ class _FicheAnnonceState extends State<FicheAnnonce> {
         if (responsebody != "0") {
           idAnnonce = int.parse(responsebody);
           loadImages();
-          Data.showSnack(msg: 'Annonce ajoutée ...',color:  Colors.green);
+          Data.showSnack(msg: 'Annonce ajoutée ...', color: Colors.green);
           Navigator.of(context).pop();
         } else {
           setState(() {
@@ -1342,32 +1379,26 @@ class _PermissionPageState extends State<PermissionPage> {
             elevation: 3,
             child: Padding(
                 padding: const EdgeInsets.only(left: 10, bottom: 10),
-                child: Row(
-                  children: [
-                    Text((i + 1).toString() + " -  ",
-                        style: GoogleFonts.laila(fontSize: 16)),
-                    SizedBox(
-                        width: 40,
-                        child: (enfants[i].photo == "")
-                            ? Image.asset("images/noPhoto.png")
-                            : Image.network(
-                                Data.getImage(enfants[i].photo, "PHOTO/ENFANT"),
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                if (loadingProgress == null) {
-                                  return child;
-                                }
-                                return Center(
-                                    child: CircularProgressIndicator(
-                                        color: Data.darkColor[Random().nextInt(
-                                                Data.darkColor.length - 1) +
-                                            1]));
-                              })),
-                    const SizedBox(width: 5),
-                    Text(enfants[i].fullName,
-                        style: GoogleFonts.laila(fontSize: 16)),
-                  ],
-                ))),
+                child: Row(children: [
+                  Text((i + 1).toString() + " -  ",
+                      style: GoogleFonts.laila(fontSize: 16)),
+                  SizedBox(
+                      width: 40,
+                      child: (enfants[i].photo == "")
+                          ? Image.asset("images/noPhoto.png")
+                          : CachedNetworkImage(
+                              //  fit: BoxFit.contain,
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(
+                                      color: Data.darkColor[Random().nextInt(
+                                              Data.darkColor.length - 1) +
+                                          1]),
+                              imageUrl: Data.getImage(
+                                  enfants[i].photo, "PHOTO/ENFANT"))),
+                  const SizedBox(width: 5),
+                  Text(enfants[i].fullName,
+                      style: GoogleFonts.laila(fontSize: 16))
+                ]))),
         itemCount: enfants.length,
         primary: false,
         shrinkWrap: true);

@@ -5,6 +5,7 @@ import 'package:atlas_school/classes/data.dart';
 import 'package:atlas_school/classes/enfant.dart';
 import 'package:atlas_school/pages/fiches/fiche_enfants.dart';
 import 'package:atlas_school/pages/widgets/widget_info_enfant.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -335,19 +336,16 @@ class _AlphabetScrollPageState extends State<AlphabetScrollPage> {
                   width: 60,
                   child: (item.photo == "")
                       ? Image.asset("images/noPhoto.png")
-                      : Image.network(photo,
-                          errorBuilder: (context, url, error) =>
+                      : CachedNetworkImage(
+                          errorWidget: (context, url, error) =>
                               const Icon(Icons.error),
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            }
-                            return Center(
-                                child: CircularProgressIndicator(
-                                    color: Data.darkColor[Random().nextInt(
-                                            Data.darkColor.length - 1) +
-                                        1]));
-                          }))),
+                          fit: BoxFit.contain,
+                          placeholder: (context, url) => Center(
+                              child: CircularProgressIndicator(
+                                  color: Data.darkColor[Random()
+                                          .nextInt(Data.darkColor.length - 1) +
+                                      1])),
+                          imageUrl: photo))),
           subtitle: Row(children: [
             Text(item.dateNaiss + "  --  ",
                 style: const TextStyle(fontSize: 11)),

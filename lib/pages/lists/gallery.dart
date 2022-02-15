@@ -7,6 +7,7 @@ import 'package:atlas_school/classes/gest_gallery_images.dart';
 import 'package:atlas_school/classes/photo.dart';
 import 'package:atlas_school/pages/widgets/widget_gallery.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -202,23 +203,18 @@ class _GalleriePageState extends State<GalleriePage> {
                                     },
                                     child: Ink(
                                         padding: const EdgeInsets.all(2),
-                                        child: Image.network(
-                                            Data.getImage(
-                                                item.chemin, "GALLERY"),
-                                            loadingBuilder: (context, child,
-                                                loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          }
-                                          return Center(
-                                              child: CircularProgressIndicator(
-                                                  color: Data.darkColor[Random()
-                                                          .nextInt(Data
-                                                                  .darkColor
-                                                                  .length -
-                                                              1) +
-                                                      1]));
-                                        }, fit: BoxFit.contain)))));
+                                        child: CachedNetworkImage(
+                                            fit: BoxFit.contain,
+                                            placeholder: (context, url) => Center(
+                                                child: CircularProgressIndicator(
+                                                    color: Data.darkColor[
+                                                        Random().nextInt(Data
+                                                                    .darkColor
+                                                                    .length -
+                                                                1) +
+                                                            1])),
+                                            imageUrl: Data.getImage(
+                                                item.chemin, "GALLERY"))))));
                       })
                       .toList()
                       .cast<Widget>())

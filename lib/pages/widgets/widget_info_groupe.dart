@@ -7,6 +7,7 @@ import 'package:atlas_school/classes/groupe.dart';
 import 'package:atlas_school/classes/enfant.dart';
 import 'package:atlas_school/pages/fiches/fiche_classe.dart';
 import 'package:atlas_school/pages/fiches/fiche_groupe.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -104,7 +105,7 @@ class _InfoGroupeState extends State<InfoGroupe> {
           if (response.statusCode == 200) {
             var result = response.body;
             if (result != "0") {
-              Data.showSnack(msg: 'Groupe supprimé ...',color:  Colors.green);
+              Data.showSnack(msg: 'Groupe supprimé ...', color: Colors.green);
               Navigator.of(context).pop();
             } else {
               AwesomeDialog(
@@ -176,17 +177,15 @@ class _InfoGroupeState extends State<InfoGroupe> {
                         width: 60,
                         child: (enfants[i].photo == "")
                             ? Image.asset("images/noPhoto.png")
-                            : Image.network(
-                                Data.getImage(enfants[i].photo, "PHOTO/ENFANT"),
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
+                            : CachedNetworkImage(
+                                //   fit: BoxFit.contain,
+                                placeholder: (context, url) => Center(
                                     child: CircularProgressIndicator(
                                         color: Data.darkColor[Random().nextInt(
                                                 Data.darkColor.length - 1) +
-                                            1]));
-                              }))),
+                                            1])),
+                                imageUrl: Data.getImage(
+                                    enfants[i].photo, "PHOTO/ENFANT")))),
                 title: Text(enfants[i].fullName,
                     style: GoogleFonts.laila(
                         fontSize: 12, fontWeight: FontWeight.bold),

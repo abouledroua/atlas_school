@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:atlas_school/classes/enfant.dart';
 import 'package:atlas_school/classes/parent.dart';
 import 'package:atlas_school/classes/data.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -608,26 +609,21 @@ class _FicheRelationState extends State<FicheRelation> {
                               width: 60,
                               child: (enfants[i].photo == "")
                                   ? Image.asset("images/noPhoto.png")
-                                  : Image.network(
-                                      Data.getImage(enfants[i].photo, "PHOTO/ENFANT"),
-                                      loadingBuilder:
-                                          (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                          child: CircularProgressIndicator(
-                                              color: Data.darkColor[Random()
-                                                      .nextInt(Data.darkColor
-                                                              .length -
-                                                          1) +
-                                                  1]));
-                                    }))),
+                                  : CachedNetworkImage(
+                                      //  fit: BoxFit.contain,
+                                      placeholder: (context, url) =>
+                                          CircularProgressIndicator(
+                                              color: Data.darkColor[
+                                                  Random().nextInt(Data.darkColor.length - 1) +
+                                                      1]),
+                                      imageUrl: Data.getImage(
+                                          enfants[i].photo, "PHOTO/ENFANT")))),
                       title: Text(enfants[i].fullName,
                           style: GoogleFonts.laila(
                               fontSize: 12, fontWeight: FontWeight.bold),
                           overflow: TextOverflow.clip),
                       subtitle: Text(enfants[i].adresse,
-                          style: GoogleFonts.laila(
-                              fontSize: 12, color: Colors.grey.shade800),
+                          style: GoogleFonts.laila(fontSize: 12, color: Colors.grey.shade800),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 10),
                       trailing: Row(mainAxisSize: MainAxisSize.min, children: [

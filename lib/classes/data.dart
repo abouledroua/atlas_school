@@ -6,6 +6,7 @@ import 'package:atlas_school/classes/gest_gallery_images.dart';
 import 'package:atlas_school/classes/user.dart';
 import 'package:atlas_school/pages/lists/list_enfants.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -421,28 +422,20 @@ class Data {
                                                   const EdgeInsets.all(2.0),
                                               child: SizedBox(
                                                   width: 60,
-                                                  child: (_enfants[i].photo ==
-                                                          "")
+                                                  child: (_enfants[i].photo == "")
                                                       ? Image.asset(
                                                           "images/noPhoto.png")
-                                                      : Image.network(
-                                                          getImage(
-                                                              _enfants[i].photo,
-                                                              "PHOTO/ENFANT"),
-                                                          loadingBuilder: (context,
-                                                              child,
-                                                              loadingProgress) {
-                                                          if (loadingProgress ==
-                                                              null) {
-                                                            return child;
-                                                          }
-                                                          return Center(
-                                                              child: CircularProgressIndicator(
+                                                      : CachedNetworkImage(
+                                                          placeholder: (context,
+                                                                  url) =>
+                                                              CircularProgressIndicator(
                                                                   color: darkColor[
-                                                                      Random().nextInt(darkColor.length -
-                                                                              1) +
-                                                                          1]));
-                                                        }))));
+                                                                      Random().nextInt(darkColor.length - 1) +
+                                                                          1]),
+                                                          imageUrl: getImage(
+                                                              _enfants[i].photo,
+                                                              "PHOTO/ENFANT"))
+                                                  )));
                                     }))))
                   ]))
                 ]))));

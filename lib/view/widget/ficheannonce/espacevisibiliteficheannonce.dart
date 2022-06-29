@@ -29,9 +29,7 @@ class EspaceVisibiliteFicheAnnonce extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyText1,
                       overflow: TextOverflow.clip)),
               controller.loadingSub
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
+                  ? const Center(child: CircularProgressIndicator())
                   : Visibility(
                       visible: (controller.visibiliteMode != 1),
                       child: Visibility(

@@ -9,7 +9,9 @@ import 'package:atlas_school/core/class/parent.dart';
 import 'package:atlas_school/core/constant/color.dart';
 import 'package:atlas_school/core/constant/data.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
+import 'package:atlas_school/view/screen/listenfantselect.dart';
 import 'package:atlas_school/view/screen/listgroupeselect.dart';
+import 'package:atlas_school/view/screen/listparentselect.dart';
 import 'package:atlas_school/view/widget/selectcameragellerywidget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -217,35 +219,10 @@ class FicheAnnonceController extends GetxController {
     update();
   }
 
-  addGroupe(Groupe g) {
-    groupes.add(g);
-    print("groupe added");
-    update();
-  }
-
   removeImage(int index) {
     myImages.removeAt(index);
     print("image removed");
     update();
-  }
-
-  removeGroupe(Groupe item) {
-    groupes.removeAt(groupes.indexOf(item));
-    print("groupe removed");
-    update();
-  }
-
-  showModal() async {
-    await Get.bottomSheet(
-        SelectCameraGalleryWidget(onTapCamera: () async {
-          await captureImage();
-          Get.back();
-        }, onTapGallery: () async {
-          await pickImages();
-          Get.back();
-        }),
-        enterBottomSheetDuration: const Duration(milliseconds: 600),
-        exitBottomSheetDuration: const Duration(milliseconds: 600));
   }
 
   captureImage() async {
@@ -264,6 +241,55 @@ class FicheAnnonceController extends GetxController {
     }
   }
 
+  addGroupe(Groupe g) {
+    groupes.add(g);
+    print("groupe added");
+    update();
+  }
+
+  removeGroupe(Groupe item) {
+    groupes.removeAt(groupes.indexOf(item));
+    print("groupe removed");
+    update();
+  }
+
+  addParent(Parent p) {
+    parents.add(p);
+    print("parent added");
+    update();
+  }
+
+  removeParent(Parent item) {
+    parents.removeAt(parents.indexOf(item));
+    print("parent removed");
+    update();
+  }
+
+  addEnfant(Enfant e) {
+    enfants.add(e);
+    print("enfant added");
+    update();
+  }
+
+  removeEnfant(Enfant item) {
+    enfants.removeAt(enfants.indexOf(item));
+    print("enfant removed");
+    update();
+  }
+
+  showModal() async {
+    await Get.bottomSheet(
+        SelectCameraGalleryWidget(onTapCamera: () async {
+          await captureImage();
+          Get.back();
+        }, onTapGallery: () async {
+          await pickImages();
+          Get.back();
+        }),
+        enterBottomSheetDuration: const Duration(milliseconds: 600),
+        exitBottomSheetDuration: const Duration(milliseconds: 600));
+  }
+
   onRadioChange(val) async {
     switch (val) {
       case "Public":
@@ -276,18 +302,17 @@ class FicheAnnonceController extends GetxController {
         print("search for groupes");
         Get.to(() => const ListGroupeSelect());
         updateRadio(val);
-        // await showDialog(context: context, builder: (_) => const SearchGroup());
         break;
       case "Parent":
         visibiliteMode = 3;
-
         print("search for parents");
-        //  await showDialog(context: context, builder: (_) => const SearchParent());
+        Get.to(() => const ListParentSelect());
         updateRadio(val);
         break;
       case "Enfant":
         visibiliteMode = 4;
         print("search for kids");
+        Get.to(() => const ListEnfantSelect());
         //   await showDialog(context: context, builder: (_) => const SearchEnfant());
         updateRadio(val);
         break;
@@ -300,6 +325,12 @@ class FicheAnnonceController extends GetxController {
     String bddFileName = idAnnonce.toString() + "." + ext;
     String fileName = chemin + "\\" + bddFileName;
     return fileName;
+  }
+
+  Future<bool> onWillPopVisibilite() async {
+    return !((visibiliteMode == 2 && groupes.isEmpty) ||
+        (visibiliteMode == 3 && parents.isEmpty) ||
+        (visibiliteMode == 4 && enfants.isEmpty));
   }
 
   @override

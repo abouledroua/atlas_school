@@ -1,29 +1,30 @@
 // ignore_for_file: avoid_print
 
 import 'package:atlas_school/controller/ficheannonce_controller.dart';
-import 'package:atlas_school/controller/listgroupeselect_controller.dart';
+import 'package:atlas_school/controller/listenfantselect_controller.dart';
+import 'package:atlas_school/core/class/enfant.dart';
 import 'package:atlas_school/view/widget/mywidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ListGroupeSelect extends StatelessWidget {
-  const ListGroupeSelect({Key? key}) : super(key: key);
+class ListEnfantSelect extends StatelessWidget {
+  const ListEnfantSelect({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ListGroupeSelectController controller =
-        Get.put(ListGroupeSelectController());
-    List suggestionList = controller.query.isEmpty
-        ? controller.allgroupes
+    ListEnfantSelectController controller =
+        Get.put(ListEnfantSelectController());
+    List<Enfant> suggestionList = controller.query.isEmpty
+        ? controller.allenfants
         : controller.filtrerCours();
     return MyWidget(
-        title: "Selectionner Groupe(s)",
-        child: GetBuilder<ListGroupeSelectController>(
+        title: "Selectionner Enfant(s)",
+        child: GetBuilder<ListEnfantSelectController>(
             builder: (controller) => Visibility(
                 visible: controller.loading,
                 child: const Center(child: CircularProgressIndicator()),
                 replacement: Visibility(
-                    visible: controller.allgroupes.isEmpty,
+                    visible: controller.allenfants.isEmpty,
                     child: Container(
                         color: Colors.white,
                         child: Column(
@@ -34,7 +35,7 @@ class ListGroupeSelect extends StatelessWidget {
                                   child: Text(
                                       controller.error
                                           ? "Erreur de connexion !!!"
-                                          : "Aucun Groupe !!!!",
+                                          : "Aucun Enfant !!!!",
                                       style: TextStyle(
                                           fontSize: 22,
                                           color: controller.error
@@ -47,55 +48,54 @@ class ListGroupeSelect extends StatelessWidget {
                                       primary: Colors.blue,
                                       onPrimary: Colors.white),
                                   onPressed: () {
-                                    controller.getAllGroupes();
+                                    controller.getAllEnfants();
                                   },
                                   icon: const Icon(Icons.refresh),
                                   label: const Text("Actualiser"))
                             ])),
                     replacement: Column(children: [
                       GetBuilder<FicheAnnonceController>(
-                        builder: (fcontroller) => Visibility(
-                            visible: fcontroller.groupes.isEmpty,
-                            child: Center(
-                                child: Container(
-                                    padding: const EdgeInsets.all(10),
-                                    width: double.infinity,
-                                    color: Colors.amber,
-                                    child: const Text(
-                                        "Pas de groupe sélectionné",
-                                        textAlign: TextAlign.center,
-                                        style:
-                                            TextStyle(color: Colors.white)))),
-                            replacement: Wrap(
-                                children: fcontroller.groupes
-                                    .map((item) => Padding(
-                                        padding: const EdgeInsets.all(4),
-                                        child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              InkWell(
-                                                  onTap: () {
-                                                    fcontroller
-                                                        .removeGroupe(item);
-                                                  },
-                                                  child: const Icon(
-                                                      Icons.delete,
-                                                      color: Colors.red)),
-                                              Ink(
-                                                  color: Colors.blue,
-                                                  child: Padding(
-                                                      padding: const EdgeInsets
-                                                          .all(8.0),
-                                                      child: Text(
-                                                          item.designation,
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .white))))
-                                            ])))
-                                    .toList()
-                                    .cast<Widget>())),
-                      ),
+                          builder: (fcontroller) => Visibility(
+                              visible: fcontroller.enfants.isEmpty,
+                              child: Center(
+                                  child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      width: double.infinity,
+                                      color: Colors.amber,
+                                      child: const Text(
+                                          "Pas d'enfant sélectionné",
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              TextStyle(color: Colors.white)))),
+                              replacement: Wrap(
+                                  children: fcontroller.enfants
+                                      .map((item) => Padding(
+                                          padding: const EdgeInsets.all(4),
+                                          child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                InkWell(
+                                                    onTap: () {
+                                                      fcontroller
+                                                          .removeEnfant(item);
+                                                    },
+                                                    child: const Icon(
+                                                        Icons.delete,
+                                                        color: Colors.red)),
+                                                Ink(
+                                                    color: Colors.blue,
+                                                    child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Text(
+                                                            item.fullName,
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .white))))
+                                              ])))
+                                      .toList()
+                                      .cast<Widget>()))),
                       const Divider(),
                       TextFormField(
                           initialValue: controller.query,
@@ -120,7 +120,7 @@ class ListGroupeSelect extends StatelessWidget {
                                   itemCount: suggestionList.length,
                                   itemBuilder: (context, i) => Visibility(
                                       visible: !controller
-                                          .existGroup(suggestionList[i].id),
+                                          .existEnfant(suggestionList[i].id),
                                       child: Card(
                                           child: Padding(
                                               padding:
@@ -128,19 +128,19 @@ class ListGroupeSelect extends StatelessWidget {
                                               child: ListTile(
                                                   onTap: () {
                                                     print(suggestionList[i]
-                                                        .designation);
-                                                    if (!controller.existGroup(
+                                                        .fullName);
+                                                    if (!controller.existEnfant(
                                                         suggestionList[i].id)) {
-                                                      fcontroller.addGroupe(
+                                                      fcontroller.addEnfant(
                                                           suggestionList[i]);
                                                     }
                                                   },
                                                   title: Text(
                                                       suggestionList[i]
-                                                          .designation,
+                                                          .fullName,
                                                       style: TextStyle(
                                                           color: controller
-                                                                  .existGroup(
+                                                                  .existEnfant(
                                                                       suggestionList[
                                                                               i]
                                                                           .id)

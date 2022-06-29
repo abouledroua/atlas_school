@@ -30,70 +30,74 @@ class FicheAnnonce extends StatelessWidget {
     return MyWidget(
         backgroudImage: AppImageAsset.annonceOpac,
         title: "Fiche Annonce",
-        child: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: ListView(children: [
-              Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: padLeft, vertical: padBottom),
-                  child: EditTextFicheAnnonce(
-                      hintText: "Titre de l'annonce",
-                      icon: Icons.title_rounded,
-                      mycontroller: controller.titreController,
-                      title: "Titre")),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: padLeft, right: padLeft, bottom: padBottom / 2),
-                  child: EditTextFicheAnnonce(
-                      hintText: "Détails sur l'annonce",
-                      icon: Icons.description_outlined,
-                      mycontroller: controller.detailsController,
-                      title: "Détails")),
-              const Divider(),
-              const EnteteImageFicheAnnonce(),
-              const EspaceImageFicheAnnonce(),
-              const Divider(),
-              const EnteteVisibiliteFicheAnnonce(),
-              EspaceVisibiliteFicheAnnonce(padBottom: padBottom),
-              const Divider(),
-              if (controller.valider) const ValidationEnCoursFicheAnnonce(),
-              if (!controller.valider)
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      MyButtonsFicheAnnonce(
-                          onPressed: () {
-                            AwesomeDialog(
-                                    context: context,
-                                    dialogType: DialogType.QUESTION,
-                                    showCloseIcon: true,
-                                    btnCancelText: "Non",
-                                    btnOkText: "Oui",
-                                    btnCancelOnPress: () {},
-                                    width: min(AppSizes.maxWidth,
-                                        AppSizes.widthScreen),
-                                    btnOkOnPress: () {
-                                      Get.back();
-                                    },
-                                    desc:
-                                        'Voulez-vous vraiment annuler tous les changements !!!')
-                                .show();
-                          },
-                          borderColor: AppColor.red,
-                          backgroundcolor: AppColor.white,
-                          text: 'Annuler',
-                          textColor: AppColor.red),
-                      MyButtonsFicheAnnonce(
-                          onPressed: () {
-                            controller.saveAnnonce();
-                          },
-                          borderColor: AppColor.white,
-                          backgroundcolor: AppColor.green,
-                          text: 'Valider',
-                          textColor: AppColor.white)
-                    ])
-            ])));
+        child: WillPopScope(
+            onWillPop: controller.onWillPop,
+            child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                },
+                child: ListView(children: [
+                  Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: padLeft, vertical: padBottom),
+                      child: EditTextFicheAnnonce(
+                          hintText: "Titre de l'annonce",
+                          icon: Icons.title_rounded,
+                          nbline: 1,
+                          mycontroller: controller.titreController,
+                          title: "Titre")),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          left: padLeft, right: padLeft, bottom: padBottom / 2),
+                      child: EditTextFicheAnnonce(
+                          hintText: "Détails sur l'annonce",
+                          icon: Icons.description_outlined,
+                          mycontroller: controller.detailsController,
+                          title: "Détails")),
+                  const Divider(),
+                  const EnteteImageFicheAnnonce(),
+                  const EspaceImageFicheAnnonce(),
+                  const Divider(),
+                  const EnteteVisibiliteFicheAnnonce(),
+                  EspaceVisibiliteFicheAnnonce(padBottom: padBottom),
+                  const Divider(),
+                  if (controller.valider) const ValidationEnCoursFicheAnnonce(),
+                  if (!controller.valider)
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          MyButtonsFicheAnnonce(
+                              onPressed: () {
+                                AwesomeDialog(
+                                        context: context,
+                                        dialogType: DialogType.QUESTION,
+                                        showCloseIcon: true,
+                                        btnCancelText: "Non",
+                                        btnOkText: "Oui",
+                                        btnCancelOnPress: () {},
+                                        width: min(AppSizes.maxWidth,
+                                            AppSizes.widthScreen),
+                                        btnOkOnPress: () {
+                                          Get.back();
+                                        },
+                                        desc:
+                                            'Voulez-vous vraiment annuler tous les changements !!!')
+                                    .show();
+                              },
+                              borderColor: AppColor.red,
+                              backgroundcolor: AppColor.white,
+                              text: 'Annuler',
+                              textColor: AppColor.red),
+                          MyButtonsFicheAnnonce(
+                              onPressed: () {
+                                controller.saveAnnonce();
+                              },
+                              borderColor: AppColor.white,
+                              backgroundcolor: AppColor.green,
+                              text: 'Valider',
+                              textColor: AppColor.white)
+                        ]),
+                  const SizedBox(height: 20)
+                ]))));
   }
 }

@@ -21,6 +21,7 @@ class ListAnnonceWidget extends StatelessWidget {
             itemBuilder: (context, i) => GestureDetector(
                 onTap: () {
                   Get.bottomSheet(BottomSheetWidgetListAnnonce(ind: i),
+                      isScrollControlled: true,
                       enterBottomSheetDuration:
                           const Duration(milliseconds: 600),
                       exitBottomSheetDuration:

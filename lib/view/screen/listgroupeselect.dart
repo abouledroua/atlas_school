@@ -54,48 +54,47 @@ class ListGroupeSelect extends StatelessWidget {
                             ])),
                     replacement: Column(children: [
                       GetBuilder<FicheAnnonceController>(
-                        builder: (fcontroller) => Visibility(
-                            visible: fcontroller.groupes.isEmpty,
-                            child: Center(
-                                child: Container(
-                                    padding: const EdgeInsets.all(10),
-                                    width: double.infinity,
-                                    color: Colors.amber,
-                                    child: const Text(
-                                        "Pas de groupe sélectionné",
-                                        textAlign: TextAlign.center,
-                                        style:
-                                            TextStyle(color: Colors.white)))),
-                            replacement: Wrap(
-                                children: fcontroller.groupes
-                                    .map((item) => Padding(
-                                        padding: const EdgeInsets.all(4),
-                                        child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              InkWell(
-                                                  onTap: () {
-                                                    fcontroller
-                                                        .removeGroupe(item);
-                                                  },
-                                                  child: const Icon(
-                                                      Icons.delete,
-                                                      color: Colors.red)),
-                                              Ink(
-                                                  color: Colors.blue,
-                                                  child: Padding(
-                                                      padding: const EdgeInsets
-                                                          .all(8.0),
-                                                      child: Text(
-                                                          item.designation,
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .white))))
-                                            ])))
-                                    .toList()
-                                    .cast<Widget>())),
-                      ),
+                          builder: (fcontroller) => Visibility(
+                              visible: fcontroller.groupes.isEmpty,
+                              child: Center(
+                                  child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      width: double.infinity,
+                                      color: Colors.amber,
+                                      child: const Text(
+                                          "Pas de groupe sélectionné",
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              TextStyle(color: Colors.white)))),
+                              replacement: Wrap(
+                                  children: fcontroller.groupes
+                                      .map((item) => Padding(
+                                          padding: const EdgeInsets.all(4),
+                                          child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                InkWell(
+                                                    onTap: () {
+                                                      fcontroller
+                                                          .removeGroupe(item);
+                                                    },
+                                                    child: const Icon(
+                                                        Icons.delete,
+                                                        color: Colors.red)),
+                                                Ink(
+                                                    color: Colors.blue,
+                                                    child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Text(
+                                                            item.designation,
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .white))))
+                                              ])))
+                                      .toList()
+                                      .cast<Widget>()))),
                       const Divider(),
                       TextFormField(
                           initialValue: controller.query,

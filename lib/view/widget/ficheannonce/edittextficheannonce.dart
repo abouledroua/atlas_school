@@ -7,12 +7,14 @@ class EditTextFicheAnnonce extends StatelessWidget {
   final String title, hintText;
   final IconData icon;
   final TextEditingController mycontroller;
+  final int? nbline;
   const EditTextFicheAnnonce(
       {Key? key,
       required this.title,
       required this.icon,
       required this.hintText,
-      required this.mycontroller})
+      required this.mycontroller,
+      this.nbline})
       : super(key: key);
 
   @override
@@ -22,13 +24,15 @@ class EditTextFicheAnnonce extends StatelessWidget {
             controller: mycontroller,
             enabled: !controller.valider,
             readOnly: controller.valider,
-            textInputAction: TextInputAction.next,
+            maxLines: nbline,
+            textInputAction:
+                nbline == null ? TextInputAction.newline : TextInputAction.next,
             decoration: InputDecoration(
                 hintText: hintText,
                 hintStyle: const TextStyle(fontSize: 14),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 label: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 9),
                     child: Text(title)),

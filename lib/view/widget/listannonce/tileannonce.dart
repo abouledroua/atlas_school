@@ -59,19 +59,18 @@ class TileAnnonce extends GetView<ListAnnonceController> {
                       maxLines: 3,
                       style: Theme.of(context).textTheme.bodyText2,
                       overflow: TextOverflow.clip)),
-              const SizedBox(height: 10),
+              if (!annonce.images.isNotEmpty) const SizedBox(height: 10),
               // yarham babak khaliha haka ay dega koun traja3ha visibility
-              SizedBox(
-                  height: AppSizes.heightScreen * 0.4,
-                  child: annonce.images.isNotEmpty
-                      ? nbImages == 1
-                          ? Image1ListAnnonce(index: index)
-                          : nbImages == 2
-                              ? Image2ListAnnonce(index: index)
-                              : nbImages == 3
-                                  ? Image3ListAnnonce(index: index)
-                                  : Image4ListAnnonce(index: index)
-                      : Container())
+              if (annonce.images.isNotEmpty)
+                SizedBox(
+                    height: AppSizes.heightScreen * 0.4,
+                    child: nbImages == 1
+                        ? Image1ListAnnonce(index: index)
+                        : nbImages == 2
+                            ? Image2ListAnnonce(index: index)
+                            : nbImages == 3
+                                ? Image3ListAnnonce(index: index)
+                                : Image4ListAnnonce(index: index))
             ]));
   }
 }

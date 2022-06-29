@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:math';
 
 import 'package:atlas_school/controller/photoview_controller.dart';
@@ -18,6 +20,7 @@ class BottomPagePhotoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('BottomPagePhotoView');
     return GetBuilder<MyPhotoViewController>(
         builder: (controller) => Padding(
             padding: const EdgeInsets.only(bottom: 15),

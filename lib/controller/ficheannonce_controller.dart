@@ -13,6 +13,7 @@ import 'package:atlas_school/view/screen/listenfantselect.dart';
 import 'package:atlas_school/view/screen/listgroupeselect.dart';
 import 'package:atlas_school/view/screen/listparentselect.dart';
 import 'package:atlas_school/view/widget/selectcameragellerywidget.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
@@ -127,7 +128,6 @@ class FicheAnnonceController extends GetxController {
 
   insertAnnonce() async {
     String serverDir = AppData.getServerDirectory();
-
     String pGroupe = "", pParent = "", pEnfant = "";
     if (visibiliteMode == 2) {
       for (var i = 0; i < groupes.length; i++) {
@@ -194,7 +194,6 @@ class FicheAnnonceController extends GetxController {
 
   loadImages() {
     late ImageAnnounce e;
-    bool exist = false;
     for (var i = nbAnnImg; i < myImages.length; i++) {
       var item = myImages[i];
       e = ImageAnnounce(
@@ -203,13 +202,6 @@ class FicheAnnonceController extends GetxController {
               p.extension(getFileName("IMAGE\\ANNONCE", File(item.chemin))),
           base64Image: base64Encode(File(item.chemin).readAsBytesSync()));
       GestAnnounceImages.myImages.add(e);
-      exist = true;
-    }
-    if (exist) {
-      AppData.mySnackBar(
-          title: 'Fiche Annonce',
-          message: "En cours de chargement des images ...",
-          color: AppColor.amber);
     }
   }
 
@@ -331,6 +323,31 @@ class FicheAnnonceController extends GetxController {
     return !((visibiliteMode == 2 && groupes.isEmpty) ||
         (visibiliteMode == 3 && parents.isEmpty) ||
         (visibiliteMode == 4 && enfants.isEmpty));
+  }
+
+  Future<bool> onWillPop() async {
+    return (await showDialog(
+            context: Get.context!,
+            builder: (context) => AlertDialog(
+                    title: Row(children: const [
+                      Icon(Icons.cancel_outlined, color: Colors.red),
+                      Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Text('Annuler ?'))
+                    ]),
+                    content: const Text(
+                        "Voulez-vous vraiment annuler tous les changements !!!"),
+                    actions: <Widget>[
+                      TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: const Text('Non',
+                              style: TextStyle(color: Colors.red))),
+                      TextButton(
+                          onPressed: () => Navigator.of(context).pop(true),
+                          child: const Text('Oui',
+                              style: TextStyle(color: Colors.green)))
+                    ]))) ??
+        false;
   }
 
   @override

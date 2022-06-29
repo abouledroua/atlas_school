@@ -3,6 +3,7 @@ import 'package:atlas_school/core/class/user.dart';
 import 'package:atlas_school/core/constant/color.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:atlas_school/view/screen/detailsannonce.dart';
+import 'package:atlas_school/view/screen/ficheannonce.dart';
 import 'package:atlas_school/view/widget/listannonce/bottom_listannonce/detailsenfantsbottomwidgetlistannonce.dart';
 import 'package:atlas_school/view/widget/listannonce/bottom_listannonce/detailsgroupebottomwidgetlistannonce.dart';
 import 'package:atlas_school/view/widget/listannonce/bottom_listannonce/detailsparentbottomwidgetlistannonce.dart';
@@ -94,6 +95,13 @@ class BottomSheetWidgetListAnnonce extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                             primary: Colors.blue, onPrimary: Colors.white),
                         onPressed: () {
+                          Get.to(() => FicheAnnonce(
+                                  idAnnonce: controller.annonces[ind].id))
+                              ?.then((value) {
+                            if (value == "success") {
+                              controller.getAnnonces();
+                            }
+                          });
                           // var route = MaterialPageRoute(
                           //     builder: (context) =>
                           //         FicheAnnonce(id: annonces[ind].id));

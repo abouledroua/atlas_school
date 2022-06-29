@@ -1,3 +1,4 @@
+import 'package:atlas_school/core/class/gest_annonce_images.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:atlas_school/core/services/dataservice.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class HomePageController extends GetxController {
     WidgetsFlutterBinding.ensureInitialized();
     AppSizes.setSizeScreen(Get.context);
     await initialService();
+    GestAnnounceImages.uploadAnnonceImages();
     super.onInit();
   }
 }

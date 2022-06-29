@@ -1,6 +1,9 @@
 // ignore_for_file: avoid_print
 
 import 'package:atlas_school/classes/notifications.dart';
+import 'package:atlas_school/controller/listannonce_controller.dart';
+import 'package:atlas_school/core/constant/color.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../constant/data.dart';
@@ -14,18 +17,30 @@ class GestAnnounceImages {
       isThereNewUploaded = false;
 
   static uploadAnnonceImages() async {
-    while (User.isParent) {
+    while (User.isAdmin) {
       if (myImages.isEmpty || _uploading) {
         print(_uploading
             ? "ImageAnnonce : Someone else is uploading ..."
             : "ImageAnnonce : Waiting for upload");
         if (myImages.isEmpty && _wasUploading) {
-          createUploadNotification('chargerment des Images est terminé ...');
+          // createUploadNotification('chargerment des Images est terminé ...');
+          AppData.mySnackBar(
+              title: 'Fiche Annonce',
+              message: "chargerment des Images est terminé ...",
+              color: AppColor.amber);
+          ListAnnonceController controller = Get.find();
+          controller.getAnnonces();
         }
         _wasUploading = myImages.isNotEmpty;
         await Future.delayed(const Duration(seconds: 5));
       } else {
-        cancelUploadNotification();
+        //     cancelUploadNotification();
+        if (!_wasUploading) {
+          AppData.mySnackBar(
+              title: 'Fiche Annonce',
+              message: "En cours de chargement des images ...",
+              color: AppColor.amber);
+        }
         _wasUploading = true;
         send(myImages[0]);
         await Future.delayed(const Duration(seconds: 2));

@@ -1,6 +1,6 @@
-import 'package:atlas_school/classes/enfant.dart';
-import 'package:atlas_school/classes/groupe.dart';
-import 'package:atlas_school/classes/parent.dart';
+import 'package:atlas_school/core/class/enfant.dart';
+import 'package:atlas_school/core/class/groupe.dart';
+import 'package:atlas_school/core/class/parent.dart';
 
 class Annonce {
   String titre, detail, date, heure;

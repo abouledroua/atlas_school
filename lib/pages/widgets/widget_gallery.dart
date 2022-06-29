@@ -1,216 +1,216 @@
-// ignore_for_file: avoid_print
+// // ignore_for_file: avoid_print
 
-import 'dart:math';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
-import 'package:atlas_school/classes/data.dart';
-import 'package:atlas_school/classes/photo.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
-import 'package:http/http.dart' as http;
-import 'package:photo_view/photo_view_gallery.dart';
+// import 'dart:math';
+// import 'package:path_provider/path_provider.dart';
+// import 'dart:io';
+// import 'package:atlas_school/classes/data.dart';
+// import 'package:atlas_school/classes/photo.dart';
+// import 'package:awesome_dialog/awesome_dialog.dart';
+// import 'package:flutter/material.dart';
+// import 'package:photo_view/photo_view.dart';
+// import 'package:http/http.dart' as http;
+// import 'package:photo_view/photo_view_gallery.dart';
 
-class GalleryWidget extends StatefulWidget {
-  final PageController pageController;
-  final int index;
-  final String folder;
-  final bool delete;
-  final List<Photo> myImages;
-  GalleryWidget(
-      {Key? key,
-      required this.folder,
-      required this.delete,
-      required this.index,
-      required this.myImages})
-      : pageController = PageController(initialPage: index),
-        super(key: key);
+// class GalleryWidget extends StatefulWidget {
+//   final PageController pageController;
+//   final int index;
+//   final String folder;
+//   final bool delete;
+//   final List<Photo> myImages;
+//   GalleryWidget(
+//       {Key? key,
+//       required this.folder,
+//       required this.delete,
+//       required this.index,
+//       required this.myImages})
+//       : pageController = PageController(initialPage: index),
+//         super(key: key);
 
-  @override
-  _GalleryWidgetState createState() => _GalleryWidgetState();
-}
+//   @override
+//   _GalleryWidgetState createState() => _GalleryWidgetState();
+// }
 
-class _GalleryWidgetState extends State<GalleryWidget> {
-  late int index = widget.index;
-  late bool delete;
-  late String folder;
-  late List<Photo> myImages;
+// class _GalleryWidgetState extends State<GalleryWidget> {
+//   late int index = widget.index;
+//   late bool delete;
+//   late String folder;
+//   late List<Photo> myImages;
 
-  @override
-  void initState() {
-    WidgetsFlutterBinding.ensureInitialized(); //all widgets are rendered here
-    folder = widget.folder;
-    myImages = widget.myImages;
-    delete = widget.delete;
-    super.initState();
-  }
+//   @override
+//   void initState() {
+//     WidgetsFlutterBinding.ensureInitialized(); //all widgets are rendered here
+//     folder = widget.folder;
+//     myImages = widget.myImages;
+//     delete = widget.delete;
+//     super.initState();
+//   }
 
-  deleteEnseignant() async {
-    String serverDir = Data.getServerDirectory();
-    var url = "$serverDir/DELETE_GALLERY.php";
-    print(url);
-    Uri myUri = Uri.parse(url);
-    http
-        .post(myUri, body: {"ID_PHOTO": myImages[index].id.toString()})
-        .timeout(Duration(seconds: Data.timeOut))
-        .then((response) async {
-          if (response.statusCode == 200) {
-            var result = response.body;
-            if (result != "0") {
-              Data.showSnack(msg: 'Image supprimé ...', color: Colors.green);
-              Navigator.of(context).pop("delete");
-            } else {
-              AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.ERROR,
-                      showCloseIcon: true,
-                      title: 'Erreur',
-                      desc: "Probleme lors de la suppression !!!")
-                  .show();
-            }
-          } else {
-            AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.ERROR,
-                    showCloseIcon: true,
-                    title: 'Erreur',
-                    desc: 'Probleme de Connexion avec le serveur !!!')
-                .show();
-          }
-        })
-        .catchError((error) {
-          print("erreur : $error");
-          AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.ERROR,
-                  showCloseIcon: true,
-                  title: 'Erreur',
-                  desc: 'Probleme de Connexion avec le serveur !!!')
-              .show();
-        });
-  }
+//   deleteEnseignant() async {
+//     String serverDir = Data.getServerDirectory();
+//     var url = "$serverDir/DELETE_GALLERY.php";
+//     print(url);
+//     Uri myUri = Uri.parse(url);
+//     http
+//         .post(myUri, body: {"ID_PHOTO": myImages[index].id.toString()})
+//         .timeout(Duration(seconds: Data.timeOut))
+//         .then((response) async {
+//           if (response.statusCode == 200) {
+//             var result = response.body;
+//             if (result != "0") {
+//               Data.showSnack(msg: 'Image supprimé ...', color: Colors.green);
+//               Navigator.of(context).pop("delete");
+//             } else {
+//               AwesomeDialog(
+//                       context: context,
+//                       dialogType: DialogType.ERROR,
+//                       showCloseIcon: true,
+//                       title: 'Erreur',
+//                       desc: "Probleme lors de la suppression !!!")
+//                   .show();
+//             }
+//           } else {
+//             AwesomeDialog(
+//                     context: context,
+//                     dialogType: DialogType.ERROR,
+//                     showCloseIcon: true,
+//                     title: 'Erreur',
+//                     desc: 'Probleme de Connexion avec le serveur !!!')
+//                 .show();
+//           }
+//         })
+//         .catchError((error) {
+//           print("erreur : $error");
+//           AwesomeDialog(
+//                   context: context,
+//                   dialogType: DialogType.ERROR,
+//                   showCloseIcon: true,
+//                   title: 'Erreur',
+//                   desc: 'Probleme de Connexion avec le serveur !!!')
+//               .show();
+//         });
+//   }
 
-  Future<String> getFilePath() async {
-    Directory appDocumentsDirectory =
-        await getApplicationDocumentsDirectory(); // 1
-    String appDocumentsPath = appDocumentsDirectory.path; // 2
-    String filePath =
-        '$appDocumentsPath/GALLERY/${myImages[index].chemin}'; // 3
-    return filePath;
-  }
+//   Future<String> getFilePath() async {
+//     Directory appDocumentsDirectory =
+//         await getApplicationDocumentsDirectory(); // 1
+//     String appDocumentsPath = appDocumentsDirectory.path; // 2
+//     String filePath =
+//         '$appDocumentsPath/GALLERY/${myImages[index].chemin}'; // 3
+//     return filePath;
+//   }
 
-  void saveFile() async {
-    Uri myUri = Uri.parse(Data.getImage(myImages[index].chemin, "GALLERY"));
-    var response = await http.get(myUri);
-    Directory documentDirectory = await getApplicationDocumentsDirectory();
-    File file = File(documentDirectory.path + myImages[index].chemin);
-    file.writeAsBytesSync(response.bodyBytes);
-    Data.showSnack(msg: "Image enregistré avec succée ...",color:  Colors.green);
-  }
+//   void saveFile() async {
+//     Uri myUri = Uri.parse(Data.getImage(myImages[index].chemin, "GALLERY"));
+//     var response = await http.get(myUri);
+//     Directory documentDirectory = await getApplicationDocumentsDirectory();
+//     File file = File(documentDirectory.path + myImages[index].chemin);
+//     file.writeAsBytesSync(response.bodyBytes);
+//     Data.showSnack(msg: "Image enregistré avec succée ...",color:  Colors.green);
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    print("gallery widget");
-    final image = myImages[index];
-    return SafeArea(
-        child: Scaffold(
-            body: Hero(
-                tag: 'myHero$index',
-                child: Stack(alignment: Alignment.bottomCenter, children: [
-                  PhotoViewGallery.builder(
-                      loadingBuilder: (context, event) => Center(
-                          child: CircularProgressIndicator(
-                              color: Data.darkColor[
-                                  Random().nextInt(Data.darkColor.length - 1) +
-                                      1])),
-                      onPageChanged: (index) =>
-                          setState(() => this.index = index),
-                      pageController: widget.pageController,
-                      itemCount: myImages.length,
-                      builder: (context, i) {
-                        return PhotoViewGalleryPageOptions(
-                            minScale: PhotoViewComputedScale.contained,
-                            maxScale: PhotoViewComputedScale.contained * 4,
-                            imageProvider: NetworkImage(
-                                Data.getImage(image.chemin, folder)));
-                      }),
-                  Positioned(
-                      top: 0,
-                      left: 0,
-                      child: InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Ink(
-                              color: Colors.black,
-                              child: const Icon(Icons.arrow_back,
-                                  color: Colors.white)))),
-                  if (index > 0)
-                    Positioned(
-                        top: Data.heightScreen / 2,
-                        left: 0,
-                        child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                index--;
-                              });
-                            },
-                            child: Ink(
-                                color: Colors.black,
-                                child: Icon(Icons.arrow_back_ios_new_rounded,
-                                    size: Data.heightScreen / 15,
-                                    color: Colors.white)))),
-                  if (index < myImages.length - 1)
-                    Positioned(
-                        top: Data.heightScreen / 2,
-                        right: 0,
-                        child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                index++;
-                              });
-                            },
-                            child: Ink(
-                                color: Colors.black,
-                                child: Icon(Icons.arrow_forward_ios_rounded,
-                                    size: Data.heightScreen / 15,
-                                    color: Colors.white)))),
-                  Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text("Photo ${index + 1} / ${myImages.length}",
-                                style: const TextStyle(color: Colors.white)),
-                            !Data.currentUser!.isParent && delete
-                                ? InkWell(
-                                    onTap: () {
-                                      AwesomeDialog(
-                                              context: context,
-                                              dialogType: DialogType.QUESTION,
-                                              showCloseIcon: true,
-                                              title: 'Confirmation',
-                                              btnOkText: "Oui",
-                                              btnCancelText: "Non",
-                                              btnOkOnPress: () {
-                                                setState(() {
-                                                  deleteEnseignant();
-                                                });
-                                              },
-                                              btnCancelOnPress: () {},
-                                              desc:
-                                                  'Voulez vraiment supprimer cette photo ?')
-                                          .show();
-                                    },
-                                    child: Ink(
-                                        child: Row(children: const [
-                                      Text("Supprimer ",
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      Icon(Icons.delete, color: Colors.white)
-                                    ])))
-                                : const SizedBox(height: 0, width: 0)
-                          ]))
-                ]))));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     print("gallery widget");
+//     final image = myImages[index];
+//     return SafeArea(
+//         child: Scaffold(
+//             body: Hero(
+//                 tag: 'myHero$index',
+//                 child: Stack(alignment: Alignment.bottomCenter, children: [
+//                   PhotoViewGallery.builder(
+//                       loadingBuilder: (context, event) => Center(
+//                           child: CircularProgressIndicator(
+//                               color: Data.darkColor[
+//                                   Random().nextInt(Data.darkColor.length - 1) +
+//                                       1])),
+//                       onPageChanged: (index) =>
+//                           setState(() => this.index = index),
+//                       pageController: widget.pageController,
+//                       itemCount: myImages.length,
+//                       builder: (context, i) {
+//                         return PhotoViewGalleryPageOptions(
+//                             minScale: PhotoViewComputedScale.contained,
+//                             maxScale: PhotoViewComputedScale.contained * 4,
+//                             imageProvider: NetworkImage(
+//                                 Data.getImage(image.chemin, folder)));
+//                       }),
+//                   Positioned(
+//                       top: 0,
+//                       left: 0,
+//                       child: InkWell(
+//                           onTap: () {
+//                             Navigator.pop(context);
+//                           },
+//                           child: Ink(
+//                               color: Colors.black,
+//                               child: const Icon(Icons.arrow_back,
+//                                   color: Colors.white)))),
+//                   if (index > 0)
+//                     Positioned(
+//                         top: Data.heightScreen / 2,
+//                         left: 0,
+//                         child: InkWell(
+//                             onTap: () {
+//                               setState(() {
+//                                 index--;
+//                               });
+//                             },
+//                             child: Ink(
+//                                 color: Colors.black,
+//                                 child: Icon(Icons.arrow_back_ios_new_rounded,
+//                                     size: Data.heightScreen / 15,
+//                                     color: Colors.white)))),
+//                   if (index < myImages.length - 1)
+//                     Positioned(
+//                         top: Data.heightScreen / 2,
+//                         right: 0,
+//                         child: InkWell(
+//                             onTap: () {
+//                               setState(() {
+//                                 index++;
+//                               });
+//                             },
+//                             child: Ink(
+//                                 color: Colors.black,
+//                                 child: Icon(Icons.arrow_forward_ios_rounded,
+//                                     size: Data.heightScreen / 15,
+//                                     color: Colors.white)))),
+//                   Padding(
+//                       padding: const EdgeInsets.only(bottom: 15),
+//                       child: Row(
+//                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                           children: [
+//                             Text("Photo ${index + 1} / ${myImages.length}",
+//                                 style: const TextStyle(color: Colors.white)),
+//                             !Data.currentUser!.isParent && delete
+//                                 ? InkWell(
+//                                     onTap: () {
+//                                       AwesomeDialog(
+//                                               context: context,
+//                                               dialogType: DialogType.QUESTION,
+//                                               showCloseIcon: true,
+//                                               title: 'Confirmation',
+//                                               btnOkText: "Oui",
+//                                               btnCancelText: "Non",
+//                                               btnOkOnPress: () {
+//                                                 setState(() {
+//                                                   deleteEnseignant();
+//                                                 });
+//                                               },
+//                                               btnCancelOnPress: () {},
+//                                               desc:
+//                                                   'Voulez vraiment supprimer cette photo ?')
+//                                           .show();
+//                                     },
+//                                     child: Ink(
+//                                         child: Row(children: const [
+//                                       Text("Supprimer ",
+//                                           style:
+//                                               TextStyle(color: Colors.white)),
+//                                       Icon(Icons.delete, color: Colors.white)
+//                                     ])))
+//                                 : const SizedBox(height: 0, width: 0)
+//                           ]))
+//                 ]))));
+//   }
+// }

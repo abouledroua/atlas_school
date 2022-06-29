@@ -5,6 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Chrome",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--web-port", "50463",
+                "-d", "chrome",
+                "--web-renderer", "html",
+                ],
+            },
+            {
             "name": "atlas_school",
             "request": "launch",
             "type": "dart"

@@ -1,9 +1,11 @@
 // ignore_for_file: avoid_print
 
-import 'package:atlas_school/classes/ann_image.dart';
-import 'package:atlas_school/classes/data.dart';
 import 'package:atlas_school/classes/notifications.dart';
 import 'package:http/http.dart' as http;
+
+import '../constant/data.dart';
+import 'image_annonce.dart';
+import 'user.dart';
 
 class GestAnnounceImages {
   static List<ImageAnnounce> myImages = [];
@@ -12,7 +14,7 @@ class GestAnnounceImages {
       isThereNewUploaded = false;
 
   static uploadAnnonceImages() async {
-    while (Data.currentUser != null && !Data.currentUser!.isParent) {
+    while (User.isParent) {
       if (myImages.isEmpty || _uploading) {
         print(_uploading
             ? "ImageAnnonce : Someone else is uploading ..."
@@ -32,7 +34,7 @@ class GestAnnounceImages {
   }
 
   static void send(ImageAnnounce item) async {
-    String serverDir = Data.getServerDirectory();
+    String serverDir = AppData.getServerDirectory();
     final String url = "$serverDir/UPLOAD_ANNONCE_IMAGES.php";
     print(url);
     Uri myUri = Uri.parse(url);

@@ -12,6 +12,7 @@ class MyWidget extends StatelessWidget {
   final List<Widget>? actions;
   String? backgroudImage;
   Color? color;
+  Widget? drawer, leading;
 
   MyWidget({
     Key? key,
@@ -19,7 +20,9 @@ class MyWidget extends StatelessWidget {
     this.backgroudImage,
     this.color,
     this.title,
+    this.drawer,
     this.actions,
+    this.leading,
     this.floatingActionButton,
   }) : super(key: key);
 
@@ -38,14 +41,18 @@ class MyWidget extends StatelessWidget {
                     centerTitle: true,
                     backgroundColor:
                         color != null ? AppColor.white : Colors.transparent,
-                    leading: Get.routing.isBack!
-                        ? IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.arrow_back))
-                        : null,
+                    leading: leading ??
+                        (Navigator.canPop(context)
+                            ? IconButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                icon: const Icon(Icons.arrow_back))
+                            : null),
                     title: Text(title!,
                         style: Theme.of(context).textTheme.headline1)),
             floatingActionButton: floatingActionButton,
+            drawer: drawer,
             resizeToAvoidBottomInset: true,
             body: Stack(children: [
               if (backgroudImage != null)

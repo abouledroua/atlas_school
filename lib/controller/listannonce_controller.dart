@@ -17,6 +17,11 @@ class ListAnnonceController extends GetxController {
   bool loading = false, error = false;
   List<Annonce> annonces = [];
 
+  addImage({required String filename, required int index}) {
+    annonces[index].images.add(filename);
+    update();
+  }
+
   getAnnonces() {
     if (User.isAdmin) {
       getAllAnnonces();
@@ -203,7 +208,6 @@ class ListAnnonceController extends GetxController {
       pWhere = " AND (" + pWhere + " )";
     }
     var url = "$serverDir/GET_ENFANTS.php";
-    print("url=$url \n pWhere=$pWhere");
     Uri myUri = Uri.parse(url);
     http
         .post(myUri, body: {"WHERE": pWhere})
@@ -368,73 +372,31 @@ class ListAnnonceController extends GetxController {
         });
   }
 
-  unpinAnnonce(int index) async {
+  pinAnnonce({required int index}) async {
     int idAnnonce = annonces[index].id;
-    String serverDir = AppData.getServerDirectory();
-    var url = "$serverDir/UNPIN_ANNONCE.php";
-    print(url);
-    Uri myUri = Uri.parse(url);
-    await http
-        .post(myUri, body: {
-          "ID_ANNONCE": idAnnonce.toString(),
-          "ID_USER": User.idUser.toString()
-        })
-        .timeout(Duration(seconds: AppData.timeOut))
-        .then((response) async {
-          if (response.statusCode == 200) {
-            var result = response.body;
-            if (result == "0") {
-              AppData.mySnackBar(
-                  title: 'Lacher l' 'annonce',
-                  message: "Probleme de Connexion avec le serveur !!!",
-                  color: AppColor.red);
-            } else {
-              annonces[index].pin = false;
-              update();
-            }
-          } else {
-            AppData.mySnackBar(
-                title: 'Lacher l' 'annonce',
-                message: "Probleme de Connexion avec le serveur !!!",
-                color: AppColor.red);
-          }
-        })
-        .catchError((error) {
-          print("erreur : $error");
-          AppData.mySnackBar(
-              title: 'Lacher l' 'annonce',
-              message: "Probleme de Connexion avec le serveur !!!",
-              color: AppColor.red);
-        });
-  }
-
-  pinAnnonce(int index) async {
-    int idAnnonce = annonces[index].id;
+    String title = annonces[index].pin ? "Lacher" : "Epingler";
     String serverDir = AppData.getServerDirectory();
     var url = "$serverDir/PIN_ANNONCE.php";
     print(url);
     Uri myUri = Uri.parse(url);
     http
-        .post(myUri, body: {
-          "ID_ANNONCE": idAnnonce.toString(),
-          "ID_USER": User.idUser.toString()
-        })
+        .post(myUri, body: {"ID_ANNONCE": idAnnonce.toString()})
         .timeout(Duration(seconds: AppData.timeOut))
         .then((response) async {
           if (response.statusCode == 200) {
             var result = response.body;
             if (result == "0") {
               AppData.mySnackBar(
-                  title: 'Epingler l' 'annonce',
+                  title: "$title l'annonce",
                   message: "Probleme de Connexion avec le serveur !!!",
                   color: AppColor.red);
             } else {
-              annonces[index].pin = true;
+              annonces[index].pin = !annonces[index].pin;
               update();
             }
           } else {
             AppData.mySnackBar(
-                title: 'Epingler l' 'annonce',
+                title: "$title l'annonce",
                 message: "Probleme de Connexion avec le serveur !!!",
                 color: AppColor.red);
           }
@@ -442,16 +404,56 @@ class ListAnnonceController extends GetxController {
         .catchError((error) {
           print("erreur : $error");
           AppData.mySnackBar(
-              title: 'Epingler l' 'annonce',
+              title: "$title l'annonce",
               message: "Probleme de Connexion avec le serveur !!!",
               color: AppColor.red);
         });
   }
 
-  updateBooleans({newloading, newerror}) {
+  updateBooleans({required newloading, required newerror}) {
     loading = newloading;
     error = newerror;
     update();
+  }
+
+  deleteAnnonce(int ind) async {
+    String serverDir = AppData.getServerDirectory();
+    var url = "$serverDir/DELETE_ANNONCE.php";
+    print(url);
+    Uri myUri = Uri.parse(url);
+    http
+        .post(myUri, body: {"ID_ANNONCE": annonces[ind].id.toString()})
+        .timeout(Duration(seconds: AppData.timeOut))
+        .then((response) async {
+          if (response.statusCode == 200) {
+            var result = response.body;
+            if (result != "0") {
+              Get.back();
+              getAnnonces();
+              AppData.mySnackBar(
+                  title: 'Liste des annonces',
+                  message: "Annonce supprimé ...",
+                  color: AppColor.green);
+            } else {
+              AppData.mySnackBar(
+                  title: 'Liste des annonces',
+                  message: "Probleme lors de la suppression !!!",
+                  color: AppColor.red);
+            }
+          } else {
+            AppData.mySnackBar(
+                title: 'Liste des annonces',
+                message: "Probleme de Connexion avec le serveur !!!",
+                color: AppColor.red);
+          }
+        })
+        .catchError((error) {
+          print("erreur : $error");
+          AppData.mySnackBar(
+              title: 'Listed des annonces',
+              message: "Probleme de Connexion avec le serveur !!!",
+              color: AppColor.red);
+        });
   }
 
   @override

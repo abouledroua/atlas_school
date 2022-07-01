@@ -28,18 +28,16 @@ class EspaceVisibiliteFicheAnnonce extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyText1,
                       overflow: TextOverflow.clip)),
-              controller.loadingSub
-                  ? const Center(child: CircularProgressIndicator())
-                  : Visibility(
-                      visible: (controller.visibiliteMode != 1),
-                      child: Visibility(
-                          visible: (controller.visibiliteMode == 2),
-                          child: const ListGroupeSelectedFicheAnnonce(),
-                          replacement: Visibility(
-                              visible: (controller.visibiliteMode == 3),
-                              child: const ListParentSelectedFicheAnnonce(),
-                              replacement:
-                                  const ListEnfantSelectedFicheAnnonce()))),
+              if (controller.loadingSub)
+                const Center(child: CircularProgressIndicator()),
+              if (!controller.loadingSub && controller.visibiliteMode != 1)
+                Visibility(
+                    visible: (controller.visibiliteMode == 2),
+                    child: const ListGroupeSelectedFicheAnnonce(),
+                    replacement: Visibility(
+                        visible: (controller.visibiliteMode == 3),
+                        child: const ListParentSelectedFicheAnnonce(),
+                        replacement: const ListEnfantSelectedFicheAnnonce())),
               if (controller.visibiliteMode == 2 &&
                       controller.groupes.isEmpty ||
                   controller.visibiliteMode == 3 &&

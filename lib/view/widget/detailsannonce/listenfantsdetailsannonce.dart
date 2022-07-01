@@ -1,6 +1,7 @@
 import 'package:atlas_school/controller/listannonce_controller.dart';
 import 'package:atlas_school/core/class/enfant.dart';
 import 'package:atlas_school/core/constant/data.dart';
+import 'package:atlas_school/core/constant/image_asset.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,7 +29,7 @@ class ListEnfantDetailAnnonce extends StatelessWidget {
                   SizedBox(
                       width: 40,
                       child: (enfants[i].photo == "")
-                          ? Image.asset("images/noPhoto.png")
+                          ? Image.asset(AppImageAsset.noPhoto)
                           : CachedNetworkImage(
                               //  fit: BoxFit.contain,
                               placeholder: (context, url) => const Center(

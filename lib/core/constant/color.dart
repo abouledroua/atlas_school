@@ -13,6 +13,15 @@ class AppColor {
   static const Color white = Colors.white;
   static const Color primary = Color(0xffF2786D);
   static const Color purple = Colors.deepPurple;
+
+  static const Color enfant = Colors.amber;
+  static const Color parent = Colors.orange;
+  static const Color groupe = Colors.cyan;
+  static const Color enseignant = Colors.brown;
+  static const Color message = Colors.green;
+  static const Color annocne = Color.fromARGB(255, 50, 64, 134);
+  static const Color gallery = Color(0xffF2786D);
+
   static const MaterialColor matWhite = MaterialColor(
     0xFFFFFFFF,
     <int, Color>{

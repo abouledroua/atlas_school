@@ -13,14 +13,12 @@ import 'package:atlas_school/view/screen/listenfantselect.dart';
 import 'package:atlas_school/view/screen/listgroupeselect.dart';
 import 'package:atlas_school/view/screen/listparentselect.dart';
 import 'package:atlas_school/view/widget/selectcameragellerywidget.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import '../core/class/gest_annonce_images.dart';
 
 class FicheAnnonceController extends GetxController {
@@ -28,7 +26,7 @@ class FicheAnnonceController extends GetxController {
   List<Groupe> groupes = [];
   List<Parent> parents = [];
   List<Enfant> enfants = [];
-  bool valider = false, loadingSub = false;
+  bool valider = false, loadingSub = false, loading = false, error = false;
   int nbAnnImg = 0, visibiliteMode = 1;
   late TextEditingController titreController, detailsController;
   List<MyAnnonceImage> myImages = [];
@@ -50,6 +48,7 @@ class FicheAnnonceController extends GetxController {
   }
 
   saveAnnonce() {
+    setValider(true);
     if (titreController.text.isEmpty) {
       print("Veuillez saisir le titre de l'annonce !!!!");
       AppData.mySnackBar(
@@ -98,7 +97,7 @@ class FicheAnnonceController extends GetxController {
               } else {
                 print(
                     "annonce n'existe pas dans la bdd en cours de la modification ...");
-                // updateAnnonce();
+                updateAnnonce();
               }
             } else {
               setValider(false);
@@ -188,6 +187,77 @@ class FicheAnnonceController extends GetxController {
       AppData.mySnackBar(
           title: 'Fiche Annonce',
           message: "Probleme de Connexion avec le serveur 14 !!!",
+          color: AppColor.red);
+    });
+  }
+
+  updateAnnonce() async {
+    String serverDir = AppData.getServerDirectory();
+    String pGroupe = "", pParent = "", pEnfant = "";
+    if (visibiliteMode == 2) {
+      for (var i = 0; i < groupes.length; i++) {
+        if (pGroupe.isNotEmpty) {
+          pGroupe += ",";
+        }
+        pGroupe += groupes[i].id.toString();
+      }
+    } else if (visibiliteMode == 3) {
+      for (var i = 0; i < parents.length; i++) {
+        if (pParent.isNotEmpty) {
+          pParent += ",";
+        }
+        pParent += parents[i].id.toString();
+      }
+    } else if (visibiliteMode == 4) {
+      for (var i = 0; i < enfants.length; i++) {
+        if (pEnfant.isNotEmpty) {
+          pEnfant += ",";
+        }
+        pEnfant += enfants[i].id.toString();
+      }
+    }
+    var body = {};
+    body['ID_ANNONCE'] = idAnnonce.toString();
+    body['TITRE'] = titreController.text;
+    body['DETAILS'] = detailsController.text;
+    body['TYPE'] = visibiliteMode.toString();
+    body['GROUPES'] = pGroupe;
+    body['PARENTS'] = pParent;
+    body['ENFANTS'] = pEnfant;
+    for (var i = 0; i < deletedImages.length; i++) {
+      body['DEL_' + i.toString()] = deletedImages[i].toString();
+    }
+    body['NB_DELETED'] = deletedImages.length.toString();
+    var url = "$serverDir/UPDATE_ANNONCE.php";
+    print(url);
+    Uri myUri = Uri.parse(url);
+    http.post(myUri, body: body).then((response) async {
+      if (response.statusCode == 200) {
+        var responsebody = response.toString();
+        print("responsebody=${response.body}");
+        if (responsebody != "0") {
+          loadImages();
+          Get.back(result: "success");
+        } else {
+          setValider(false);
+          AppData.mySnackBar(
+              title: 'Fiche Annonce',
+              message: "Probleme lors de la mise à jours !!!",
+              color: AppColor.red);
+        }
+      } else {
+        setValider(false);
+        AppData.mySnackBar(
+            title: 'Fiche Annonce',
+            message: "Probleme de Connexion avec le serveur 13 !!!",
+            color: AppColor.red);
+      }
+    }).catchError((error) {
+      print("erreur : $error");
+      setValider(false);
+      AppData.mySnackBar(
+          title: 'Fiche Annonce',
+          message: "Probleme de Connexion avec le serveur 13 !!!",
           color: AppColor.red);
     });
   }
@@ -339,15 +409,289 @@ class FicheAnnonceController extends GetxController {
                         "Voulez-vous vraiment annuler tous les changements !!!"),
                     actions: <Widget>[
                       TextButton(
-                          onPressed: () => Navigator.of(context).pop(false),
+                          onPressed: () => Get.back(result: false),
                           child: const Text('Non',
                               style: TextStyle(color: Colors.red))),
                       TextButton(
-                          onPressed: () => Navigator.of(context).pop(true),
+                          onPressed: () => Get.back(result: true),
                           child: const Text('Oui',
                               style: TextStyle(color: Colors.green)))
                     ]))) ??
         false;
+  }
+
+  updateLoading({newloading, newerror}) {
+    loading = newloading;
+    error = newerror;
+    update();
+  }
+
+  updateLoadingSub({newloading}) {
+    loadingSub = newloading;
+    update();
+  }
+
+  getMyGroupes(List s) async {
+    updateLoadingSub(newloading: true);
+    String serverDir = AppData.getServerDirectory();
+    String pWhere = "";
+    for (var item in s) {
+      if (pWhere != "") {
+        pWhere += " OR ";
+      }
+      pWhere += " E.ID_GROUPE = " + item;
+    }
+    pWhere = " AND (" + pWhere + " )";
+    var url = "$serverDir/GET_GROUPES.php";
+    print("url=$url");
+    groupes.clear();
+    Uri myUri = Uri.parse(url);
+    http
+        .post(myUri, body: {"WHERE": pWhere})
+        .timeout(Duration(seconds: AppData.timeOut))
+        .then((response) async {
+          if (response.statusCode == 200) {
+            var responsebody = jsonDecode(response.body);
+            Groupe e;
+            for (var m in responsebody) {
+              e = Groupe(
+                  designation: m['DESIGNATION'],
+                  etat: int.parse(m['ETAT']),
+                  id: int.parse(m['ID_GROUPE']));
+              groupes.add(e);
+            }
+            updateLoadingSub(newloading: false);
+          } else {
+            groupes.clear();
+            updateLoadingSub(newloading: false);
+            AppData.mySnackBar(
+                title: 'Fiche Annonce',
+                message: "Probleme de Connexion avec le serveur !!!",
+                color: AppColor.red);
+          }
+        })
+        .catchError((error) {
+          print("erreur : $error");
+          groupes.clear();
+          updateLoadingSub(newloading: false);
+          AppData.mySnackBar(
+              title: 'Fiche Annonce',
+              message: "Probleme de Connexion avec le serveur !!!",
+              color: AppColor.red);
+        });
+  }
+
+  getMyParents(List s) async {
+    updateLoadingSub(newloading: true);
+    String serverDir = AppData.getServerDirectory();
+    String pWhere = "";
+    for (var item in s) {
+      if (pWhere != "") {
+        pWhere += " OR ";
+      }
+      pWhere += " E.ID_PARENT = " + item;
+    }
+    pWhere = " AND (" + pWhere + " )";
+    var url = "$serverDir/GET_PARENTS.php";
+    print("url=$url");
+    parents.clear();
+    Uri myUri = Uri.parse(url);
+    http
+        .post(myUri, body: {"WHERE": pWhere})
+        .timeout(Duration(seconds: AppData.timeOut))
+        .then((response) async {
+          if (response.statusCode == 200) {
+            var responsebody = jsonDecode(response.body);
+            Parent p;
+            late int sexe;
+            for (var m in responsebody) {
+              sexe = int.parse(m['SEXE']);
+              p = Parent(
+                  nom: m['NOM'],
+                  prenom: m['PRENOM'],
+                  fullName: m['NOM'] + "  " + m['PRENOM'],
+                  dateNaiss: m['DATE_NAISS'],
+                  id: int.parse(m['ID_PARENT']),
+                  idUser: int.parse(m['ID_USER']),
+                  etat: int.parse(m['ETAT']),
+                  userName: m['USERNAME'],
+                  password: m['PASSWORD'],
+                  sexe: sexe,
+                  adresse: m['ADRESSE'],
+                  tel2: m['TEL2'],
+                  isHomme: (sexe == 1),
+                  isFemme: (sexe == 2),
+                  tel1: m['TEL1']);
+              parents.add(p);
+            }
+            updateLoadingSub(newloading: false);
+          } else {
+            parents.clear();
+            updateLoadingSub(newloading: false);
+            AppData.mySnackBar(
+                title: 'Fiche Annonce',
+                message: "Probleme de Connexion avec le serveur !!!",
+                color: AppColor.red);
+          }
+        })
+        .catchError((error) {
+          print("erreur : $error");
+          parents.clear();
+          updateLoadingSub(newloading: false);
+          AppData.mySnackBar(
+              title: 'Fiche Annonce',
+              message: "Probleme de Connexion avec le serveur !!!",
+              color: AppColor.red);
+        });
+  }
+
+  getMyEnfants(List s) async {
+    updateLoadingSub(newloading: true);
+    String serverDir = AppData.getServerDirectory();
+    String pWhere = "";
+    for (var item in s) {
+      if (pWhere != "") {
+        pWhere += " OR ";
+      }
+      pWhere += " E.ID_ENFANT = " + item;
+    }
+    pWhere = " AND (" + pWhere + " )";
+    var url = "$serverDir/GET_ENFANTS.php";
+    print("url=$url");
+    enfants.clear();
+    Uri myUri = Uri.parse(url);
+    http
+        .post(myUri, body: {"WHERE": pWhere})
+        .timeout(Duration(seconds: AppData.timeOut))
+        .then((response) async {
+          if (response.statusCode == 200) {
+            var responsebody = jsonDecode(response.body);
+            Enfant e;
+            late int sexe;
+            for (var m in responsebody) {
+              sexe = int.parse(m['SEXE']);
+              e = Enfant(
+                  nom: m['NOM'],
+                  prenom: m['PRENOM'],
+                  fullName: m['NOM'] + "  " + m['PRENOM'],
+                  dateNaiss: m['DATE_NAISS'],
+                  id: int.parse(m['ID_ENFANT']),
+                  etat: int.parse(m['ETAT']),
+                  sexe: sexe,
+                  adresse: m['ADRESSE'],
+                  isHomme: (sexe == 1),
+                  isFemme: (sexe == 2),
+                  photo: m['PHOTO']);
+              enfants.add(e);
+            }
+            updateLoadingSub(newloading: false);
+          } else {
+            enfants.clear();
+            updateLoadingSub(newloading: false);
+            AppData.mySnackBar(
+                title: 'Fiche Annonce',
+                message: "Probleme de Connexion avec le serveur !!!",
+                color: AppColor.red);
+          }
+        })
+        .catchError((error) {
+          print("erreur : $error");
+          enfants.clear();
+          updateLoadingSub(newloading: false);
+          AppData.mySnackBar(
+              title: 'Fiche Annonce',
+              message: "Probleme de Connexion avec le serveur !!!",
+              color: AppColor.red);
+        });
+  }
+
+  getAnnonceInfo() async {
+    updateLoading(newloading: true, newerror: false);
+    myImages = [];
+    nbAnnImg = 0;
+    String serverDir = AppData.getServerDirectory();
+    var url = "$serverDir/GET_INFO_ANNONCE.php";
+    print("url=$url");
+    Uri myUri = Uri.parse(url);
+    http
+        .post(myUri, body: {"ID_ANNONCE": idAnnonce.toString()})
+        .timeout(Duration(seconds: AppData.timeOut))
+        .then((response) async {
+          if (response.statusCode == 200) {
+            var responsebody = jsonDecode(response.body);
+            String s = "", ns = "";
+            List ls = [], nls = [];
+            MyAnnonceImage e;
+            for (var m in responsebody) {
+              titreController.text = m['TITRE'];
+              detailsController.text = m['DETAILS'];
+              visibiliteMode = int.parse(m['VISIBILITE']);
+
+              // partie groupes
+              s = m['GROUPES'];
+              if (s.isNotEmpty) {
+                ls = s.split(",");
+                await getMyGroupes(ls);
+              }
+
+              // partie PARENT
+              s = m['PARENTS'];
+              if (s.isNotEmpty) {
+                ls = s.split(",");
+                await getMyParents(ls);
+              }
+
+              // partie ENFANT
+              s = m['ENFANTS'];
+              if (s.isNotEmpty) {
+                ls = s.split(",");
+                await getMyEnfants(ls);
+              }
+
+              // partie images
+              ns = m['NUMS'];
+              s = m['IMAGES'];
+              s.isEmpty ? ls = [] : ls = s.split(",");
+              ns.isEmpty ? nls = [] : nls = ns.split(",");
+              for (var i = 0; i < ls.length; i++) {
+                e = MyAnnonceImage(chemin: ls[i], num: int.parse(nls[i]));
+                myImages.add(e);
+              }
+              nbAnnImg = myImages.length;
+
+              switch (visibiliteMode) {
+                case 1:
+                  radio = "Public";
+                  break;
+                case 2:
+                  radio = "Groupe";
+                  break;
+                case 3:
+                  radio = "Parent";
+                  break;
+                case 4:
+                  radio = "Enfant";
+                  break;
+                default:
+              }
+            }
+            updateLoading(newloading: false, newerror: false);
+          } else {
+            updateLoading(newloading: false, newerror: true);
+            AppData.mySnackBar(
+                title: 'Fiche Annonce',
+                message: "Probleme de Connexion avec le serveur !!!",
+                color: AppColor.red);
+          }
+        })
+        .catchError((error) {
+          print("erreur : $error");
+          updateLoading(newloading: false, newerror: true);
+          AppData.mySnackBar(
+              title: 'Fiche Annonce',
+              message: "Probleme de Connexion avec le serveur !!!",
+              color: AppColor.red);
+        });
   }
 
   @override
@@ -357,6 +701,7 @@ class FicheAnnonceController extends GetxController {
     print('idAnnonce=$idAnnonce');
     titreController = TextEditingController();
     detailsController = TextEditingController();
+    if (idAnnonce != 0) getAnnonceInfo();
     super.onInit();
   }
 

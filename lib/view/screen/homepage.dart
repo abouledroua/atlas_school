@@ -17,30 +17,32 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(HomePageController());
+    HomePageController hcontroller = Get.put(HomePageController());
     Get.put(ListAnnonceController());
     return MyWidget(
-        child: GetBuilder<ListAnnonceController>(
-            builder: (controller) => Column(children: [
-                  if (controller.loading) const Spacer(),
-                  if (controller.loading)
-                    Center(
-                        child: ScalingText('Chargement ...',
-                            style: Theme.of(context).textTheme.headline2)),
-                  if (controller.loading) const Spacer(),
-                  if (!controller.loading)
-                    Expanded(
-                        child: GetBuilder<HomePageController>(
-                            builder: (controller) => Visibility(
-                                visible: controller.pageIndex == 0,
-                                child: const ListAnnonces(),
-                                replacement: Visibility(
-                                    visible: controller.pageIndex == 1,
-                                    child: const ListMessages(),
+        child: WillPopScope(
+            onWillPop: hcontroller.onWillPop,
+            child: GetBuilder<ListAnnonceController>(
+                builder: (controller) => Column(children: [
+                      if (controller.loading) const Spacer(),
+                      if (controller.loading)
+                        Center(
+                            child: ScalingText('Chargement ...',
+                                style: Theme.of(context).textTheme.headline2)),
+                      if (controller.loading) const Spacer(),
+                      if (!controller.loading)
+                        Expanded(
+                            child: GetBuilder<HomePageController>(
+                                builder: (controller) => Visibility(
+                                    visible: controller.pageIndex == 0,
+                                    child: const ListAnnonces(),
                                     replacement: Visibility(
-                                        visible: controller.pageIndex == 2,
-                                        child: const ListPhotos()))))),
-                  if (!controller.loading) const MenuHomePage()
-                ])));
+                                        visible: controller.pageIndex == 1,
+                                        child: const ListMessages(),
+                                        replacement: Visibility(
+                                            visible: controller.pageIndex == 2,
+                                            child: const ListPhotos()))))),
+                      if (!controller.loading) const MenuHomePage()
+                    ]))));
   }
 }

@@ -11,6 +11,31 @@ class HomePageController extends GetxController {
     await Get.putAsync(() => DataServices().init());
   }
 
+  Future<bool> onWillPop() async {
+    return (await showDialog(
+            context: Get.context!,
+            builder: (context) => AlertDialog(
+                    title: Row(children: const [
+                      Icon(Icons.exit_to_app_sharp, color: Colors.red),
+                      Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Text('Etes-vous sur ?'))
+                    ]),
+                    content: const Text(
+                        "Voulez-vous vraiment quitter l'application ?"),
+                    actions: <Widget>[
+                      TextButton(
+                          onPressed: () => Get.back(result: false),
+                          child: const Text('Non',
+                              style: TextStyle(color: Colors.red))),
+                      TextButton(
+                          onPressed: () => Get.back(result: true),
+                          child: const Text('Oui',
+                              style: TextStyle(color: Colors.green)))
+                    ]))) ??
+        false;
+  }
+
   changePage(newIndex) {
     pageIndex = newIndex;
     update();

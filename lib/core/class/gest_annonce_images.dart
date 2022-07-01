@@ -1,11 +1,9 @@
 // ignore_for_file: avoid_print
 
-import 'package:atlas_school/classes/notifications.dart';
 import 'package:atlas_school/controller/listannonce_controller.dart';
 import 'package:atlas_school/core/constant/color.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-
 import '../constant/data.dart';
 import 'image_annonce.dart';
 import 'user.dart';
@@ -28,8 +26,6 @@ class GestAnnounceImages {
               title: 'Fiche Annonce',
               message: "chargerment des Images est terminé ...",
               color: AppColor.amber);
-          ListAnnonceController controller = Get.find();
-          controller.getAnnonces();
         }
         _wasUploading = myImages.isNotEmpty;
         await Future.delayed(const Duration(seconds: 5));
@@ -59,7 +55,13 @@ class GestAnnounceImages {
     body['ext'] = item.extension;
     http.post(myUri, body: body).then((result) {
       if (result.statusCode == 200) {
+        print('result.body=${result.body}');
         isThereNewUploaded = true;
+        int index = getIndex(myImages[0].idAnnonce);
+        String filename = result.body.removeAllWhitespace.replaceAll('"', "");
+        ListAnnonceController controller = Get.find();
+        controller.addImage(filename: filename, index: index);
+        myImages.removeAt(0);
       } else {
         print("ImageAnnonce : Error Uploading Image");
       }
@@ -67,6 +69,13 @@ class GestAnnounceImages {
     }).catchError((error) {
       print("ImageAnnonce : erreur : $error");
     });
-    myImages.removeAt(0);
+  }
+
+  static int getIndex(int pid) {
+    ListAnnonceController controller = Get.find();
+    for (var i = 0; i < controller.annonces.length; i++) {
+      if (controller.annonces[i].id == pid) return i;
+    }
+    return 0;
   }
 }

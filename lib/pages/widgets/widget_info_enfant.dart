@@ -328,7 +328,6 @@
 //     }
 //   }
 
-//   @override
 //   void initState() {
 //     WidgetsFlutterBinding.ensureInitialized();
 //     enfants = widget.enfants;
@@ -343,7 +342,6 @@
 //       onTap: () => Navigator.of(context).pop(),
 //       child: GestureDetector(onTap: () {}, child: child));
 
-//   @override
 //   Widget build(BuildContext context) {
 //     return makeDismissible(
 //         child: DraggableScrollableSheet(

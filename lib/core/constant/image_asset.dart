@@ -7,6 +7,7 @@ class AppImageAsset {
   static const String famille = "$rootAsset/famille.jpg";
   static const String groupe = "$rootAsset/groupe.png";
   static const String kid = "$rootAsset/kid.jpg";
+  static const String kidOpac = "$rootAsset/kid_opac.jpg";
   static const String noPhoto = "$rootAsset/noPhoto.png";
   static const String teacher = "$rootAsset/teacher.jpg";
   static const String wallLogin = "$rootAsset/wall_login.png";

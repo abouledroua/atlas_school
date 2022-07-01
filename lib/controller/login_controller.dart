@@ -30,11 +30,11 @@ class LoginController extends GetxController {
                         "Voulez-vous vraiment quitter l'application ?"),
                     actions: <Widget>[
                       TextButton(
-                          onPressed: () => Navigator.of(context).pop(false),
+                          onPressed: () => Get.back(result: false),
                           child: const Text('Non',
                               style: TextStyle(color: Colors.red))),
                       TextButton(
-                          onPressed: () => Navigator.of(context).pop(true),
+                          onPressed: () => Get.back(result: true),
                           child: const Text('Oui',
                               style: TextStyle(color: Colors.green)))
                     ]))) ??

@@ -1,4 +1,5 @@
 import 'package:atlas_school/core/constant/data.dart';
+import 'package:atlas_school/core/constant/image_asset.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:atlas_school/controller/listannonce_controller.dart';
@@ -26,7 +27,7 @@ class DetailsEnfantsBottomWidgetListAnnonce extends StatelessWidget {
                   SizedBox(
                       width: 40,
                       child: (controller.annonces[ind].enfants[i].photo == "")
-                          ? Image.asset("images/noPhoto.png")
+                          ? Image.asset(AppImageAsset.noPhoto)
                           : CachedNetworkImage(
                               placeholder: (context, url) =>
                                   const CircularProgressIndicator(),

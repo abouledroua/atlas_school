@@ -94,7 +94,6 @@
 //         });
 //   }
 
-//   @override
 //   void initState() {
 //     print("initialise list_enfant");
 //     WidgetsFlutterBinding.ensureInitialized(); //all widgets are rendered here
@@ -103,7 +102,6 @@
 //     super.initState();
 //   }
 
-//   @override
 //   Widget build(BuildContext context) {
 //     print("build list_enfant");
 //     Data.setSizeScreen(context);
@@ -272,7 +270,6 @@
 // class _AlphabetScrollPageState extends State<AlphabetScrollPage> {
 //   late List<Enfant> items;
 
-//   @override
 //   void initState() {
 //     WidgetsFlutterBinding.ensureInitialized(); //all widgets are rendered here
 //     initList(widget.items);
@@ -286,7 +283,6 @@
 //     setState(() {});
 //   }
 
-//   @override
 //   Widget build(BuildContext context) => AzListView(
 //       indexBarItemHeight: (Data.heightScreen - 80) / 40,
 //       data: items,

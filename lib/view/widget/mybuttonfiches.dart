@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class MyButtonsFicheAnnonce extends StatelessWidget {
+class MyButtonFiches extends StatelessWidget {
   final Color backgroundcolor, borderColor, textColor;
   final String text;
   final void Function()? onPressed;
-  const MyButtonsFicheAnnonce(
+  const MyButtonFiches(
       {Key? key,
       required this.backgroundcolor,
       required this.textColor,

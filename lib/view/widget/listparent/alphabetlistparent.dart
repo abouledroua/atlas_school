@@ -1,23 +1,23 @@
-import 'package:atlas_school/controller/listenfants_controller.dart';
-import 'package:atlas_school/core/class/enfant.dart';
+import 'package:atlas_school/controller/listparent_controller.dart';
+import 'package:atlas_school/core/class/parent.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:azlistview/azlistview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AlphabetScrollPageEnfant extends StatelessWidget {
-  const AlphabetScrollPageEnfant({Key? key}) : super(key: key);
+class AlphabetScrollPageParent extends StatelessWidget {
+  const AlphabetScrollPageParent({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ListEnfantsController>(builder: (controller) {
-      List<Enfant> items = controller.enfants;
+    return GetBuilder<ListParentsController>(builder: (controller) {
+      List<Parent> items = controller.parents;
       return AzListView(
           indexBarItemHeight: (AppSizes.heightScreen - 80) / 40,
           data: items,
           itemCount: items.length,
           itemBuilder: (context, i) {
-            Enfant item = items[i];
+            Parent item = items[i];
             if ((controller.query.isEmpty) ||
                 (item.fullName
                     .toUpperCase()

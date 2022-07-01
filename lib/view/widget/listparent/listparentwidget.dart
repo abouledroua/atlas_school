@@ -1,18 +1,16 @@
-// ignore_for_file: avoid_print
-
-import 'package:atlas_school/controller/listenfants_controller.dart';
+import 'package:atlas_school/controller/listparent_controller.dart';
+import 'package:atlas_school/view/widget/listparent/alphabetlistparent.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'alphabetlistenfant.dart';
 
-class ListEnfantWidget extends StatelessWidget {
-  const ListEnfantWidget({Key? key}) : super(key: key);
+class ListParentWidget extends StatelessWidget {
+  const ListParentWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
-        child: GetBuilder<ListEnfantsController>(
+        child: GetBuilder<ListParentsController>(
             builder: (controller) => Column(children: [
                   if (controller.searching)
                     TextFormField(
@@ -32,7 +30,7 @@ class ListEnfantWidget extends StatelessWidget {
                                 },
                                 child: Ink(child: const Icon(Icons.clear))),
                             prefixIcon: const Icon(Icons.search))),
-                  const Expanded(child: AlphabetScrollPageEnfant())
+                  const Expanded(child: AlphabetScrollPageParent())
                 ])));
   }
 }

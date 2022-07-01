@@ -21,7 +21,7 @@ class BottomSheetWidgetListAnnonce extends StatelessWidget {
   Widget build(BuildContext context) {
     ListAnnonceController controller = Get.find();
     return Container(
-        padding: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 6),
         constraints: const BoxConstraints(maxWidth: AppSizes.maxWidth),
         color: AppColor.white,
         child: Column(

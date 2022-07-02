@@ -81,7 +81,6 @@ class LoginPage extends StatelessWidget {
                                                 : () {
                                                     controller.onValidate();
                                                   },
-                                            text: "Connect",
                                             backcolor: AppColor.primary,
                                             textcolor: AppColor.white))),
                                 const SizedBox(height: 16)

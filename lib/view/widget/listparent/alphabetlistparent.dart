@@ -1,6 +1,7 @@
 import 'package:atlas_school/controller/listparent_controller.dart';
 import 'package:atlas_school/core/class/parent.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
+import 'package:atlas_school/view/widget/listparent/buildlistitemlistparent.dart';
 import 'package:azlistview/azlistview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,7 +23,7 @@ class AlphabetScrollPageParent extends StatelessWidget {
                 (item.fullName
                     .toUpperCase()
                     .contains(controller.query.toUpperCase()))) {
-              return controller.buildListItem(item);
+              return BuildListItemListParent(item: item);
             } else {
               return Container();
             }

@@ -9,24 +9,24 @@ class MenuHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          const SizedBox(width: 10),
-          const MenuItemHomePage(
-              title: "Annonces",
-              icon: Icons.announcement,
-              color: AppColor.blue2,
-              index: 0),
-          MenuItemHomePage(
-              title: "Messages",
-              icon: Icons.sms,
-              color: AppColor.green,
-              index: 1),
-          MenuItemHomePage(
-              title: "Gallery",
-              icon: Icons.photo_camera,
-              color: AppColor.red,
-              index: 2),
-          const SizedBox(width: 10)
-        ]));
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const [
+              MenuItemHomePage(
+                  title: "Annonces",
+                  icon: Icons.announcement,
+                  color: AppColor.annocne,
+                  index: 0),
+              MenuItemHomePage(
+                  title: "Messages",
+                  icon: Icons.sms,
+                  color: AppColor.message,
+                  index: 1),
+              MenuItemHomePage(
+                  title: "Gallery",
+                  icon: Icons.photo_camera,
+                  color: AppColor.gallery,
+                  index: 2)
+            ]));
   }
 }

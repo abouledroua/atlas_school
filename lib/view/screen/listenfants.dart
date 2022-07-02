@@ -1,5 +1,6 @@
 import 'package:atlas_school/controller/listenfants_controller.dart';
 import 'package:atlas_school/core/class/user.dart';
+import 'package:atlas_school/core/constant/color.dart';
 import 'package:atlas_school/core/constant/data.dart';
 import 'package:atlas_school/view/screen/ficheenfant.dart';
 import 'package:atlas_school/view/widget/listenfants/listenfantwidget.dart';
@@ -15,7 +16,7 @@ class ListEnfants extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ListEnfantsController controller = Get.put(ListEnfantsController());
+    ListEnfantsController controller = Get.find();
     return MyWidget(
         drawer: AppData.myDrawer(context),
         actions: controller.myActions(),
@@ -23,7 +24,7 @@ class ListEnfants extends StatelessWidget {
         floatingActionButton: User.isAdmin
             ? FloatingActionButton(
                 heroTag: "btn2",
-                backgroundColor: Colors.indigo,
+                backgroundColor: AppColor.enfant,
                 onPressed: () {
                   Get.to(() => FicheEnfant())?.then((value) {
                     if (value == "success") {

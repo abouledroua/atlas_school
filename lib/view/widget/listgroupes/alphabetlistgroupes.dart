@@ -1,29 +1,29 @@
-import 'package:atlas_school/controller/listenfants_controller.dart';
-import 'package:atlas_school/core/class/enfant.dart';
+import 'package:atlas_school/controller/listgroupes_controller.dart';
+import 'package:atlas_school/core/class/groupe.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
-import 'package:atlas_school/view/widget/listenfants/buildlistitemlistenfant.dart';
+import 'package:atlas_school/view/widget/listgroupes/buildlistitemlistgroupes.dart';
 import 'package:azlistview/azlistview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AlphabetScrollPageEnfant extends StatelessWidget {
-  const AlphabetScrollPageEnfant({Key? key}) : super(key: key);
+class AlphabetScrollPageGroupes extends StatelessWidget {
+  const AlphabetScrollPageGroupes({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ListEnfantsController>(builder: (controller) {
-      List<Enfant> items = controller.enfants;
+    return GetBuilder<ListGroupesController>(builder: (controller) {
+      List<Groupe> items = controller.groupes;
       return AzListView(
           indexBarItemHeight: (AppSizes.heightScreen - 80) / 40,
           data: items,
           itemCount: items.length,
           itemBuilder: (context, i) {
-            Enfant item = items[i];
+            Groupe item = items[i];
             if ((controller.query.isEmpty) ||
-                (item.fullName
+                (item.designation
                     .toUpperCase()
                     .contains(controller.query.toUpperCase()))) {
-              return BuildListItemListEnfant(item: item);
+              return BuildListItemListGroupes(item: item);
             } else {
               return Container();
             }

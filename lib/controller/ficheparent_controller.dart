@@ -1,43 +1,38 @@
 // ignore_for_file: avoid_print
 
-import 'dart:io';
 import 'package:atlas_school/core/constant/color.dart';
 import 'package:atlas_school/core/constant/data.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:path/path.dart' as p;
 
-class FicheEnfantController extends GetxController {
-  late int idEnfant;
-  String myPhoto = "", nom = "", prenom = "", dateNaiss = "";
+class FicheParentController extends GetxController {
+  late int idParent;
   bool loading = false,
-      selectPhoto = false,
       valNom = false,
       valPrenom = false,
-      valDateNaiss = false,
       valider = false,
       isSwitched = true,
       error = false;
-  late TextEditingController txtNom, txtPrenom, txtDateNaiss, txtAdresse;
-  int? sexe = 1;
   DateTime? date;
+  int? sexe = 1;
+  late int idUser;
+  late TextEditingController txtNom,
+      txtPrenom,
+      txtDateNaiss,
+      txtAdresse,
+      txtTel1,
+      txtTel2;
 
-  FicheEnfantController(int id) {
-    idEnfant = id;
+  FicheParentController(int id) {
+    idParent = id;
   }
 
   updateSexe(int? newValue) {
     sexe = newValue;
-    update();
-  }
-
-  updateSwitch() {
-    isSwitched = !isSwitched;
     update();
   }
 
@@ -46,149 +41,10 @@ class FicheEnfantController extends GetxController {
     update();
   }
 
-  selectImage({required String path}) {
-    myPhoto = path;
-    selectPhoto = true;
+  updateLoading({newloading, newerror}) {
+    loading = newloading;
+    error = newerror;
     update();
-  }
-
-  pickPhoto(source) async {
-    final ImagePicker _picker = ImagePicker();
-    final image = await _picker.pickImage(source: source);
-    if (image == null) return;
-    selectImage(path: image.path);
-  }
-
-  updateDateController() {
-    txtDateNaiss.text = DateFormat('yyyy-MM-dd').format(date!);
-    update();
-  }
-
-  datePicker({required BuildContext context}) {
-    showDatePicker(
-            context: context,
-            initialDate: date ?? DateTime.now(),
-            firstDate: DateTime(1800),
-            lastDate: DateTime.now())
-        .then((value) {
-      if (value != null) {
-        date = value;
-        updateDateController();
-      }
-    });
-  }
-
-  saveEnfant() {
-    updateValider(newValue: true);
-    valNom = txtNom.text.isEmpty;
-    valPrenom = txtPrenom.text.isEmpty;
-    valDateNaiss = txtDateNaiss.text.isEmpty;
-    if (valNom || valPrenom || valDateNaiss) {
-      print("Veuillez saisir les champs obligatoires !!!!");
-      updateValider(newValue: false);
-      AppData.mySnackBar(
-          color: AppColor.red,
-          title: 'Fiche Enfant',
-          message: "Veuillez remplir les champs oligatoire !!!!");
-    } else {
-      existEnfant();
-    }
-  }
-
-  existEnfant() async {
-    String serverDir = AppData.getServerDirectory();
-    var url = "$serverDir/EXIST_ENFANT.php";
-    print(url);
-    Uri myUri = Uri.parse(url);
-    http
-        .post(myUri, body: {
-          "NOM": txtNom.text,
-          "PRENOM": txtPrenom.text,
-          "DATE_NAISS": txtDateNaiss.text,
-          "ID_ENFANT": idEnfant.toString(),
-        })
-        .timeout(Duration(seconds: AppData.timeOut))
-        .then((response) async {
-          if (response.statusCode == 200) {
-            var responsebody = jsonDecode(response.body);
-            int result = 0;
-            for (var m in responsebody) {
-              result = int.parse(m['ID_ENFANT']);
-            }
-            if (result == 0) {
-              if (idEnfant == 0) {
-                insertEnfant();
-              } else {
-                updateEnfant();
-              }
-            } else {
-              updateValider(newValue: false);
-              AppData.mySnackBar(
-                  title: 'Fiche Enfant',
-                  message: "Cet Enfant existe déjà !!!",
-                  color: AppColor.red);
-            }
-          } else {
-            updateValider(newValue: false);
-            AppData.mySnackBar(
-                title: 'Fiche Enfant',
-                message: "Probleme de Connexion avec le serveur !!!",
-                color: AppColor.red);
-          }
-        })
-        .catchError((error) {
-          print("erreur : $error");
-          updateValider(newValue: false);
-          AppData.mySnackBar(
-              title: 'Fiche Enfant',
-              message: "Probleme de Connexion avec le serveur !!!",
-              color: AppColor.red);
-        });
-  }
-
-  insertEnfant() async {
-    String serverDir = AppData.getServerDirectory();
-    var url = "$serverDir/INSERT_ENFANT.php";
-    print(url);
-    int petat = isSwitched ? 1 : 2;
-    Uri myUri = Uri.parse(url);
-    http.post(myUri, body: {
-      "NOM": txtNom.text.toUpperCase(),
-      "PRENOM": txtPrenom.text.toUpperCase(),
-      "DATE_NAISS": txtDateNaiss.text,
-      "ADRESSE": txtAdresse.text,
-      "SEXE": sexe.toString(),
-      "ETAT": petat.toString(),
-      "EXT": selectPhoto ? p.extension(myPhoto) : "",
-      "DATA": selectPhoto ? base64Encode(File(myPhoto).readAsBytesSync()) : ""
-    }).then((response) async {
-      if (response.statusCode == 200) {
-        var responsebody = response.body;
-        print("EnfantResponse=$responsebody");
-        if (responsebody != "0") {
-          Get.back(result: "success");
-        } else {
-          updateValider(newValue: false);
-          AppData.mySnackBar(
-              title: 'Fiche Enfant',
-              message: "Probleme lors de l'ajout !!!",
-              color: AppColor.red);
-        }
-      } else {
-        updateValider(newValue: false);
-        AppData.mySnackBar(
-            title: 'Fiche Enfant',
-            message: "Probleme de Connexion avec le serveur !!!",
-            color: AppColor.red);
-      }
-    }).catchError((error) {
-      print("erreur : $error");
-      updateValider(newValue: false);
-      AppData.mySnackBar(
-          title: 'Fiche Enfant',
-          message: "Probleme de Connexion avec le serveur !!!",
-          color: AppColor.red);
-    });
   }
 
   Future<bool> onWillPop() async {
@@ -216,20 +72,189 @@ class FicheEnfantController extends GetxController {
         false;
   }
 
-  updateLoading({newloading, newerror}) {
-    loading = newloading;
-    error = newerror;
+  updateDateController() {
+    txtDateNaiss.text = DateFormat('yyyy-MM-dd').format(date!);
     update();
   }
 
-  getEnfantInfo() async {
+  datePicker({required BuildContext context}) {
+    showDatePicker(
+            context: context,
+            initialDate: date ?? DateTime.now(),
+            firstDate: DateTime(1800),
+            lastDate: DateTime.now())
+        .then((value) {
+      if (value != null) {
+        date = value;
+        updateDateController();
+      }
+    });
+  }
+
+  saveParent() {
+    updateValider(newValue: true);
+    valNom = txtNom.text.isEmpty;
+    valPrenom = txtPrenom.text.isEmpty;
+    if (valNom || valPrenom) {
+      print("Veuillez saisir les champs obligatoires !!!!");
+      updateValider(newValue: false);
+      AppData.mySnackBar(
+          color: AppColor.red,
+          title: 'Fiche Parent',
+          message: "Veuillez remplir les champs oligatoire !!!!");
+    } else {
+      existParent();
+    }
+  }
+
+  existParent() async {
+    String serverDir = AppData.getServerDirectory();
+    var url = "$serverDir/EXIST_PARENT.php";
+    print(url);
+    Uri myUri = Uri.parse(url);
+    http
+        .post(myUri, body: {
+          "NOM": txtNom.text,
+          "PRENOM": txtPrenom.text,
+          "DATE_NAISS": txtDateNaiss.text,
+          "ID_PARENT": idParent.toString()
+        })
+        .timeout(Duration(seconds: AppData.timeOut))
+        .then((response) async {
+          if (response.statusCode == 200) {
+            var responsebody = jsonDecode(response.body);
+            int result = 0;
+            for (var m in responsebody) {
+              result = int.parse(m['ID_PARENT']);
+            }
+            if (result == 0) {
+              print("parent n'existe pas ...");
+              if (idParent == 0) {
+                insertParent();
+              } else {
+                updateParent();
+              }
+            } else {
+              updateValider(newValue: false);
+              AppData.mySnackBar(
+                  title: 'Fiche Parent',
+                  message: "Ce Parent existe déjà !!!",
+                  color: AppColor.red);
+            }
+          } else {
+            updateValider(newValue: false);
+            AppData.mySnackBar(
+                title: 'Fiche Parent',
+                message: "Probleme de Connexion avec le serveur !!!",
+                color: AppColor.red);
+          }
+        })
+        .catchError((error) {
+          print("erreur : $error");
+          updateValider(newValue: false);
+          AppData.mySnackBar(
+              title: 'Fiche Parent',
+              message: "Probleme de Connexion avec le serveur !!!",
+              color: AppColor.red);
+        });
+  }
+
+  insertParent() async {
+    String serverDir = AppData.getServerDirectory();
+    var url = "$serverDir/INSERT_PARENT.php";
+    print(url);
+    Uri myUri = Uri.parse(url);
+    http.post(myUri, body: {
+      "NOM": txtNom.text.toUpperCase(),
+      "PRENOM": txtPrenom.text.toUpperCase(),
+      "DATE_NAISS": txtDateNaiss.text,
+      "ADRESSE": txtAdresse.text,
+      "TEL1": txtTel1.text,
+      "TEL2": txtTel2.text,
+      "SEXE": sexe.toString()
+    }).then((response) async {
+      if (response.statusCode == 200) {
+        var responsebody = response.body;
+        print("ParentResponse=$responsebody");
+        if (responsebody != "0") {
+          Get.back(result: "success");
+        } else {
+          updateValider(newValue: false);
+          AppData.mySnackBar(
+              title: 'Fiche Parent',
+              message: "Probleme lors de l'ajout !!!",
+              color: AppColor.red);
+        }
+      } else {
+        updateValider(newValue: false);
+        AppData.mySnackBar(
+            title: 'Fiche Parent',
+            message: "Probleme de Connexion avec le serveur !!!",
+            color: AppColor.red);
+      }
+    }).catchError((error) {
+      print("erreur : $error");
+      updateValider(newValue: false);
+      AppData.mySnackBar(
+          title: 'Fiche Parent',
+          message: "Probleme de Connexion avec le serveur !!!",
+          color: AppColor.red);
+    });
+  }
+
+  updateParent() async {
+    String serverDir = AppData.getServerDirectory();
+    var url = "$serverDir/UPDATE_PARENT.php";
+    print(url);
+    Uri myUri = Uri.parse(url);
+    http.post(myUri, body: {
+      "ID_PARENT": idParent.toString(),
+      "SEXE": sexe.toString(),
+      "ID_USER": idUser.toString(),
+      "NOM": txtNom.text.toUpperCase(),
+      "PRENOM": txtPrenom.text.toUpperCase(),
+      "DATE_NAISS": txtDateNaiss.text,
+      "ADRESSE": txtAdresse.text,
+      "TEL1": txtTel1.text,
+      "TEL2": txtTel2.text
+    }).then((response) async {
+      if (response.statusCode == 200) {
+        var responsebody = response.body;
+        print("ParentResponse=$responsebody");
+        if (responsebody != "0") {
+          Get.back(result: "success");
+        } else {
+          updateLoading(newloading: false, newerror: true);
+          AppData.mySnackBar(
+              title: 'Fiche Parent',
+              message: "Probleme lors de la mise a jour des informations !!!",
+              color: AppColor.red);
+        }
+      } else {
+        updateLoading(newloading: false, newerror: true);
+        AppData.mySnackBar(
+            title: 'Fiche Parent',
+            message: "Probleme de Connexion avec le serveur !!!",
+            color: AppColor.red);
+      }
+    }).catchError((error) {
+      print("erreur : $error");
+      updateLoading(newloading: false, newerror: true);
+      AppData.mySnackBar(
+          title: 'Fiche Parent',
+          message: "Probleme de Connexion avec le serveur !!!",
+          color: AppColor.red);
+    });
+  }
+
+  getParentInfo() async {
     updateLoading(newloading: true, newerror: false);
     String serverDir = AppData.getServerDirectory();
-    var url = "$serverDir/GET_INFO_ENFANTS.php";
+    var url = "$serverDir/GET_INFO_PARENTS.php";
     print("url=$url");
     Uri myUri = Uri.parse(url);
     http
-        .post(myUri, body: {"ID_ENFANT": idEnfant.toString()})
+        .post(myUri, body: {"ID_PARENT": idParent.toString()})
         .timeout(Duration(seconds: AppData.timeOut))
         .then((response) async {
           if (response.statusCode == 200) {
@@ -239,16 +264,16 @@ class FicheEnfantController extends GetxController {
               txtPrenom.text = m['PRENOM'];
               txtAdresse.text = m['ADRESSE'];
               txtDateNaiss.text = m['DATE_NAISS'];
-              myPhoto = m['PHOTO'];
+              txtTel1.text = m['TEL1'];
+              txtTel2.text = m['TEL2'];
+              idUser = int.parse(m['ID_USER']);
               sexe = int.parse(m['SEXE']);
-              int petat = int.parse(m['ETAT']);
-              isSwitched = (petat == 1);
             }
             updateLoading(newloading: false, newerror: false);
           } else {
             updateLoading(newloading: false, newerror: true);
             AppData.mySnackBar(
-                title: 'Fiche Enfant',
+                title: 'Fiche Parent',
                 message: "Probleme de Connexion avec le serveur !!!",
                 color: AppColor.red);
           }
@@ -257,56 +282,10 @@ class FicheEnfantController extends GetxController {
           updateLoading(newloading: false, newerror: true);
           print("erreur : $error");
           AppData.mySnackBar(
-              title: 'Fiche Enfant',
+              title: 'Fiche Parent',
               message: "Probleme de Connexion avec le serveur !!!",
               color: AppColor.red);
         });
-  }
-
-  updateEnfant() async {
-    String serverDir = AppData.getServerDirectory();
-    var url = "$serverDir/UPDATE_ENFANT.php";
-    print(url);
-    int petat = isSwitched ? 1 : 2;
-    Uri myUri = Uri.parse(url);
-    http.post(myUri, body: {
-      "ID_ENFANT": idEnfant.toString(),
-      "SEXE": sexe.toString(),
-      "NOM": txtNom.text.toUpperCase(),
-      "PRENOM": txtPrenom.text.toUpperCase(),
-      "DATE_NAISS": txtDateNaiss.text,
-      "ADRESSE": txtAdresse.text,
-      "ETAT": petat.toString(),
-      "EXT": selectPhoto ? p.extension(myPhoto) : "",
-      "DATA": selectPhoto ? base64Encode(File(myPhoto).readAsBytesSync()) : ""
-    }).then((response) async {
-      if (response.statusCode == 200) {
-        var responsebody = response.body;
-        print("EnfantResponse=$responsebody");
-        if (responsebody != "0") {
-          Get.back(result: "success");
-        } else {
-          updateLoading(newloading: false, newerror: true);
-          AppData.mySnackBar(
-              title: 'Fiche Enfant',
-              message: "Probleme lors de la mise a jour des informations !!!",
-              color: AppColor.red);
-        }
-      } else {
-        updateLoading(newloading: false, newerror: true);
-        AppData.mySnackBar(
-            title: 'Fiche Enfant',
-            message: "Probleme de Connexion avec le serveur !!!",
-            color: AppColor.red);
-      }
-    }).catchError((error) {
-      print("erreur : $error");
-      updateLoading(newloading: false, newerror: true);
-      AppData.mySnackBar(
-          title: 'Fiche Enfant',
-          message: "Probleme de Connexion avec le serveur !!!",
-          color: AppColor.red);
-    });
   }
 
   @override
@@ -317,7 +296,9 @@ class FicheEnfantController extends GetxController {
     txtPrenom = TextEditingController();
     txtDateNaiss = TextEditingController();
     txtAdresse = TextEditingController();
-    if (idEnfant != 0) getEnfantInfo();
+    txtTel1 = TextEditingController();
+    txtTel2 = TextEditingController();
+    if (idParent != 0) getParentInfo();
     super.onInit();
   }
 
@@ -327,6 +308,8 @@ class FicheEnfantController extends GetxController {
     txtPrenom.dispose();
     txtDateNaiss.dispose();
     txtAdresse.dispose();
+    txtTel1.dispose();
+    txtTel2.dispose();
     super.onClose();
   }
 }

@@ -49,8 +49,9 @@ class MyWidget extends StatelessWidget {
                                 },
                                 icon: const Icon(Icons.arrow_back))
                             : null),
-                    title: Text(title!,
-                        style: Theme.of(context).textTheme.headline1)),
+                    title: FittedBox(
+                        child: Text(title!,
+                            style: Theme.of(context).textTheme.headline1))),
             floatingActionButton: floatingActionButton,
             drawer: drawer,
             resizeToAvoidBottomInset: true,

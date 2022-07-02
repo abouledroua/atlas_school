@@ -26,7 +26,7 @@ class ListAnnonces extends StatelessWidget {
         floatingActionButton: User.isAdmin
             ? FloatingActionButton(
                 heroTag: "btn2",
-                backgroundColor: Colors.indigo,
+                backgroundColor: AppColor.annocne,
                 onPressed: () {
                   Get.to(() => FicheAnnonce())?.then((value) {
                     if (value == "success") {

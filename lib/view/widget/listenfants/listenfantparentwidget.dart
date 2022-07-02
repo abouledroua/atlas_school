@@ -10,10 +10,10 @@ class ListEnfantParentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     BottomListEnfantsController controller = Get.find();
     return Container(
+        margin: const EdgeInsets.only(top: 8),
         color: Colors.green.shade50,
-        child: Column(children: [
-          const Divider(),
-          Text("Liste des Parents ",
+        child: ListView(primary: false, shrinkWrap: true, children: [
+          Text("Liste des Parents",
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headline1,
               overflow: TextOverflow.clip),

@@ -10,7 +10,6 @@ class EmptyListParentGroupeEnfant extends StatelessWidget {
     return Container(
         color: Colors.green.shade50,
         child: Column(children: [
-          const Divider(),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             const Icon(Icons.warning, color: Colors.amber),
             const SizedBox(width: 10),

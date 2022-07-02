@@ -21,7 +21,7 @@ class BottomSheetWidgetListAnnonce extends StatelessWidget {
   Widget build(BuildContext context) {
     ListAnnonceController controller = Get.find();
     return Container(
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         constraints: const BoxConstraints(maxWidth: AppSizes.maxWidth),
         color: AppColor.white,
         child: Column(
@@ -42,14 +42,15 @@ class BottomSheetWidgetListAnnonce extends StatelessWidget {
                     },
                     icon: const Icon(Icons.zoom_out_map_rounded))
               ]),
-              const Divider(),
+              if (controller.annonces[ind].detail.isNotEmpty) const Divider(),
               if (controller.annonces[ind].detail.isNotEmpty)
                 Center(
                     child: Text(controller.annonces[ind].detail,
                         maxLines: 6,
                         style: Theme.of(context).textTheme.bodyText1,
                         overflow: TextOverflow.clip)),
-              const Divider(),
+              if (!User.isAdmin) const SizedBox(height: 8),
+              if (User.isAdmin) const Divider(),
               if (User.isAdmin)
                 Row(children: [
                   Icon(controller.annonces[ind].visiblite == 1
@@ -83,48 +84,49 @@ class BottomSheetWidgetListAnnonce extends StatelessWidget {
                         replacement:
                             DetailsEnfantsBottomWidgetListAnnonce(ind: ind))),
               if (User.isAdmin) const Divider(),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                if (User.isAdmin)
-                  ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.blue, onPrimary: Colors.white),
-                      onPressed: () {
-                        Get.to(() => FicheAnnonce(
-                                idAnnonce: controller.annonces[ind].id))
-                            ?.then((value) {
-                          if (value == "success") {
-                            controller.getAnnonces();
-                            Get.back();
-                          }
-                        });
-                      },
-                      icon: const Icon(Icons.edit),
-                      label: const Text("Modifier")),
-                if (User.isAdmin)
-                  ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.red, onPrimary: Colors.white),
-                      onPressed: () {
-                        AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.QUESTION,
-                                showCloseIcon: true,
-                                title: 'Confirmation',
-                                btnOkText: "Oui",
-                                btnCancelText: "Non",
-                                width: min(
-                                    AppSizes.maxWidth, AppSizes.widthScreen),
-                                btnOkOnPress: () {
-                                  controller.deleteAnnonce(ind);
-                                },
-                                btnCancelOnPress: () {},
-                                desc:
-                                    'Voulez vraiment supprimer cette annonce ?')
-                            .show();
-                      },
-                      icon: const Icon(Icons.delete),
-                      label: const Text("Supprimer"))
-              ])
+              if (User.isAdmin)
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.blue, onPrimary: Colors.white),
+                          onPressed: () {
+                            Get.to(() => FicheAnnonce(
+                                    idAnnonce: controller.annonces[ind].id))
+                                ?.then((value) {
+                              if (value == "success") {
+                                controller.getAnnonces();
+                                Get.back();
+                              }
+                            });
+                          },
+                          icon: const Icon(Icons.edit),
+                          label: const Text("Modifier")),
+                      ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.red, onPrimary: Colors.white),
+                          onPressed: () {
+                            AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.QUESTION,
+                                    showCloseIcon: true,
+                                    title: 'Confirmation',
+                                    btnOkText: "Oui",
+                                    btnCancelText: "Non",
+                                    width: min(AppSizes.maxWidth,
+                                        AppSizes.widthScreen),
+                                    btnOkOnPress: () {
+                                      controller.deleteAnnonce(ind);
+                                    },
+                                    btnCancelOnPress: () {},
+                                    desc:
+                                        'Voulez vraiment supprimer cette annonce ?')
+                                .show();
+                          },
+                          icon: const Icon(Icons.delete),
+                          label: const Text("Supprimer"))
+                    ])
             ]));
   }
 }

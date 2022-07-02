@@ -12,7 +12,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class LoginController extends GetxController {
-  bool isBack = Get.routing.isBack!;
   late TextEditingController userController, passController;
   bool valider = false;
 
@@ -92,9 +91,13 @@ class LoginController extends GetxController {
               c.sharedPrefs.setBool('LastConnected', true);
               String privacy =
                   c.sharedPrefs.getString('Privacy${User.idUser}') ?? "";
+              userController.text = "";
+              passController.text = "";
+              valider = false;
               if (privacy.isEmpty) {
                 Get.toNamed('/privacy');
               }
+              Get.back();
               Get.offAllNamed('/homepage');
             } else {
               effacerLastUser();

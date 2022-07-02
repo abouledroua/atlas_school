@@ -1,18 +1,18 @@
 // ignore_for_file: avoid_print
 
-import 'package:atlas_school/core/class/parent.dart';
+import 'package:atlas_school/core/class/groupe.dart';
+import 'package:atlas_school/core/constant/data.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atlas_school/core/constant/color.dart';
-import 'package:atlas_school/core/constant/data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class ListParentsController extends GetxController {
+class ListGroupesController extends GetxController {
   bool loading = false, error = false, searching = false;
   String query = "";
-  List<Parent> parents = [];
+  List<Groupe> groupes = [];
 
   myActions() {
     return [
@@ -44,7 +44,7 @@ class ListParentsController extends GetxController {
                 updateSearching();
                 break;
               case 2:
-                getParents();
+                getGroupes();
                 break;
               default:
             }
@@ -58,62 +58,6 @@ class ListParentsController extends GetxController {
     update();
   }
 
-  getParents() async {
-    updateBooleans(newloading: true, newerror: false);
-    parents.clear();
-    String serverDir = AppData.getServerDirectory();
-    var url = "$serverDir/GET_PARENTS.php";
-    print("url=$url");
-    Uri myUri = Uri.parse(url);
-    http
-        .post(myUri, body: {"WHERE": ""})
-        .timeout(Duration(seconds: AppData.timeOut))
-        .then((response) async {
-          if (response.statusCode == 200) {
-            var responsebody = jsonDecode(response.body);
-            Parent p;
-            late int sexe;
-            for (var m in responsebody) {
-              sexe = int.parse(m['SEXE']);
-              p = Parent(
-                  nom: m['NOM'],
-                  prenom: m['PRENOM'],
-                  fullName: m['NOM'] + "  " + m['PRENOM'],
-                  dateNaiss: m['DATE_NAISS'],
-                  id: int.parse(m['ID_PARENT']),
-                  idUser: int.parse(m['ID_USER']),
-                  etat: int.parse(m['ETAT']),
-                  userName: m['USERNAME'],
-                  password: m['PASSWORD'],
-                  sexe: sexe,
-                  adresse: m['ADRESSE'],
-                  tel2: m['TEL2'],
-                  isHomme: (sexe == 1),
-                  isFemme: (sexe == 2),
-                  tel1: m['TEL1']);
-              parents.add(p);
-            }
-            updateBooleans(newloading: false, newerror: false);
-          } else {
-            updateBooleans(newloading: false, newerror: true);
-            parents.clear();
-            AppData.mySnackBar(
-                title: 'Liste des Parents',
-                message: "Probleme de Connexion avec le serveur !!!",
-                color: AppColor.red);
-          }
-        })
-        .catchError((error) {
-          print("erreur : $error");
-          updateBooleans(newloading: false, newerror: true);
-          parents.clear();
-          AppData.mySnackBar(
-              title: 'Liste des Parents',
-              message: "Probleme de Connexion avec le serveur !!!",
-              color: AppColor.red);
-        });
-  }
-
   updateQuery(String newValue) {
     query = newValue;
     update();
@@ -124,36 +68,75 @@ class ListParentsController extends GetxController {
     update();
   }
 
-  deleteParent(int ind) async {
+  getGroupes() async {
+    updateBooleans(newloading: true, newerror: false);
+    groupes.clear();
     String serverDir = AppData.getServerDirectory();
-    var url = "$serverDir/DELETE_PARENT.php";
+    var url = "$serverDir/GET_GROUPES.php";
+    print("url=$url");
+    Uri myUri = Uri.parse(url);
+    http
+        .post(myUri, body: {"WHERE": ""})
+        .timeout(Duration(seconds: AppData.timeOut))
+        .then((response) async {
+          if (response.statusCode == 200) {
+            var responsebody = jsonDecode(response.body);
+            Groupe e;
+            for (var m in responsebody) {
+              e = Groupe(
+                  designation: m['DESIGNATION'],
+                  etat: int.parse(m['ETAT']),
+                  id: int.parse(m['ID_GROUPE']));
+              groupes.add(e);
+            }
+            updateBooleans(newloading: false, newerror: false);
+          } else {
+            updateBooleans(newloading: false, newerror: true);
+            groupes.clear();
+            AppData.mySnackBar(
+                title: 'Liste des Groupes',
+                message: "Probleme de Connexion avec le serveur !!!",
+                color: AppColor.red);
+          }
+        })
+        .catchError((error) {
+          print("erreur : $error");
+          updateBooleans(newloading: false, newerror: true);
+          groupes.clear();
+          AppData.mySnackBar(
+              title: 'Liste des Groupes',
+              message: "Probleme de Connexion avec le serveur !!!",
+              color: AppColor.red);
+        });
+  }
+
+  deleteGroupe(int ind) async {
+    String serverDir = AppData.getServerDirectory();
+    var url = "$serverDir/DELETE_GROUPE.php";
     print(url);
     Uri myUri = Uri.parse(url);
     http
-        .post(myUri, body: {
-          "ID_PARENT": parents[ind].id.toString(),
-          "ID_USER": parents[ind].idUser.toString(),
-        })
+        .post(myUri, body: {"ID_GROUPE": groupes[ind].id.toString()})
         .timeout(Duration(seconds: AppData.timeOut))
         .then((response) async {
           if (response.statusCode == 200) {
             var result = response.body;
             if (result != "0") {
               Get.back();
-              getParents();
+              getGroupes();
               AppData.mySnackBar(
-                  title: 'Liste des parents',
-                  message: "Parent supprimé ...",
+                  title: 'Liste des groupes',
+                  message: "Groupe supprimé ...",
                   color: AppColor.green);
             } else {
               AppData.mySnackBar(
-                  title: 'Liste des parents',
+                  title: 'Liste des groupes',
                   message: "Probleme lors de la suppression !!!",
                   color: AppColor.red);
             }
           } else {
             AppData.mySnackBar(
-                title: 'Liste des parents',
+                title: 'Liste des groupes',
                 message: "Probleme de Connexion avec le serveur !!!",
                 color: AppColor.red);
           }
@@ -161,7 +144,7 @@ class ListParentsController extends GetxController {
         .catchError((error) {
           print("erreur : $error");
           AppData.mySnackBar(
-              title: 'Liste des parents',
+              title: 'Liste des groupes',
               message: "Probleme de Connexion avec le serveur !!!",
               color: AppColor.red);
         });
@@ -171,7 +154,7 @@ class ListParentsController extends GetxController {
   void onInit() {
     WidgetsFlutterBinding.ensureInitialized();
     AppSizes.setSizeScreen(Get.context);
-    getParents();
+    getGroupes();
     super.onInit();
   }
 }

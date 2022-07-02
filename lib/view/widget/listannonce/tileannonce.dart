@@ -45,7 +45,9 @@ class TileAnnonce extends StatelessWidget {
                           icon: Icon(Icons.flag,
                               color: annonce.pin
                                   ? AppColor.amber
-                                  : AppColor.grey.withOpacity(0.5))))
+                                  : User.isAdmin
+                                      ? AppColor.grey.withOpacity(0.5)
+                                      : Colors.transparent)))
                 ]),
                 Row(children: [
                   Icon(annonce.visiblite == 1

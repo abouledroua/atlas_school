@@ -11,17 +11,18 @@ class ListEnfantGroupesWidget extends StatelessWidget {
     return Container(
         color: Colors.amber.shade50,
         child: Column(children: [
-          const Divider(),
-          Text("Inscrit dans le(s) groupe(s) ",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headline1,
-              overflow: TextOverflow.clip),
+          FittedBox(
+              child: Text("Inscrit dans le(s) groupe(s) ",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headline1,
+                  overflow: TextOverflow.clip)),
           ListView.builder(
               shrinkWrap: true,
               primary: false,
               itemCount: controller.groupes.length,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, i) => ListTile(
+                  minVerticalPadding: 0,
                   horizontalTitleGap: 4,
                   leading: Text((i + 1).toString(),
                       style: Theme.of(context)

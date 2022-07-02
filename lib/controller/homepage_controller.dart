@@ -1,11 +1,12 @@
 import 'package:atlas_school/core/class/gest_annonce_images.dart';
+import 'package:atlas_school/core/constant/data.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:atlas_school/core/services/dataservice.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomePageController extends GetxController {
-  int pageIndex = 0;
+  int pageIndex = 0, oldPage = 0;
 
   Future initialService() async {
     await Get.putAsync(() => DataServices().init());
@@ -37,7 +38,12 @@ class HomePageController extends GetxController {
   }
 
   changePage(newIndex) {
+    oldPage = pageIndex;
     pageIndex = newIndex;
+
+    if (pageIndex == 7) {
+      AppData.logout();
+    }
     update();
   }
 

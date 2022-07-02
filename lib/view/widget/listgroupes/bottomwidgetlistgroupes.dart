@@ -1,32 +1,31 @@
 import 'dart:math';
-import 'package:atlas_school/controller/bottomlistparents_controller.dart';
-import 'package:atlas_school/controller/listparent_controller.dart';
-import 'package:atlas_school/core/class/parent.dart';
+import 'package:atlas_school/controller/bottomlistgroupes_controller.dart';
+import 'package:atlas_school/controller/listgroupes_controller.dart';
+import 'package:atlas_school/core/class/groupe.dart';
 import 'package:atlas_school/core/constant/color.dart';
-import 'package:atlas_school/core/constant/data.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
-import 'package:atlas_school/view/screen/ficheparent.dart';
+import 'package:atlas_school/view/screen/fichegroupe.dart';
 import 'package:atlas_school/view/widget/listenfants/emptylistenfantparent.dart';
+import 'package:atlas_school/view/widget/listgroupes/listgroupeenfantwidget.dart';
 import 'package:atlas_school/view/widget/loadingwidget.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'listparentenfantwidget.dart';
 
-class BottomSheetWidgetListParents extends StatelessWidget {
+class BottomSheetWidgetListGroupes extends StatelessWidget {
   final int ind;
-  const BottomSheetWidgetListParents({Key? key, required this.ind})
+  const BottomSheetWidgetListGroupes({Key? key, required this.ind})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Get.put(BottomListParentsController(indice: ind));
+    Get.put(BottomListGroupesController(indice: ind));
     return Container(
         padding: const EdgeInsets.only(bottom: 8),
         constraints: const BoxConstraints(maxWidth: AppSizes.maxWidth),
         color: AppColor.white,
-        child: GetBuilder<BottomListParentsController>(builder: (controller) {
-          Parent parent = controller.parent;
+        child: GetBuilder<BottomListGroupesController>(builder: (controller) {
+          Groupe groupe = controller.groupe;
           return Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,63 +35,30 @@ class BottomSheetWidgetListParents extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child:
                         ListView(primary: false, shrinkWrap: true, children: [
-                      Text(parent.fullName.toUpperCase(),
+                      Text(groupe.designation.toUpperCase(),
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.headline1,
                           overflow: TextOverflow.clip),
-                      if (parent.dateNaiss.isNotEmpty)
-                        Row(children: [
-                          const Icon(Icons.date_range_rounded),
-                          const SizedBox(width: 20),
-                          Text(parent.dateNaiss + " ("),
-                          Text(
-                              parent.dateNaiss.isEmpty
-                                  ? ""
-                                  : AppData.calculateAge(
-                                      DateTime.parse(parent.dateNaiss)),
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold)),
-                          const Text(" )")
-                        ]),
-                      if (parent.adresse != "")
-                        Row(children: [
-                          const Icon(Icons.gps_fixed),
-                          const SizedBox(width: 20),
-                          Text(parent.adresse)
-                        ]),
-                      const Divider(),
-                      if (parent.userName != "")
-                        Row(children: [
-                          const Icon(Icons.verified_user),
-                          const SizedBox(width: 20),
-                          Text(parent.userName)
-                        ]),
-                      if (parent.password != "")
-                        Row(children: [
-                          const Icon(Icons.password),
-                          const SizedBox(width: 20),
-                          Text(parent.password)
-                        ]),
                       if (controller.loadingEnf) const LoadingWidget(),
                       if (!controller.loadingEnf)
                         Visibility(
                             visible: controller.enfants.isEmpty,
                             child: const EmptyListParentGroupeEnfant(
                                 type: 'enfant'),
-                            replacement: const ListParentEnfantWidget()),
+                            replacement: const LisGroupeEnfantWidget()),
                       const Divider(),
                       Wrap(alignment: WrapAlignment.spaceEvenly, children: [
                         ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                                 primary: Colors.green, onPrimary: Colors.white),
                             onPressed: () {
-                              Get.to(() => FicheParent(
-                                      idParent: controller.parent.id))
+                              Get.to(() => FicheGroupe(
+                                      idGroupe: controller.groupe.id))
                                   ?.then((value) {
                                 if (value == "success") {
-                                  ListParentsController listcontroller =
+                                  ListGroupesController listcontroller =
                                       Get.find();
-                                  listcontroller.getParents();
+                                  listcontroller.getGroupes();
                                   Get.back();
                                 }
                               });
@@ -101,7 +67,8 @@ class BottomSheetWidgetListParents extends StatelessWidget {
                             label: const Text("Infos")),
                         ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
-                                primary: Colors.amber, onPrimary: Colors.white),
+                                primary: AppColor.enfant,
+                                onPrimary: Colors.white),
                             onPressed: () {
                               // var route = MaterialPageRoute(
                               //     builder: (context) => FicheRelation(
@@ -110,11 +77,12 @@ class BottomSheetWidgetListParents extends StatelessWidget {
                               //   Navigator.of(context).pop();
                               // });
                             },
-                            icon: const Icon(Icons.group_outlined),
-                            label: const Text("Parents")),
+                            icon: const Icon(Icons.person_outline_sharp),
+                            label: const Text("Enfants")),
                         ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
-                                primary: Colors.cyan, onPrimary: Colors.white),
+                                primary: AppColor.groupe,
+                                onPrimary: Colors.white),
                             onPressed: () {
                               // var route = MaterialPageRoute(
                               //     builder: (context) => FicheClasse(
@@ -140,9 +108,9 @@ class BottomSheetWidgetListParents extends StatelessWidget {
                                         width: min(AppSizes.maxWidth,
                                             AppSizes.widthScreen),
                                         btnOkOnPress: () {
-                                          ListParentsController listcontroller =
+                                          ListGroupesController listcontroller =
                                               Get.find();
-                                          listcontroller.deleteParent(ind);
+                                          listcontroller.deleteGroupe(ind);
                                         },
                                         btnCancelOnPress: () {
                                           Navigator.of(context).pop();

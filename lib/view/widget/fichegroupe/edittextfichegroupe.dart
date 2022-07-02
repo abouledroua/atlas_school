@@ -1,32 +1,37 @@
-import 'package:atlas_school/controller/ficheannonce_controller.dart';
+import 'package:atlas_school/controller/fichegroupe_controller.dart';
 import 'package:atlas_school/core/constant/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EditTextFicheAnnonce extends StatelessWidget {
+class EditTextFicheGroupe extends StatelessWidget {
   final String title, hintText;
   final IconData icon;
   final bool? check;
   final TextEditingController mycontroller;
+  final TextInputType keyboardType;
+  final void Function()? onPressedIcon;
   final int? nbline;
-  const EditTextFicheAnnonce(
+  const EditTextFicheGroupe(
       {Key? key,
       required this.title,
       required this.icon,
       required this.hintText,
-      this.check,
       required this.mycontroller,
-      this.nbline})
+      required this.nbline,
+      this.onPressedIcon,
+      this.check,
+      required this.keyboardType})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<FicheAnnonceController>(
+    return GetBuilder<FicheGroupeController>(
         builder: (controller) => TextFormField(
             controller: mycontroller,
             enabled: !controller.valider,
             readOnly: controller.valider,
             maxLines: nbline,
+            keyboardType: keyboardType,
             textInputAction:
                 nbline == null ? TextInputAction.newline : TextInputAction.next,
             decoration: InputDecoration(
@@ -40,7 +45,8 @@ class EditTextFicheAnnonce extends StatelessWidget {
                 label: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 9),
                     child: Text(title)),
-                suffixIcon: Icon(icon),
+                suffixIcon:
+                    IconButton(onPressed: onPressedIcon, icon: Icon(icon)),
                 border: OutlineInputBorder(
                     borderSide: const BorderSide(color: AppColor.black),
                     borderRadius: BorderRadius.circular(16)))));

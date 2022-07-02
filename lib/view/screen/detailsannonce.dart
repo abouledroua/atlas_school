@@ -28,7 +28,7 @@ class DetailsAnnoncePage extends StatelessWidget {
               child: Text(annonce.detail,
                   style: Theme.of(context).textTheme.bodyText1,
                   overflow: TextOverflow.clip)),
-          const Divider(),
+          if (User.isAdmin) const Divider(),
           if (User.isAdmin)
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -66,7 +66,7 @@ class DetailsAnnoncePage extends StatelessWidget {
             Column(
                 children: annonce.images
                     .map((item) => Padding(
-                        padding: const EdgeInsets.all(4),
+                        padding: const EdgeInsets.symmetric(vertical: 4),
                         child: SizedBox(
                             height: AppSizes.heightScreen / 3,
                             child: GestureDetector(
@@ -86,16 +86,12 @@ class DetailsAnnoncePage extends StatelessWidget {
                                       index: index,
                                       myImages: gallery));
                                 },
-                                child: Padding(
-                                    padding: const EdgeInsets.all(2),
-                                    child: CachedNetworkImage(
-                                        fit: BoxFit.contain,
-                                        placeholder: (context, url) =>
-                                            const Center(
-                                                child:
-                                                    CircularProgressIndicator()),
-                                        imageUrl: AppData.getImage(
-                                            item, "ANNONCE")))))))
+                                child: CachedNetworkImage(
+                                    fit: BoxFit.contain,
+                                    placeholder: (context, url) => const Center(
+                                        child: CircularProgressIndicator()),
+                                    imageUrl:
+                                        AppData.getImage(item, "ANNONCE"))))))
                     .toList()
                     .cast<Widget>())
         ]));

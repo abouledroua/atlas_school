@@ -3,14 +3,11 @@
 import 'package:atlas_school/core/class/enfant.dart';
 import 'package:atlas_school/core/constant/color.dart';
 import 'package:atlas_school/core/constant/data.dart';
-import 'package:atlas_school/core/constant/image_asset.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../view/widget/listenfants/bottomwidgetlistenfants.dart';
 
 class ListEnfantsController extends GetxController {
   bool loading = false, error = false, searching = false;
@@ -121,57 +118,6 @@ class ListEnfantsController extends GetxController {
   updateSearching() {
     searching = !searching;
     update();
-  }
-
-  static buildHeader(String tag) => Container(
-      height: 40,
-      color: Colors.grey.shade300,
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      alignment: Alignment.center,
-      child: Text(tag,
-          softWrap: false,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)));
-
-  Widget buildListItem(Enfant item) {
-    final tag = item.getSuspensionTag();
-    final offstage = !item.isShowSuspension;
-    final photo = AppData.getImage(item.photo, "PHOTO/ENFANT");
-    return Column(children: [
-      Offstage(offstage: offstage, child: buildHeader(tag)),
-      ListTile(
-          tileColor: item.etat == 1 ? Colors.transparent : Colors.grey.shade400,
-          title: Text(item.fullName),
-          leading: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3),
-              child: SizedBox(
-                  width: 60,
-                  child: (item.photo == "")
-                      ? Image.asset(AppImageAsset.noPhoto)
-                      : CachedNetworkImage(
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                          fit: BoxFit.contain,
-                          placeholder: (context, url) =>
-                              const Center(child: CircularProgressIndicator()),
-                          imageUrl: photo))),
-          subtitle: Row(children: [
-            Text(item.dateNaiss + "  --  ",
-                style: const TextStyle(fontSize: 11)),
-            Text(AppData.calculateAge(DateTime.parse(item.dateNaiss)),
-                style:
-                    const TextStyle(fontSize: 11, fontWeight: FontWeight.bold))
-          ]),
-          horizontalTitleGap: 6,
-          onTap: () {
-            int i = enfants.indexOf(item);
-            print("item:${item.fullName}, index =$i");
-            Get.bottomSheet(BottomSheetWidgetListEnfant(ind: i),
-                isScrollControlled: true,
-                enterBottomSheetDuration: const Duration(milliseconds: 600),
-                exitBottomSheetDuration: const Duration(milliseconds: 600));
-            // showModal(i);
-          })
-    ]);
   }
 
   deleteEnfant(int ind) async {

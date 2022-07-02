@@ -22,43 +22,41 @@ class BottomPagePhotoView extends StatelessWidget {
   Widget build(BuildContext context) {
     print('BottomPagePhotoView');
     return GetBuilder<MyPhotoViewController>(
-        builder: (controller) => Padding(
-            padding: const EdgeInsets.only(bottom: 15),
-            child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                color: AppColor.black,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text("Photo ${controller.index + 1} / ${myImages.length}",
-                          style: const TextStyle(color: Colors.white)),
-                      if (!User.isParent && delete)
-                        InkWell(
-                            onTap: () {
-                              AwesomeDialog(
-                                      context: context,
-                                      dialogType: DialogType.QUESTION,
-                                      showCloseIcon: true,
-                                      title: 'Confirmation',
-                                      btnOkText: "Oui",
-                                      btnCancelText: "Non",
-                                      width: min(AppSizes.maxWidth,
-                                          AppSizes.widthScreen),
-                                      btnOkOnPress: () {
-                                        controller.deletePhoto(
-                                            image: myImages[controller.index]);
-                                      },
-                                      btnCancelOnPress: () {},
-                                      desc:
-                                          'Voulez vraiment supprimer cette photo ?')
-                                  .show();
-                            },
-                            child: Ink(
-                                child: Row(children: const [
-                              Text("Supprimer ",
-                                  style: TextStyle(color: Colors.white)),
-                              Icon(Icons.delete, color: Colors.white)
-                            ])))
-                    ]))));
+        builder: (controller) => Container(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            color: AppColor.black,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text("Photo ${controller.index + 1} / ${myImages.length}",
+                      style: const TextStyle(color: Colors.white)),
+                  if (!User.isParent && delete)
+                    InkWell(
+                        onTap: () {
+                          AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.QUESTION,
+                                  showCloseIcon: true,
+                                  title: 'Confirmation',
+                                  btnOkText: "Oui",
+                                  btnCancelText: "Non",
+                                  width: min(
+                                      AppSizes.maxWidth, AppSizes.widthScreen),
+                                  btnOkOnPress: () {
+                                    controller.deletePhoto(
+                                        image: myImages[controller.index]);
+                                  },
+                                  btnCancelOnPress: () {},
+                                  desc:
+                                      'Voulez vraiment supprimer cette photo ?')
+                              .show();
+                        },
+                        child: Ink(
+                            child: Row(children: const [
+                          Text("Supprimer ",
+                              style: TextStyle(color: Colors.white)),
+                          Icon(Icons.delete, color: Colors.white)
+                        ])))
+                ])));
   }
 }

@@ -1,17 +1,18 @@
 // ignore_for_file: avoid_print, deprecated_member_use
 
 import 'dart:math';
-import 'package:atlas_school/core/class/annonce.dart';
-import 'package:atlas_school/core/class/photo.dart';
+// import 'package:atlas_school/controller/login_controller.dart';
+import 'package:atlas_school/controller/homepage_controller.dart';
 import 'package:atlas_school/core/class/user.dart';
 import 'package:atlas_school/core/constant/color.dart';
+import 'package:atlas_school/core/constant/routes.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:atlas_school/core/services/settingservice.dart';
 import 'package:atlas_school/view/screen/listannonce.dart';
 import 'package:atlas_school/view/screen/listenfants.dart';
 import 'package:atlas_school/view/screen/listparents.dart';
-import 'package:atlas_school/view/screen/photoview.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:atlas_school/view/screen/listphotos.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,17 +34,18 @@ class AppData {
   static String getImage(pImage, pType) =>
       getServerDirectory() + "/IMAGE/$pType/$pImage";
 
-  static setServerIP(ip) async {
+  static void setServerIP(ip) async {
     serverIP = ip;
     SettingServices c = Get.find();
     c.sharedPrefs.setString('ServerIp', serverIP);
   }
 
-  static mySnackBar({required title, required message, required color}) =>
-      Get.snackbar(title, message,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: color,
-          colorText: AppColor.white);
+  static void mySnackBar({required title, required message, required color}) {
+    Get.snackbar(title, message,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: color,
+        colorText: AppColor.white);
+  }
 
   static String printDate(DateTime? date) {
     DateTime currentDate = DateTime.now();
@@ -104,25 +106,7 @@ class AppData {
     return str;
   }
 
-  static showImage(Annonce annonce, int i) => InkWell(
-      onTap: () async {
-        List<Photo> gallery = [];
-        for (var item in annonce.images) {
-          gallery.add(Photo(chemin: item, date: '', heure: '', id: 0));
-        }
-        Get.to(PhotoViewPage(
-            index: i, folder: "ANNONCE", myImages: gallery, delete: false));
-      },
-      child: Center(
-          child: Ink(
-              padding: const EdgeInsets.all(2),
-              child: CachedNetworkImage(
-                  fit: BoxFit.contain,
-                  imageUrl: AppData.getImage(annonce.images[i], "ANNONCE"),
-                  placeholder: (context, url) =>
-                      const CircularProgressIndicator()))));
-
-  static calculateAge(DateTime birthDate) {
+  static String calculateAge(DateTime birthDate) {
     DateTime currentDate = DateTime.now();
     int yy = currentDate.year - birthDate.year;
     int mm = currentDate.month - birthDate.month;
@@ -149,7 +133,7 @@ class AppData {
     return age;
   }
 
-  static makeExternalRequest(String url) async {
+  static void makeExternalRequest(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -224,6 +208,37 @@ class AppData {
               message: "Probleme de Connexion avec le serveur 6!!!",
               color: AppColor.red);
         });
+  }
+
+  static void logout() {
+    String alert = '';
+    (User.isEns) //&& GestGalleryImages.myImages.isNotEmpty)
+        ? alert =
+            '\n Attention tous LES chargement des images seront arrêter ....'
+        : alert = '';
+    AwesomeDialog(
+            context: Get.context!,
+            dialogType: DialogType.QUESTION,
+            title: '',
+            btnOkText: "Oui",
+            btnCancelText: "Non",
+            width: min(AppSizes.maxWidth, AppSizes.widthScreen),
+            btnCancelOnPress: () {
+              HomePageController hc = Get.find();
+              if (hc.pageIndex == 7) {
+                hc.changePage(hc.oldPage);
+              }
+            },
+            btnOkOnPress: () async {
+              SettingServices c = Get.find();
+              c.sharedPrefs.setBool('LastConnected', false);
+              User.idUser = 0;
+              // LoginController cc = Get.find();
+              Get.offAllNamed(AppRoute.login);
+            },
+            showCloseIcon: true,
+            desc: 'Voulez-vous vraiment déconnecter ??' + alert)
+        .show();
   }
 
   static Drawer myDrawer(BuildContext context, {Color? color}) => Drawer(
@@ -318,7 +333,7 @@ class AppData {
                       icon: Icons.photo,
                       onTap: () {
                         Get.back();
-                        Navigator.of(context).pushNamed("ListPhotos");
+                        Get.to(() => const ListPhotos());
                       },
                       text: "Gallerie des Photos"),
                   if (User.isAdmin)
@@ -336,7 +351,7 @@ class AppData {
                       context: context,
                       icon: Icons.logout,
                       onTap: () {
-                        //  _logout();
+                        logout();
                       },
                       text: "Déconnecter"),
                   if (User.isParent) const Divider(),

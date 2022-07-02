@@ -88,7 +88,6 @@
 //         });
 //   }
 
-//   @override
 //   void initState() {
 //     WidgetsFlutterBinding.ensureInitialized(); //all widgets are rendered here
 //     idParent = widget.id;
@@ -102,7 +101,6 @@
 //     super.initState();
 //   }
 
-//   @override
 //   Widget build(BuildContext context) {
 //     Data.setSizeScreen(context);
 //     return SafeArea(

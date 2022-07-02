@@ -57,6 +57,7 @@ class FicheAnnonce extends StatelessWidget {
                               child: EditTextFicheAnnonce(
                                   hintText: "Titre de l'annonce",
                                   icon: Icons.title_rounded,
+                                  check: controller.valTitre,
                                   nbline: 1,
                                   mycontroller: controller.titreController,
                                   title: "Titre")),

@@ -26,7 +26,11 @@ class FicheAnnonceController extends GetxController {
   List<Groupe> groupes = [];
   List<Parent> parents = [];
   List<Enfant> enfants = [];
-  bool valider = false, loadingSub = false, loading = false, error = false;
+  bool valider = false,
+      loadingSub = false,
+      loading = false,
+      error = false,
+      valTitre = false;
   int nbAnnImg = 0, visibiliteMode = 1;
   late TextEditingController titreController, detailsController;
   List<MyAnnonceImage> myImages = [];
@@ -49,7 +53,9 @@ class FicheAnnonceController extends GetxController {
 
   saveAnnonce() {
     setValider(true);
-    if (titreController.text.isEmpty) {
+    valTitre = titreController.text.isEmpty;
+    if (valTitre) {
+      setValider(false);
       print("Veuillez saisir le titre de l'annonce !!!!");
       AppData.mySnackBar(
           color: AppColor.red,

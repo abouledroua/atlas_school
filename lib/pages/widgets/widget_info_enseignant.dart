@@ -69,7 +69,6 @@
 //         });
 //   }
 
-//   @override
 //   void initState() {
 //     WidgetsFlutterBinding.ensureInitialized();
 //     enseignant = widget.enseignant;
@@ -81,7 +80,6 @@
 //       onTap: () => Navigator.of(context).pop(),
 //       child: GestureDetector(onTap: () {}, child: child));
 
-//   @override
 //   Widget build(BuildContext context) {
 //     return makeDismissible(
 //         child: DraggableScrollableSheet(

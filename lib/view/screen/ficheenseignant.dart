@@ -2,11 +2,11 @@
 
 import 'dart:math';
 
-import 'package:atlas_school/controller/ficheparent_controller.dart';
+import 'package:atlas_school/controller/ficheenseignant_controller.dart';
 import 'package:atlas_school/core/constant/color.dart';
 import 'package:atlas_school/core/constant/image_asset.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
-import 'package:atlas_school/view/widget/ficheparent/edittextficheparent.dart';
+import 'package:atlas_school/view/widget/ficheenseignant/edittextficheenseignant.dart';
 import 'package:atlas_school/view/widget/loadingwidget.dart';
 import 'package:atlas_school/view/widget/mybuttonfiches.dart';
 import 'package:atlas_school/view/widget/mywidget.dart';
@@ -14,16 +14,16 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class FicheParent extends StatelessWidget {
-  int? idParent;
+class FicheEnseignant extends StatelessWidget {
+  int? idEnseignant;
 
-  FicheParent({Key? key, this.idParent}) : super(key: key);
+  FicheEnseignant({Key? key, this.idEnseignant}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    idParent ??= 0;
-    FicheParentController controller =
-        Get.put(FicheParentController(idParent!));
+    idEnseignant ??= 0;
+    FicheEnseignantController controller =
+        Get.put(FicheEnseignantController(idEnseignant!));
     return MyWidget(
         leading: IconButton(
             onPressed: () {
@@ -35,14 +35,14 @@ class FicheParent extends StatelessWidget {
             },
             icon: const Icon(Icons.arrow_back)),
         backgroudImage: AppImageAsset.parentOpac,
-        title: "Fiche Parent",
+        title: "Fiche Enseignant",
         child: WillPopScope(
             onWillPop: controller.onWillPop,
             child: GestureDetector(
                 onTap: () {
                   FocusScope.of(context).unfocus();
                 },
-                child: GetBuilder<FicheParentController>(
+                child: GetBuilder<FicheEnseignantController>(
                     builder: (controller) => Visibility(
                         visible: controller.loading,
                         child: const LoadingWidget(),
@@ -56,8 +56,8 @@ class FicheParent extends StatelessWidget {
                                   Padding(
                                       padding: const EdgeInsets.only(
                                           right: 10, left: 10, bottom: 20),
-                                      child: EditTextFicheParent(
-                                          hintText: "Nom du parent",
+                                      child: EditTextFicheEnseignant(
+                                          hintText: "Nom de l'enseignant",
                                           nbline: 1,
                                           check: controller.valNom,
                                           icon: Icons
@@ -68,7 +68,7 @@ class FicheParent extends StatelessWidget {
                                   Padding(
                                       padding: const EdgeInsets.only(
                                           right: 10, left: 10, bottom: 20),
-                                      child: EditTextFicheParent(
+                                      child: EditTextFicheEnseignant(
                                           hintText: "Prénom du parent",
                                           icon: Icons
                                               .supervised_user_circle_outlined,
@@ -80,7 +80,7 @@ class FicheParent extends StatelessWidget {
                                   Padding(
                                       padding: const EdgeInsets.only(
                                           left: 10, right: 10, bottom: 5),
-                                      child: EditTextFicheParent(
+                                      child: EditTextFicheEnseignant(
                                           hintText: "Date de Naissance",
                                           icon: Icons.date_range_rounded,
                                           onPressedIcon: () {
@@ -140,7 +140,7 @@ class FicheParent extends StatelessWidget {
                                   Padding(
                                       padding: const EdgeInsets.only(
                                           left: 10, right: 10, bottom: 20),
-                                      child: EditTextFicheParent(
+                                      child: EditTextFicheEnseignant(
                                           hintText: "Adresse du parent",
                                           keyboardType: TextInputType.multiline,
                                           icon: Icons.gps_fixed,
@@ -150,23 +150,23 @@ class FicheParent extends StatelessWidget {
                                   Padding(
                                       padding: const EdgeInsets.only(
                                           right: 10, left: 10, bottom: 20),
-                                      child: EditTextFicheParent(
-                                          hintText: "Numero de Telephone 1",
+                                      child: EditTextFicheEnseignant(
+                                          hintText: "Numero de Téléphone",
                                           icon: Icons.phone,
                                           nbline: 1,
                                           keyboardType: TextInputType.phone,
                                           mycontroller: controller.txtTel1,
-                                          title: "Numero de Telephone 1")),
+                                          title: "Numero de Téléphone")),
                                   Padding(
                                       padding: const EdgeInsets.only(
                                           right: 10, left: 10, bottom: 20),
-                                      child: EditTextFicheParent(
-                                          hintText: "Numero de Telephone 2",
-                                          icon: Icons.phone,
+                                      child: EditTextFicheEnseignant(
+                                          hintText: "Matière enseignée",
+                                          icon: Icons.book,
                                           nbline: 1,
-                                          keyboardType: TextInputType.phone,
-                                          mycontroller: controller.txtTel2,
-                                          title: "Numero de Telephone 2")),
+                                          keyboardType: TextInputType.text,
+                                          mycontroller: controller.txtMatiere,
+                                          title: "Matière enseignée")),
                                   if (controller.valider)
                                     Row(
                                         mainAxisAlignment:
@@ -174,7 +174,7 @@ class FicheParent extends StatelessWidget {
                                         children: const [
                                           CircularProgressIndicator(),
                                           SizedBox(width: 20),
-                                          Text("validation en cours ...")
+                                          Text("Validation en cours ...")
                                         ]),
                                   if (!controller.valider)
                                     Row(
@@ -208,7 +208,7 @@ class FicheParent extends StatelessWidget {
                                               textColor: AppColor.red),
                                           MyButtonFiches(
                                               onPressed: () {
-                                                controller.saveParent();
+                                                controller.saveEnseignant();
                                               },
                                               borderColor: AppColor.white,
                                               backgroundcolor: AppColor.green,

@@ -34,7 +34,7 @@ class FicheGroupe extends StatelessWidget {
             },
             icon: const Icon(Icons.arrow_back)),
         backgroudImage: AppImageAsset.groupeOpac,
-        title: "Fiche Enfant",
+        title: "Fiche Groupe",
         child: WillPopScope(
             onWillPop: controller.onWillPop,
             child: GestureDetector(

@@ -8,6 +8,14 @@ import 'package:get/get.dart';
 class HomePageController extends GetxController {
   int pageIndex = 0, oldPage = 0;
 
+  final item0 = GlobalKey();
+  final item1 = GlobalKey();
+  final item2 = GlobalKey();
+  final item3 = GlobalKey();
+  final item4 = GlobalKey();
+  final item5 = GlobalKey();
+  final item6 = GlobalKey();
+
   Future initialService() async {
     await Get.putAsync(() => DataServices().init());
   }
@@ -45,6 +53,36 @@ class HomePageController extends GetxController {
       AppData.logout();
     }
     update();
+  }
+
+  scrolltoitem() async {
+    late BuildContext? mycontext = item0.currentContext;
+    switch (pageIndex) {
+      case 0:
+        mycontext = item0.currentContext;
+        break;
+      case 1:
+        mycontext = item1.currentContext;
+        break;
+      case 2:
+        mycontext = item2.currentContext;
+        break;
+      case 3:
+        mycontext = item3.currentContext;
+        break;
+      case 4:
+        mycontext = item4.currentContext;
+        break;
+      case 5:
+        mycontext = item5.currentContext;
+        break;
+      case 6:
+        mycontext = item6.currentContext;
+        break;
+    }
+    if (mycontext != null) {
+      await Scrollable.ensureVisible(mycontext, alignment: 0.5);
+    }
   }
 
   @override

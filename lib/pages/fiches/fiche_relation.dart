@@ -458,7 +458,6 @@
 //     }
 //   }
 
-//   @override
 //   void initState() {
 //     WidgetsFlutterBinding.ensureInitialized();
 //     idEnfant = widget.idEnfant;
@@ -467,7 +466,6 @@
 //     super.initState();
 //   }
 
-//   @override
 //   Widget build(BuildContext context) {
 //     Data.setSizeScreen(context);
 //     return SafeArea(
@@ -898,7 +896,6 @@
 //   final int idEnfant;
 //   const SearchParent({Key? key, required this.idEnfant}) : super(key: key);
 
-//   @override
 //   _SearchParentState createState() => _SearchParentState();
 // }
 
@@ -908,7 +905,6 @@
 //   late List<int> indName;
 //   bool loading = true, error = false;
 
-//   @override
 //   void initState() {
 //     WidgetsFlutterBinding.ensureInitialized(); //all widgets are rendered here
 //     query = "";
@@ -1012,7 +1008,6 @@
 //     return false;
 //   }
 
-//   @override
 //   Widget build(BuildContext context) {
 //     final List<Parent> suggestionList =
 //         query.isEmpty ? allparents : filtrerCours();
@@ -1209,7 +1204,6 @@
 //   final int idParent;
 //   const SearchEnfant({Key? key, required this.idParent}) : super(key: key);
 
-//   @override
 //   _SearchEnfantState createState() => _SearchEnfantState();
 // }
 
@@ -1219,7 +1213,6 @@
 //   late List<int> indName;
 //   bool loading = true, error = false;
 
-//   @override
 //   void initState() {
 //     WidgetsFlutterBinding.ensureInitialized(); //all widgets are rendered here
 //     query = "";
@@ -1319,7 +1312,6 @@
 //     return false;
 //   }
 
-//   @override
 //   Widget build(BuildContext context) {
 //     final List<Enfant> suggestionList =
 //         query.isEmpty ? allenfants : filtrerCours();

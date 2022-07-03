@@ -6,6 +6,7 @@ import 'package:atlas_school/core/constant/color.dart';
 import 'package:atlas_school/core/constant/data.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:atlas_school/view/screen/ficheparent.dart';
+import 'package:atlas_school/view/screen/ficherelation.dart';
 import 'package:atlas_school/view/widget/listenfants/emptylistenfantparent.dart';
 import 'package:atlas_school/view/widget/loadingwidget.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -60,6 +61,18 @@ class BottomSheetWidgetListParents extends StatelessWidget {
                           const SizedBox(width: 20),
                           Text(parent.adresse)
                         ]),
+                      if (parent.tel1 != "")
+                        Row(children: [
+                          const Icon(Icons.phone),
+                          const SizedBox(width: 20),
+                          Text(parent.tel1)
+                        ]),
+                      if (parent.tel2 != "")
+                        Row(children: [
+                          const Icon(Icons.phone),
+                          const SizedBox(width: 20),
+                          Text(parent.tel2)
+                        ]),
                       const Divider(),
                       if (parent.userName != "")
                         Row(children: [
@@ -98,33 +111,20 @@ class BottomSheetWidgetListParents extends StatelessWidget {
                               });
                             },
                             icon: const Icon(Icons.edit),
-                            label: const Text("Infos")),
+                            label: const Text("Modifier")),
                         ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
-                                primary: Colors.amber, onPrimary: Colors.white),
+                                primary: AppColor.enfant,
+                                onPrimary: Colors.white),
                             onPressed: () {
-                              // var route = MaterialPageRoute(
-                              //     builder: (context) => FicheRelation(
-                              //         idEnfant: enfants.id, idParent: 0));
-                              // Navigator.of(context).push(route).then((value) {
-                              //   Navigator.of(context).pop();
-                              // });
+                              Get.to(() => FicheRelation(
+                                      idParent: controller.parent.id))
+                                  ?.then((value) {
+                                Get.back();
+                              });
                             },
                             icon: const Icon(Icons.group_outlined),
-                            label: const Text("Parents")),
-                        ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.cyan, onPrimary: Colors.white),
-                            onPressed: () {
-                              // var route = MaterialPageRoute(
-                              //     builder: (context) => FicheClasse(
-                              //         idEnfant: enfants.id, idGroupe: 0));
-                              // Navigator.of(context).push(route).then((value) {
-                              //   Navigator.of(context).pop();
-                              // });
-                            },
-                            icon: const Icon(Icons.groups_outlined),
-                            label: const Text("Groupes")),
+                            label: const Text("Enfants")),
                         if (controller.enfants.isEmpty)
                           ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(

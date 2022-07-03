@@ -79,20 +79,6 @@ class BottomSheetWidgetListGroupes extends StatelessWidget {
                             },
                             icon: const Icon(Icons.person_outline_sharp),
                             label: const Text("Enfants")),
-                        ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                                primary: AppColor.groupe,
-                                onPrimary: Colors.white),
-                            onPressed: () {
-                              // var route = MaterialPageRoute(
-                              //     builder: (context) => FicheClasse(
-                              //         idEnfant: enfants.id, idGroupe: 0));
-                              // Navigator.of(context).push(route).then((value) {
-                              //   Navigator.of(context).pop();
-                              // });
-                            },
-                            icon: const Icon(Icons.groups_outlined),
-                            label: const Text("Groupes")),
                         if (controller.enfants.isEmpty)
                           ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(

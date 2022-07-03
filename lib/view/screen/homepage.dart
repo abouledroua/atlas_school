@@ -38,65 +38,65 @@ class HomePage extends StatelessWidget {
             onWillPop: hcontroller.onWillPop,
             child: GetBuilder<ListAnnonceController>(
                 builder: (anncontroller) => GetBuilder<ListEnfantsController>(
-                    builder: (enfcontroller) =>
-                        GetBuilder<ListGroupesController>(
-                          builder: (grcontroller) =>
-                              GetBuilder<ListEnseignantsController>(
-                            builder: (enscontroller) =>
-                                GetBuilder<ListParentsController>(
-                                    builder: (parcontroller) {
-                              bool adminLoading = (anncontroller.loading ||
-                                  grcontroller.loading ||
-                                  enfcontroller.loading ||
-                                  enscontroller.loading ||
-                                  parcontroller.loading);
-                              // bool userLoading = (anncontroller.loading);
-                              return Column(children: [
-                                if (adminLoading) const Spacer(),
-                                if (adminLoading)
-                                  Center(
-                                      child: ScalingText('Chargement ...',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline2)),
-                                if (adminLoading) const Spacer(),
-                                if (!adminLoading)
-                                  Expanded(child:
-                                      GetBuilder<HomePageController>(
-                                          builder: (controller) {
-                                    if (!User.isAdmin &&
-                                        controller.pageIndex > 2) {
-                                      controller.changePage(0);
-                                    }
-                                    switch (controller.pageIndex) {
-                                      case 0:
-                                        return const ListAnnonces();
-                                      case 1:
-                                        return const ListMessages();
-                                      case 2:
-                                        return const ListPhotos();
-                                      case 3:
-                                        return const ListEnfants();
-                                      case 4:
-                                        return const ListParents();
-                                      case 5:
-                                        return const ListGroupes();
-                                      case 6:
-                                        return const ListEnseignants();
-                                      case 7:
-                                        return const DeconnecterWidget();
-                                      default:
-                                        return const ListAnnonces();
-                                    }
-                                  })),
-                                if (!adminLoading)
-                                  Visibility(
-                                      visible: User.isAdmin,
-                                      child: const MenuHomePageAdmin(),
-                                      replacement: const MenuHomePage())
-                              ]);
-                            }),
-                          ),
-                        )))));
+                    builder: (enfcontroller) => GetBuilder<
+                            ListGroupesController>(
+                        builder: (grcontroller) =>
+                            GetBuilder<ListEnseignantsController>(
+                                builder: (enscontroller) =>
+                                    GetBuilder<ListParentsController>(
+                                        builder: (parcontroller) {
+                                      bool adminLoading =
+                                          (anncontroller.loading ||
+                                              grcontroller.loading ||
+                                              enfcontroller.loading ||
+                                              enscontroller.loading ||
+                                              parcontroller.loading);
+                                      // bool userLoading = (anncontroller.loading);
+                                      return Column(children: [
+                                        if (adminLoading) const Spacer(),
+                                        if (adminLoading)
+                                          Center(
+                                              child: ScalingText(
+                                                  'Chargement ...',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline2)),
+                                        if (adminLoading) const Spacer(),
+                                        if (!adminLoading)
+                                          Expanded(child:
+                                              GetBuilder<HomePageController>(
+                                                  builder: (controller) {
+                                            if (!User.isAdmin &&
+                                                controller.pageIndex > 2) {
+                                              controller.changePage(0);
+                                            }
+                                            controller.scrolltoitem();
+                                            switch (controller.pageIndex) {
+                                              case 0:
+                                                return const ListAnnonces();
+                                              case 1:
+                                                return const ListMessages();
+                                              case 2:
+                                                return const ListPhotos();
+                                              case 3:
+                                                return const ListEnfants();
+                                              case 4:
+                                                return const ListParents();
+                                              case 5:
+                                                return const ListGroupes();
+                                              case 6:
+                                                return const ListEnseignants();
+                                              case 7:
+                                                return const DeconnecterWidget();
+                                              default:
+                                                return const ListAnnonces();
+                                            }
+                                          })),
+                                        Visibility(
+                                            visible: User.isAdmin,
+                                            child: const MenuHomePageAdmin(),
+                                            replacement: const MenuHomePage())
+                                      ]);
+                                    })))))));
   }
 }

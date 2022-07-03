@@ -6,6 +6,7 @@ import 'package:atlas_school/core/constant/color.dart';
 import 'package:atlas_school/core/constant/data.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:atlas_school/view/screen/ficheenfant.dart';
+import 'package:atlas_school/view/screen/ficherelation.dart';
 import 'package:atlas_school/view/widget/listenfants/circularphotoenfant.dart';
 import 'package:atlas_school/view/widget/listenfants/emptylistenfantparent.dart';
 import 'package:atlas_school/view/widget/listenfants/listenfantparentwidget.dart';
@@ -34,7 +35,7 @@ class BottomSheetWidgetListEnfant extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headline1,
                 overflow: TextOverflow.clip),
-            const CircularPhotoWidget(),
+            const CircularPhotoWidgetListEnfant(),
             Row(children: [
               const Icon(Icons.date_range_rounded),
               const SizedBox(width: 20),
@@ -78,17 +79,15 @@ class BottomSheetWidgetListEnfant extends StatelessWidget {
                     });
                   },
                   icon: const Icon(Icons.edit),
-                  label: const Text("Infos")),
+                  label: const Text("Modifier")),
               ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                       primary: AppColor.parent, onPrimary: Colors.white),
                   onPressed: () {
-                    // var route = MaterialPageRoute(
-                    //     builder: (context) => FicheRelation(
-                    //         idEnfant: enfants.id, idParent: 0));
-                    // Navigator.of(context).push(route).then((value) {
-                    //   Navigator.of(context).pop();
-                    // });
+                    Get.to(() => FicheRelation(idEnfant: controller.enfant.id))
+                        ?.then((value) {
+                      Get.back();
+                    });
                   },
                   icon: const Icon(Icons.group_outlined),
                   label: const Text("Parents")),

@@ -415,7 +415,6 @@
 //     }
 //   }
 
-//   @override
 //   void initState() {
 //     WidgetsFlutterBinding.ensureInitialized();
 //     idEnfant = widget.idEnfant;
@@ -424,7 +423,6 @@
 //     super.initState();
 //   }
 
-//   @override
 //   Widget build(BuildContext context) {
 //     Data.setSizeScreen(context);
 //     return SafeArea(
@@ -921,7 +919,6 @@
 //     return false;
 //   }
 
-//   @override
 //   Widget build(BuildContext context) {
 //     final List<Enfant> suggestionList =
 //         query.isEmpty ? allenfants : filtrerCours();

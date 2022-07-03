@@ -5,6 +5,7 @@ import 'package:atlas_school/core/class/enfant.dart';
 import 'package:atlas_school/core/constant/color.dart';
 import 'package:atlas_school/core/constant/data.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
+import 'package:atlas_school/view/screen/ficheclasse.dart';
 import 'package:atlas_school/view/screen/ficheenfant.dart';
 import 'package:atlas_school/view/screen/ficherelation.dart';
 import 'package:atlas_school/view/widget/listenfants/circularphotoenfant.dart';
@@ -95,12 +96,10 @@ class BottomSheetWidgetListEnfant extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                       primary: AppColor.groupe, onPrimary: Colors.white),
                   onPressed: () {
-                    // var route = MaterialPageRoute(
-                    //     builder: (context) => FicheClasse(
-                    //         idEnfant: enfants.id, idGroupe: 0));
-                    // Navigator.of(context).push(route).then((value) {
-                    //   Navigator.of(context).pop();
-                    // });
+                    Get.to(() => FicheClasse(idEnfant: controller.enfant.id))
+                        ?.then((value) {
+                      Get.back();
+                    });
                   },
                   icon: const Icon(Icons.groups_outlined),
                   label: const Text("Groupes")),

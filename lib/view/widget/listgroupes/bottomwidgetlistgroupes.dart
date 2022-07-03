@@ -4,6 +4,7 @@ import 'package:atlas_school/controller/listgroupes_controller.dart';
 import 'package:atlas_school/core/class/groupe.dart';
 import 'package:atlas_school/core/constant/color.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
+import 'package:atlas_school/view/screen/ficheclasse.dart';
 import 'package:atlas_school/view/screen/fichegroupe.dart';
 import 'package:atlas_school/view/widget/listenfants/emptylistenfantparent.dart';
 import 'package:atlas_school/view/widget/listgroupes/listgroupeenfantwidget.dart';
@@ -70,12 +71,11 @@ class BottomSheetWidgetListGroupes extends StatelessWidget {
                                 primary: AppColor.enfant,
                                 onPrimary: Colors.white),
                             onPressed: () {
-                              // var route = MaterialPageRoute(
-                              //     builder: (context) => FicheRelation(
-                              //         idEnfant: enfants.id, idParent: 0));
-                              // Navigator.of(context).push(route).then((value) {
-                              //   Navigator.of(context).pop();
-                              // });
+                              Get.to(() => FicheClasse(
+                                      idGroupe: controller.groupe.id))
+                                  ?.then((value) {
+                                Get.back();
+                              });
                             },
                             icon: const Icon(Icons.person_outline_sharp),
                             label: const Text("Enfants")),

@@ -1,8 +1,14 @@
 // ignore_for_file: avoid_print, deprecated_member_use
 
 import 'dart:math';
-// import 'package:atlas_school/controller/login_controller.dart';
 import 'package:atlas_school/controller/homepage_controller.dart';
+import 'package:atlas_school/controller/listannonce_controller.dart';
+import 'package:atlas_school/controller/listenfants_controller.dart';
+import 'package:atlas_school/controller/listenseignants_controller.dart';
+import 'package:atlas_school/controller/listgroupes_controller.dart';
+import 'package:atlas_school/controller/listmessages_controller.dart';
+import 'package:atlas_school/controller/listparent_controller.dart';
+import 'package:atlas_school/controller/user_controller.dart';
 import 'package:atlas_school/core/class/user.dart';
 import 'package:atlas_school/core/constant/color.dart';
 import 'package:atlas_school/core/constant/routes.dart';
@@ -10,8 +16,12 @@ import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:atlas_school/core/services/settingservice.dart';
 import 'package:atlas_school/view/screen/listannonce.dart';
 import 'package:atlas_school/view/screen/listenfants.dart';
+import 'package:atlas_school/view/screen/listenseignant.dart';
+import 'package:atlas_school/view/screen/listgroupe.dart';
+import 'package:atlas_school/view/screen/listmessages.dart';
 import 'package:atlas_school/view/screen/listparents.dart';
-import 'package:atlas_school/view/screen/listphotos.dart';
+import 'package:atlas_school/view/widget/drawer/listenfantsdrawer.dart';
+import 'package:atlas_school/view/widget/loadingwidget.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -233,7 +243,15 @@ class AppData {
               SettingServices c = Get.find();
               c.sharedPrefs.setBool('LastConnected', false);
               User.idUser = 0;
-              // LoginController cc = Get.find();
+              UserController userController = Get.find();
+              userController.enfants = [];
+              Get.delete<HomePageController>();
+              Get.delete<ListAnnonceController>();
+              Get.delete<ListEnfantsController>();
+              Get.delete<ListParentsController>();
+              Get.delete<ListEnseignantsController>();
+              Get.delete<ListGroupesController>();
+              Get.delete<ListMessagesController>();
               Get.offAllNamed(AppRoute.login);
             },
             showCloseIcon: true,
@@ -294,7 +312,7 @@ class AppData {
                         context: context,
                         onTap: () {
                           Get.back();
-                          Navigator.of(context).pushNamed("ListGroupes");
+                          Get.to(() => const ListGroupes());
                         },
                         text: "Liste des Groupes"),
                   if (User.isAdmin)
@@ -304,7 +322,7 @@ class AppData {
                         context: context,
                         onTap: () {
                           Get.back();
-                          Navigator.of(context).pushNamed("ListEnseignants");
+                          Get.to(() => const ListEnseignants());
                         },
                         text: "Liste des Enseigants"),
                   if (User.isAdmin) const Divider(),
@@ -324,7 +342,7 @@ class AppData {
                       icon: Icons.sms,
                       onTap: () {
                         Get.back();
-                        Navigator.of(context).pushNamed("ListMessages");
+                        Get.to(() => const ListMessages());
                       },
                       text: "Liste des Messages"),
                   _drawerButton(
@@ -332,8 +350,8 @@ class AppData {
                       context: context,
                       icon: Icons.photo,
                       onTap: () {
-                        Get.back();
-                        Get.to(() => const ListPhotos());
+                        // Get.back();
+                        // Get.to(() => const ListPhotos());
                       },
                       text: "Gallerie des Photos"),
                   if (User.isAdmin)
@@ -356,85 +374,24 @@ class AppData {
                       text: "Déconnecter"),
                   if (User.isParent) const Divider(),
                   if (User.isParent) const SizedBox(height: 25),
+                  if (User.isParent)
+                    GetBuilder<UserController>(
+                        builder: (controller) => Visibility(
+                            visible: controller.loading,
+                            child: const LoadingWidget(),
+                            replacement: Center(
+                                child: Text(
+                                    controller.enfants.isEmpty
+                                        ? "Aucun Enfant"
+                                        : "List des Enfants",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            fontWeight: FontWeight.bold))))),
+                  if (User.isParent) const ListOfEnfantDrawer()
                 ]))
               ]))));
-
-  //
-  //
-  //
-  //
-  //
-  //
-  //                   Visibility(
-  //                       visible: currentUser!.isParent,
-  //                       child: Visibility(
-  //                           visible: _loadingEnfant,
-  //                           child: Row(
-  //                               mainAxisAlignment: MainAxisAlignment.center,
-  //                               children: [
-  //                                 CircularProgressIndicator(
-  //                                     color: AppColor
-  //                                         .darkColor[Random().nextInt(
-  //                                             AppColor.darkColor.length - 1) +
-  //                                         1]),
-  //                                 const SizedBox(width: 20),
-  //                                 const Text("chargement ...")
-  //                               ]),
-  //                           replacement: Center(
-  //                               child: Text(
-  //                                   _enfants.isEmpty
-  //                                       ? "Aucun Enfant"
-  //                                       : "List des Enfants",
-  //                                   style: GoogleFonts.laila(
-  //                                       decoration: TextDecoration.underline,
-  //                                       fontSize: 20,
-  //                                       fontWeight: FontWeight.bold),
-  //                                   overflow: TextOverflow.clip)))),
-  //                   Visibility(
-  //                       visible: (!currentUser!.isParent) ||
-  //                           _loadingEnfant ||
-  //                           _enfants.isEmpty,
-  //                       child: Visibility(
-  //                           visible: _errorEnfant,
-  //                           child: ElevatedButton.icon(
-  //                               style: ElevatedButton.styleFrom(
-  //                                   primary: Colors.blue,
-  //                                   onPrimary: Colors.white),
-  //                               onPressed: getListEnfant,
-  //                               icon: const FaIcon(FontAwesomeIcons.sync,
-  //                                   color: Colors.white),
-  //                               label: const Text("Actualiser"))),
-  //                       replacement: Expanded(
-  //                           child: Padding(
-  //                               padding: const EdgeInsets.only(top: 10),
-  //                               child: ListView.builder(
-  //                                   shrinkWrap: true,
-  //                                   primary: false,
-  //                                   itemCount: _enfants.length,
-  //                                   itemBuilder: (context, i) {
-  //                                     return ListTile(
-  //                                         horizontalTitleGap: 4,
-  //                                         title: Text(_enfants[i].fullName,
-  //                                             style: GoogleFonts.laila(
-  //                                                 fontSize: 12),
-  //                                             overflow: TextOverflow.clip),
-  //                                         leading: Padding(
-  //                                             padding:
-  //                                                 const EdgeInsets.all(2.0),
-  //                                             child: SizedBox(
-  //                                                 width: 60,
-  //                                                 child: (_enfants[i].photo == "")
-  //                                                     ? Image.asset(
-  //                                                         "images/noPhoto.png")
-  //                                                     : CachedNetworkImage(
-  //                                                         placeholder: (context, url) =>
-  //                                                             CircularProgressIndicator(
-  //                                                                 color: AppColor.darkColor[Random().nextInt(AppColor.darkColor.length - 1) +
-  //                                                                     1]),
-  //                                                         imageUrl: getImage(
-  //                                                             _enfants[i].photo,
-  //                                                             "PHOTO/ENFANT")))));
-  //                                   }))))
-  //                 ]))
-
 }

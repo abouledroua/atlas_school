@@ -27,7 +27,6 @@
 // class _ListMessagesState extends State<ListMessages> {
 //   bool loading = true, error = false;
 
-//   @override
 //   void initState() {
 //     WidgetsFlutterBinding.ensureInitialized(); //all widgets are rendered here
 //     loading = true;
@@ -117,7 +116,6 @@
 //         });
 //   }
 
-//   @override
 //   Widget build(BuildContext context) {
 //     return SafeArea(
 //         child: Scaffold(

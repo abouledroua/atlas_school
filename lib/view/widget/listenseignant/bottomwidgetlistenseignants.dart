@@ -120,7 +120,7 @@ class BottomSheetWidgetListEnseignants extends StatelessWidget {
                                         listcontroller.deleteEnseignant(ind);
                                       },
                                       btnCancelOnPress: () {
-                                        Navigator.of(context).pop();
+                                        Get.back();
                                       },
                                       desc:
                                           'Voulez vraiment supprimer cet enseignant ?')

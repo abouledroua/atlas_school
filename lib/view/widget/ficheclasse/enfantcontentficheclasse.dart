@@ -1,6 +1,9 @@
 // ignore_for_file: avoid_print
 
+import 'dart:math';
+
 import 'package:atlas_school/controller/ficheclasse_controller.dart';
+import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,6 +39,8 @@ class EnfantContentFicheClasse extends StatelessWidget {
                                     title: 'Erreur',
                                     btnOkText: "Oui",
                                     btnCancelText: "Non",
+                                    width: min(AppSizes.maxWidth,
+                                        AppSizes.widthScreen),
                                     btnOkOnPress: () {
                                       print(
                                           "suppression de la classe ${controller.groupes[i].id},$controller.idEnfant");

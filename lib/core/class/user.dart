@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 class User {
   static int idUser = 0,
       etat = 0,

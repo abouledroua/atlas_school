@@ -123,7 +123,7 @@ class BottomSheetWidgetListEnfant extends StatelessWidget {
                                 listcontroller.deleteEnfant(ind);
                               },
                               btnCancelOnPress: () {
-                                Navigator.of(context).pop();
+                                Get.back();
                               },
                               desc: 'Voulez vraiment supprimer cet enfant ?')
                           .show();

@@ -99,7 +99,7 @@ class BottomSheetWidgetListGroupes extends StatelessWidget {
                                           listcontroller.deleteGroupe(ind);
                                         },
                                         btnCancelOnPress: () {
-                                          Navigator.of(context).pop();
+                                          Get.back();
                                         },
                                         desc:
                                             'Voulez vraiment supprimer ce parent ?')

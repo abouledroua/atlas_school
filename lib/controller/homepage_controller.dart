@@ -1,4 +1,10 @@
+// ignore_for_file: avoid_print
+
+import 'dart:async';
+
+import 'package:atlas_school/controller/user_controller.dart';
 import 'package:atlas_school/core/class/gest_annonce_images.dart';
+import 'package:atlas_school/core/class/user.dart';
 import 'package:atlas_school/core/constant/data.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:atlas_school/core/services/dataservice.dart';
@@ -18,6 +24,19 @@ class HomePageController extends GetxController {
 
   Future initialService() async {
     await Get.putAsync(() => DataServices().init());
+  }
+
+  repeatMyFunction() {
+    myFunc().then((_) {
+      const oneSec = Duration(seconds: 1);
+      if (User.idUser != 0) Timer(oneSec, repeatMyFunction);
+      print("finish ...");
+    });
+  }
+
+  Future myFunc() async {
+    print('start ...');
+    await Future.delayed(const Duration(seconds: 4));
   }
 
   Future<bool> onWillPop() async {
@@ -90,6 +109,8 @@ class HomePageController extends GetxController {
     WidgetsFlutterBinding.ensureInitialized();
     AppSizes.setSizeScreen(Get.context);
     await initialService();
+    Get.put(UserController());
+    repeatMyFunction();
     GestAnnounceImages.uploadAnnonceImages();
     super.onInit();
   }

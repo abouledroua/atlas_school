@@ -145,7 +145,7 @@ class BottomSheetWidgetListParents extends StatelessWidget {
                                           listcontroller.deleteParent(ind);
                                         },
                                         btnCancelOnPress: () {
-                                          Navigator.of(context).pop();
+                                          Get.back();
                                         },
                                         desc:
                                             'Voulez vraiment supprimer ce parent ?')

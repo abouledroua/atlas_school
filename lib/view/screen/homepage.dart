@@ -5,14 +5,17 @@ import 'package:atlas_school/controller/listannonce_controller.dart';
 import 'package:atlas_school/controller/listenfants_controller.dart';
 import 'package:atlas_school/controller/listenseignants_controller.dart';
 import 'package:atlas_school/controller/listgroupes_controller.dart';
+import 'package:atlas_school/controller/listmessages_controller.dart';
 import 'package:atlas_school/controller/listparent_controller.dart';
 import 'package:atlas_school/core/class/user.dart';
+import 'package:atlas_school/core/services/dataservice.dart';
 import 'package:atlas_school/view/screen/deconecterwidget.dart';
+import 'package:atlas_school/view/screen/fichemessage.dart';
 import 'package:atlas_school/view/screen/listannonce.dart';
 import 'package:atlas_school/view/screen/listenfants.dart';
 import 'package:atlas_school/view/screen/listenseignant.dart';
 import 'package:atlas_school/view/screen/listgroupe.dart';
-import 'package:atlas_school/view/screen/listmessage.dart';
+import 'package:atlas_school/view/screen/listmessages.dart';
 import 'package:atlas_school/view/screen/listparents.dart';
 import 'package:atlas_school/view/screen/listphotos.dart';
 import 'package:atlas_school/view/widget/homepage/menuhomepage.dart';
@@ -31,6 +34,7 @@ class HomePage extends StatelessWidget {
     Get.put(ListAnnonceController());
     Get.put(ListParentsController());
     Get.put(ListEnfantsController());
+    Get.put(ListMessagesController());
     Get.put(ListGroupesController());
     Get.put(ListEnseignantsController());
     return MyWidget(
@@ -40,13 +44,16 @@ class HomePage extends StatelessWidget {
                 builder: (anncontroller) => GetBuilder<ListEnfantsController>(
                     builder: (enfcontroller) => GetBuilder<
                             ListGroupesController>(
-                        builder: (grcontroller) =>
-                            GetBuilder<ListEnseignantsController>(
+                        builder: (grcontroller) => GetBuilder<
+                                ListMessagesController>(
+                            builder: (msgcontroller) => GetBuilder<
+                                    ListEnseignantsController>(
                                 builder: (enscontroller) =>
                                     GetBuilder<ListParentsController>(
                                         builder: (parcontroller) {
                                       bool adminLoading =
                                           (anncontroller.loading ||
+                                              msgcontroller.loading ||
                                               grcontroller.loading ||
                                               enfcontroller.loading ||
                                               enscontroller.loading ||
@@ -75,7 +82,15 @@ class HomePage extends StatelessWidget {
                                               case 0:
                                                 return const ListAnnonces();
                                               case 1:
-                                                return const ListMessages();
+                                                if (User.isAdmin) {
+                                                  return const ListMessages();
+                                                } else {
+                                                  DataServices ds = Get.find();
+                                                  return FicheMessage(
+                                                      parentName:
+                                                          'Administration',
+                                                      idUser: ds.adminId);
+                                                }
                                               case 2:
                                                 return const ListPhotos();
                                               case 3:
@@ -97,6 +112,6 @@ class HomePage extends StatelessWidget {
                                             child: const MenuHomePageAdmin(),
                                             replacement: const MenuHomePage())
                                       ]);
-                                    })))))));
+                                    }))))))));
   }
 }

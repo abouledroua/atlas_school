@@ -118,7 +118,6 @@
 //         });
 //   }
 
-//   @override
 //   void initState() {
 //     WidgetsFlutterBinding.ensureInitialized(); //all widgets are rendered here
 //     idUser = widget.idUser;
@@ -130,7 +129,6 @@
 //     super.initState();
 //   }
 
-//   @override
 //   Widget build(BuildContext context) {
 //     return SafeArea(
 //         child: GestureDetector(

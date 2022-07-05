@@ -1,9 +1,12 @@
 // ignore_for_file: avoid_print
 
+import 'dart:math';
+
 import 'package:atlas_school/controller/ajoutergroupeficheclasse_controller.dart';
 import 'package:atlas_school/controller/ficheclasse_controller.dart';
 import 'package:atlas_school/core/class/groupe.dart';
 import 'package:atlas_school/core/constant/color.dart';
+import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:atlas_school/view/widget/mywidget.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
@@ -74,13 +77,15 @@ class AjoutGroupeFicheClasse extends StatelessWidget {
                                                     title: 'Erreur',
                                                     btnOkText: "Oui",
                                                     btnCancelText: "Non",
+                                                    width: min(
+                                                        AppSizes.maxWidth,
+                                                        AppSizes.widthScreen),
                                                     btnOkOnPress: () {
                                                       int i = classeController
                                                           .groupes
                                                           .indexOf(item);
                                                       print(
                                                           "suppression de la classe ${classeController.groupes[i].id},$classeController.idEnfant");
-
                                                       classeController.deleteClasse(
                                                           idGroupe:
                                                               classeController

@@ -66,7 +66,6 @@ class HomePage extends StatelessWidget {
                                                       enfcontroller.loading ||
                                                       enscontroller.loading ||
                                                       parcontroller.loading);
-                                              // bool userLoading = (anncontroller.loading);
                                               return Column(children: [
                                                 if (adminLoading)
                                                   const Spacer(),

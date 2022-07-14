@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'dart:async';
 import 'package:atlas_school/core/class/message.dart';
 import 'package:atlas_school/core/class/user.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
@@ -17,7 +16,6 @@ class FicheMessageController extends GetxController {
   String parentName = "";
   bool loading = true, error = false;
   TextEditingController txtMsg = TextEditingController(text: "");
-  final ScrollController scrollController = ScrollController();
   List<Message> messages = [];
 
   updateBooleans({required newloading, required newerror}) {
@@ -60,14 +58,6 @@ class FicheMessageController extends GetxController {
               messages.add(e);
             }
             updateBooleans(newloading: false, newerror: false);
-            if (messages.isNotEmpty) {
-              Timer(
-                  const Duration(seconds: 1),
-                  () => scrollController.animateTo(
-                      scrollController.position.maxScrollExtent,
-                      duration: const Duration(seconds: 1),
-                      curve: Curves.fastOutSlowIn));
-            }
           } else {
             updateBooleans(newloading: false, newerror: true);
             messages.clear();
@@ -133,11 +123,12 @@ class FicheMessageController extends GetxController {
     var url = "$serverDir/INSERT_MESSAGE.php";
     print(url);
     Uri myUri = Uri.parse(url);
+    String msgBody = msg.body.toString();
     http
         .post(myUri, body: {
           "ID_SEND": msg.idSend.toString(),
           "ID_RECEPT": msg.idRecept.toString(),
-          "BODY": msg.body.toString()
+          "BODY": msgBody
         })
         .timeout(Duration(seconds: AppData.timeOut))
         .then((response) async {
@@ -235,6 +226,7 @@ class FicheMessageController extends GetxController {
   void onInit() {
     WidgetsFlutterBinding.ensureInitialized();
     AppSizes.setSizeScreen(Get.context);
+    print('on Init FicheMessageController');
     getMessages();
     super.onInit();
   }

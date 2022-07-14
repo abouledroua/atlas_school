@@ -20,6 +20,7 @@ import 'package:atlas_school/view/screen/listenseignant.dart';
 import 'package:atlas_school/view/screen/listgroupe.dart';
 import 'package:atlas_school/view/screen/listmessages.dart';
 import 'package:atlas_school/view/screen/listparents.dart';
+import 'package:atlas_school/view/screen/listphotos.dart';
 import 'package:atlas_school/view/widget/drawer/listenfantsdrawer.dart';
 import 'package:atlas_school/view/widget/loadingwidget.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -350,8 +351,8 @@ class AppData {
                       context: context,
                       icon: Icons.photo,
                       onTap: () {
-                        // Get.back();
-                        // Get.to(() => const ListPhotos());
+                        Get.back();
+                        Get.to(() => const ListPhotos());
                       },
                       text: "Gallerie des Photos"),
                   if (User.isAdmin)

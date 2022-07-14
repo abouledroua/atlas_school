@@ -3,13 +3,12 @@ import 'package:atlas_school/core/class/user.dart';
 import 'package:atlas_school/core/constant/color.dart';
 import 'package:atlas_school/core/constant/data.dart';
 import 'package:atlas_school/view/screen/ficheenfant.dart';
+import 'package:atlas_school/view/widget/listenfants/emptylistenfant.dart';
 import 'package:atlas_school/view/widget/listenfants/listenfantwidget.dart';
 import 'package:atlas_school/view/widget/loadingwidget.dart';
 import 'package:atlas_school/view/widget/mywidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../widget/listenfants/emptylistenfant.dart';
 
 class ListEnfants extends StatelessWidget {
   const ListEnfants({Key? key}) : super(key: key);

@@ -35,7 +35,6 @@ class MyPhotoViewController extends GetxController {
                   title: 'Gallery',
                   message: "Image supprimé ...",
                   color: AppColor.green);
-              Get.back();
             } else {
               AppData.mySnackBar(
                   title: 'Gallery',

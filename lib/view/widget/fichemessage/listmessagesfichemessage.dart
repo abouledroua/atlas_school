@@ -15,7 +15,7 @@ class ListMessagesFicheMessage extends StatelessWidget {
     return GetBuilder<FicheMessageController>(builder: (controller) {
       print("list of messages (${controller.messages.length})....");
       return ListView.builder(
-          controller: controller.scrollController,
+          reverse: true,
           primary: false,
           shrinkWrap: true,
           itemCount: controller.messages.length,

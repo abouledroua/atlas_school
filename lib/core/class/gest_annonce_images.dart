@@ -2,9 +2,9 @@
 
 import 'package:atlas_school/controller/listannonce_controller.dart';
 import 'package:atlas_school/core/constant/color.dart';
+import 'package:atlas_school/core/constant/data.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import '../constant/data.dart';
 import 'image_annonce.dart';
 import 'user.dart';
 

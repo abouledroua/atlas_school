@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:atlas_school/core/class/enfant.dart';
+import 'package:atlas_school/core/class/gest_annonce_images.dart';
 import 'package:atlas_school/core/class/groupe.dart';
 import 'package:atlas_school/core/class/image_annonce.dart';
 import 'package:atlas_school/core/class/myannonceimage.dart';
@@ -19,7 +20,6 @@ import 'package:path/path.dart' as p;
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../core/class/gest_annonce_images.dart';
 
 class FicheAnnonceController extends GetxController {
   late int idAnnonce;

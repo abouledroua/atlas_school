@@ -1,11 +1,11 @@
 import 'dart:io';
 
+import 'package:atlas_school/controller/ficheenfant_controller.dart';
+import 'package:atlas_school/core/constant/data.dart';
 import 'package:atlas_school/view/widget/selectcameragellerywidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../controller/ficheenfant_controller.dart';
-import '../../../core/constant/data.dart';
 
 class CircularPhotoFicheEleve extends StatelessWidget {
   const CircularPhotoFicheEleve({Key? key}) : super(key: key);

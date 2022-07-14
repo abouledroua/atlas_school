@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'package:atlas_school/core/class/fetch.dart';
+import 'package:atlas_school/core/class/gest_photos.dart';
 import 'package:atlas_school/core/constant/color.dart';
 import 'package:atlas_school/core/services/settingservice.dart';
 import 'package:atlas_school/routes.dart';
@@ -10,6 +12,8 @@ import 'package:get/get.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initialService();
+  Fetch.searchNewMessages();
+  GestGalleryImages.uploadGalleryImages();
   runApp(const MyApp());
 }
 

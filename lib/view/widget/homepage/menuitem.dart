@@ -1,5 +1,6 @@
 import 'package:atlas_school/controller/homepage_controller.dart';
 import 'package:atlas_school/core/constant/color.dart';
+import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,30 +26,36 @@ class MenuItemHomePage extends StatelessWidget {
             },
             child: Ink(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(icon,
-                          color: controller.pageIndex == index
-                              ? color
-                              : AppColor.grey),
-                      Text(title,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(
-                                  fontSize:
-                                      controller.pageIndex == index ? 18 : 14,
-                                  fontWeight: controller.pageIndex == index
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                  decoration: controller.pageIndex == index
-                                      ? TextDecoration.underline
-                                      : null,
-                                  color: controller.pageIndex == index
-                                      ? color
-                                      : AppColor.grey))
-                    ]))));
+                child: SizedBox(
+                  width: AppSizes.widthScreen / 4 - 30,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(icon,
+                            color: controller.pageIndex == index
+                                ? color
+                                : AppColor.grey),
+                        FittedBox(
+                          child: Text(title,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(
+                                      fontSize: controller.pageIndex == index
+                                          ? 18
+                                          : 14,
+                                      fontWeight: controller.pageIndex == index
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                      decoration: controller.pageIndex == index
+                                          ? TextDecoration.underline
+                                          : null,
+                                      color: controller.pageIndex == index
+                                          ? color
+                                          : AppColor.grey)),
+                        )
+                      ]),
+                ))));
   }
 }

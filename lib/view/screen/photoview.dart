@@ -2,6 +2,7 @@ import 'package:atlas_school/controller/photoview_controller.dart';
 import 'package:atlas_school/core/class/photo.dart';
 import 'package:atlas_school/view/widget/mywidget.dart';
 import 'package:atlas_school/view/widget/photoview/backarrowphotoview.dart';
+import 'package:atlas_school/view/widget/photoview/bottomhorizontallistphotosphotoview.dart';
 import 'package:atlas_school/view/widget/photoview/bottompagephotoview.dart';
 import 'package:atlas_school/view/widget/photoview/nextarrowphotoview.dart';
 import 'package:atlas_school/view/widget/photoview/photowidget.dart';
@@ -33,8 +34,10 @@ class PhotoViewPage extends StatelessWidget {
           child: Stack(children: [
         PhotoWidget(myImages: myImages, folder: folder),
         const BackArrowButtonPhotoView(),
-        NextArrowButtonPhotoView(nbImages: myImages.length)
+        NextArrowButtonPhotoView(nbImages: myImages.length),
       ])),
+      BottomHorizontalListPhotosPhotoView(
+          delete: delete, myImages: myImages, folder: folder),
       BottomPagePhotoView(delete: delete, myImages: myImages)
     ]));
   }

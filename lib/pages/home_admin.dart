@@ -65,7 +65,6 @@
 //     screens = [const ListAnnonce(), const ListMessages(), const GalleriePage()];
 //   }
 
-//   @override
 //   void initState() {
 //     WidgetsFlutterBinding.ensureInitialized(); //all widgets are rendered here
 //     Data.index = 0;
@@ -89,7 +88,6 @@
 //     }
 //   }
 
-//   @override
 //   Widget build(BuildContext context) {
 //     Data.myContext = context;
 //     Data.setSizeScreen(context);

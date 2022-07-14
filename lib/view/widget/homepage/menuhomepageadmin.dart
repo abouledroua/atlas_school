@@ -30,11 +30,24 @@ class MenuHomePageAdmin extends StatelessWidget {
                           index: 0)),
                   Container(
                       key: controller.item1,
-                      child: const MenuItemHomePage(
-                          title: "Messages",
-                          icon: Icons.sms,
-                          color: AppColor.message,
-                          index: 1)),
+                      child: Stack(children: [
+                        const MenuItemHomePage(
+                            title: "Messages",
+                            icon: Icons.sms,
+                            color: AppColor.message,
+                            index: 1),
+                        GetBuilder<HomePageController>(
+                            builder: (controller) => Visibility(
+                                visible: controller.newMessage,
+                                child: Positioned(
+                                    right: 10,
+                                    top: -4,
+                                    child: SizedBox(
+                                        height: AppSizes.heightScreen / 40,
+                                        width: AppSizes.widthScreen / 16,
+                                        child: Icon(Icons.star,
+                                            color: AppColor.amber)))))
+                      ])),
                   Container(
                       key: controller.item2,
                       child: const MenuItemHomePage(

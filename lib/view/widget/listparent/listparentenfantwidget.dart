@@ -1,9 +1,8 @@
 import 'package:atlas_school/controller/bottomlistparents_controller.dart';
+import 'package:atlas_school/core/constant/data.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../core/constant/data.dart';
 
 class ListParentEnfantWidget extends StatelessWidget {
   const ListParentEnfantWidget({Key? key}) : super(key: key);

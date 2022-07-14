@@ -6,7 +6,6 @@ class SettingServices extends GetxService {
 
   Future<SettingServices> init() async {
     sharedPrefs = await SharedPreferences.getInstance();
-
     return this;
   }
 }

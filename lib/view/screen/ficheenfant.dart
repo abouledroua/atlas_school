@@ -3,6 +3,7 @@
 import 'dart:math';
 import 'package:atlas_school/controller/ficheenfant_controller.dart';
 import 'package:atlas_school/core/constant/color.dart';
+import 'package:atlas_school/core/constant/image_asset.dart';
 import 'package:atlas_school/core/constant/sizes.dart';
 import 'package:atlas_school/view/widget/ficheeleve/circularphotoeleve.dart';
 import 'package:atlas_school/view/widget/ficheeleve/edittextficheeleve.dart';
@@ -12,7 +13,6 @@ import 'package:atlas_school/view/widget/mywidget.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../core/constant/image_asset.dart';
 
 class FicheEnfant extends StatelessWidget {
   int? idEnfant;

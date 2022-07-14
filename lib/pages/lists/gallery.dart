@@ -37,7 +37,6 @@
 //     }
 //   }
 
-//   @override
 //   void initState() {
 //     WidgetsFlutterBinding.ensureInitialized();
 //     getAllPhotos();
@@ -105,7 +104,6 @@
 //         });
 //   }
 
-//   @override
 //   Widget build(BuildContext context) {
 //     if (!Data.currentUser!.isAdmin) {
 //       Data.myContext = context;

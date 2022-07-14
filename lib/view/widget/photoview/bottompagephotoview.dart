@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'dart:math';
-
 import 'package:atlas_school/controller/photoview_controller.dart';
 import 'package:atlas_school/core/class/photo.dart';
 import 'package:atlas_school/core/class/user.dart';
@@ -19,44 +18,37 @@ class BottomPagePhotoView extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    print('BottomPagePhotoView');
-    return GetBuilder<MyPhotoViewController>(
-        builder: (controller) => Container(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            color: AppColor.black,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Photo ${controller.index + 1} / ${myImages.length}",
-                      style: const TextStyle(color: Colors.white)),
-                  if (!User.isParent && delete)
-                    InkWell(
-                        onTap: () {
-                          AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.QUESTION,
-                                  showCloseIcon: true,
-                                  title: 'Confirmation',
-                                  btnOkText: "Oui",
-                                  btnCancelText: "Non",
-                                  width: min(
-                                      AppSizes.maxWidth, AppSizes.widthScreen),
-                                  btnOkOnPress: () {
-                                    controller.deletePhoto(
-                                        image: myImages[controller.index]);
-                                  },
-                                  btnCancelOnPress: () {},
-                                  desc:
-                                      'Voulez vraiment supprimer cette photo ?')
-                              .show();
-                        },
-                        child: Ink(
-                            child: Row(children: const [
-                          Text("Supprimer ",
-                              style: TextStyle(color: Colors.white)),
-                          Icon(Icons.delete, color: Colors.white)
-                        ])))
-                ])));
-  }
+  Widget build(BuildContext context) => GetBuilder<MyPhotoViewController>(
+      builder: (controller) => Container(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          color: AppColor.black,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Text("Photo ${controller.index + 1} / ${myImages.length}",
+                style: const TextStyle(color: Colors.white)),
+            if (!User.isParent && delete)
+              InkWell(
+                  onTap: () {
+                    AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.QUESTION,
+                            showCloseIcon: true,
+                            title: 'Confirmation',
+                            btnOkText: "Oui",
+                            btnCancelText: "Non",
+                            width: min(AppSizes.maxWidth, AppSizes.widthScreen),
+                            btnOkOnPress: () {
+                              controller.deletePhoto(
+                                  image: myImages[controller.index]);
+                            },
+                            btnCancelOnPress: () {},
+                            desc: 'Voulez vraiment supprimer cette photo ?')
+                        .show();
+                  },
+                  child: Ink(
+                      child: Row(children: const [
+                    Text("Supprimer ", style: TextStyle(color: Colors.white)),
+                    Icon(Icons.delete, color: Colors.white)
+                  ])))
+          ])));
 }
